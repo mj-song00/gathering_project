@@ -61,16 +61,12 @@ public class JwtTokenProvider {
 
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
-            return tokenValue.substring(7);
+            return tokenValue.substring(BEARER_PREFIX.length());
         }
-        throw new BaseException(ExceptionEnum.TOKEN_NOT_FOUND);
+        throw new BaseException(ExceptionEnum.JWT_TOKEN_NOT_FOUND);
     }
 
     public Claims extractClaims(String token) {
-        if (key == null) {
-            log.error("JWT 서명 키가 null입니다.");
-            throw new IllegalArgumentException("JWT 서명 키가 null입니다.");
-        }
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
