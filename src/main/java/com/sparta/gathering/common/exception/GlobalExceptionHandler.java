@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleBaseException(BaseException ex) {
         log.error("BaseException: ", ex);
         return ResponseEntity.status(ex.getStatus())
-                .body(ApiResponse.errorWithoutData(ex.getExceptionEnum(), ex.getStatus()));
+                .body(ApiResponse.errorWithOutData(ex.getExceptionEnum(), ex.getStatus()));
     }
 
     // SQL 무결성 예외 처리
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException ex) {
         log.error("SQLIntegrityConstraintViolationException: ", ex);
         return ResponseEntity.status(ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus())
-                .body(ApiResponse.errorWithoutData(ExceptionEnum.DATA_INTEGRITY_VIOLATION, ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus()));
+                .body(ApiResponse.errorWithOutData(ExceptionEnum.DATA_INTEGRITY_VIOLATION, ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus()));
     }
 
     // 데이터 무결성 예외 처리
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex) {
         log.error("DataIntegrityViolationException: ", ex);
         return ResponseEntity.status(ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus())
-                .body(ApiResponse.errorWithoutData(ExceptionEnum.DATA_INTEGRITY_VIOLATION, ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus()));
+                .body(ApiResponse.errorWithOutData(ExceptionEnum.DATA_INTEGRITY_VIOLATION, ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus()));
     }
 
     // @Valid 검증 실패 시 발생하는 예외 처리

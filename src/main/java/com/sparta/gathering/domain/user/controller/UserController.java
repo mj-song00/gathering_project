@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> signup(@Valid @RequestBody UserRequest userRequest) {
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userService.createUser(userRequest);
-        ApiResponse<Void> response = ApiResponse.successWithoutData(ApiResponseEnum.SIGNUP_SUCCESS);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.SIGNUP_SUCCESS);
         // 201 Created 상태와 함께 응답 반환
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -45,7 +45,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
-        ApiResponse<Void> response = ApiResponse.successWithoutData(ApiResponseEnum.USER_DELETED_SUCCESS);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
