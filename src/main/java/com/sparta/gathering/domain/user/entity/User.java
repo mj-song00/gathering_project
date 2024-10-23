@@ -61,18 +61,6 @@ public class User extends Timestamped {
         return user;
     }
 
-    // 기존 UUID 사용
-    public static User createWithUUID(UUID userId, String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
-        User user = new User();
-        user.id = userId;
-        user.email = email;
-        user.nickName = nickName;
-        user.password = password;
-        user.userRole = userRole;
-        user.identityProvider = identityProvider;
-        return user;
-    }
-
     // 최소 정보로 객체 생성
     public static User createWithMinimumInfo(UUID userId, String email, String nickName, UserRole userRole) {
         User user = new User();
