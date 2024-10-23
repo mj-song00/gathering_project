@@ -1,5 +1,7 @@
 package com.sparta.gathering.common.config;
 
+import com.sparta.gathering.common.exception.BaseException;
+import com.sparta.gathering.common.exception.ExceptionEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -37,10 +39,9 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws IOException {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        log.info("Authorization 헤더: {}", bearerToken);
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 필요합니다.");
-            log.warn("JWT 토큰이 필요합니다.");
-            return;
+            throw new IllegalArgumentException("JWT 토큰이 누락되었습니다.");
         }
 
         try {
@@ -72,7 +73,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // subject에서 UUID 변환
         UUID uuid = UUID.fromString(claims.getSubject()); // UUID로 변환
 
-        // 정적 팩토리 메서드를 사용하여 User 객체 생성
+        // User 객체 생성
         User user = User.createWithMinimumInfo(uuid, email, nickName, userRole);
 
         UsernamePasswordAuthenticationToken authentication =

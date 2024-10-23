@@ -94,7 +94,7 @@ public class User extends Timestamped {
     }
 
     // 소프트 삭제
-    public void deleteUser() {
+    public void setDeletedAt() {
         this.deletedAt = LocalDateTime.now();
     }
 

@@ -31,7 +31,7 @@ public class ApiResponse<T> {
     }
 
     // 성공 응답 메서드 (데이터 없이)
-    public static <T> ApiResponse<T> successWithoutData(ApiResponseEnum messageEnum) {
+    public static <T> ApiResponse<T> successWithOutData(ApiResponseEnum messageEnum) {
         return new ApiResponse<>(null, messageEnum);
     }
 
@@ -41,7 +41,7 @@ public class ApiResponse<T> {
     }
 
     // 에러 응답 메서드 (데이터 없이)
-    public static ApiResponse<?> errorWithoutData(ExceptionEnum exceptionEnum, HttpStatus status) {
+    public static ApiResponse<?> errorWithOutData(ExceptionEnum exceptionEnum, HttpStatus status) {
         return new ApiResponse<>(exceptionEnum, status, null);
     }
 
