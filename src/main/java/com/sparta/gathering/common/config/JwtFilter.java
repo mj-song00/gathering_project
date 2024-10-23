@@ -1,7 +1,5 @@
 package com.sparta.gathering.common.config;
 
-import com.sparta.gathering.common.exception.BaseException;
-import com.sparta.gathering.common.exception.ExceptionEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -39,9 +37,8 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws IOException {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        log.info("Authorization 헤더: {}", bearerToken);
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
-            throw new IllegalArgumentException("JWT 토큰이 누락되었습니다.");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 누락되었습니다.");
         }
 
         try {
@@ -71,13 +68,15 @@ public class JwtFilter extends OncePerRequestFilter {
         UserRole userRole = UserRole.valueOf(claims.get(jwtTokenProvider.USER_ROLE_CLAIM, String.class));
 
         // subject에서 UUID 변환
-        UUID uuid = UUID.fromString(claims.getSubject()); // UUID로 변환
+        UUID uuid = UUID.fromString(claims.getSubject());
 
         // User 객체 생성
         User user = User.createWithMinimumInfo(uuid, email, nickName, userRole);
 
+        String role = userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
+
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole.name())));
+                new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
