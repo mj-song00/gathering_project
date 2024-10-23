@@ -1,9 +1,12 @@
 package com.sparta.gathering.common.exception;
 
 import com.sparta.gathering.common.response.ApiResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,16 +35,16 @@ public class GlobalExceptionHandler {
     }
 
     // 데이터 무결성 예외 처리
-    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
-    public ResponseEntity<ApiResponse<?>> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<?>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error("DataIntegrityViolationException: ", ex);
         return ResponseEntity.status(ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus())
                 .body(ApiResponse.errorWithOutData(ExceptionEnum.DATA_INTEGRITY_VIOLATION, ExceptionEnum.DATA_INTEGRITY_VIOLATION.getStatus()));
     }
 
     // @Valid 검증 실패 시 발생하는 예외 처리
-    @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(org.springframework.web.bind.MethodArgumentNotValidException ex) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("MethodArgumentNotValidException: ", ex);
         // 유효성 검사 실패 시 발생한 오류 메시지를 필드별로 저장
         Map<String, String> errors = new HashMap<>();
@@ -52,7 +55,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(ExceptionEnum.INVALID_INPUT_VALUE.getStatus())
                 .body(ApiResponse.errorWithData(ExceptionEnum.INVALID_INPUT_VALUE, ExceptionEnum.INVALID_INPUT_VALUE.getStatus(), errors));
     }
-
 
     /*// 그 외 예상치 못한 예외 처리
     @ExceptionHandler(Exception.class)

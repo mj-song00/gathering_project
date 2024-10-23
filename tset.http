@@ -1,9 +1,15 @@
+@base_url = http://localhost:8080
+
+@userId = c0b9313f-cc7e-4dd4-a3c0-a64c52e1dcd9
+
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njc1Nzc3LCJpYXQiOjE3Mjk2NzIxNzd9.2vEL5j5sT1ryslu4ltBpNKJ4G-5Hs1HZw-3kQz6PT38
+
 ### 회원가입 요청
-POST http://localhost:8080/api/users/signup
+POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test1323@example.com",
+  "email": "test@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -11,7 +17,7 @@ Content-Type: application/json
 
 
 ### 일반 로그인 요청
-POST http://localhost:8080/api/auth/login
+POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
@@ -19,9 +25,14 @@ Content-Type: application/json
   "password": "password123"
 }
 
+### 회원탈퇴 요청
+PATCH {{base_url}}/api/users/{{userId}}
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
 
 ### Refresh Token을 통한 Access Token 재발급 요청
-POST http://localhost:8080/api/auth/token/refresh
+POST {{base_url}}/api/auth/token/refresh
 Content-Type: application/json
 
 {
