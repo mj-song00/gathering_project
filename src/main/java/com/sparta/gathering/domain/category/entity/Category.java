@@ -37,7 +37,7 @@ public class Category extends Timestamped {
     private User user;
 
 
-    private Category(String categoryName, User user) {
+    public Category(String categoryName, User user) {
         this.categoryName = categoryName;
         this.user = user;
     }
@@ -46,7 +46,12 @@ public class Category extends Timestamped {
         return new Category(categoryReq.getCategoryName(), user);
     }
 
+    public void updateCategory(String categoryName, User user) {
+        this.categoryName = categoryName;
+        this.user = user;
+    }
 
+    // 논리 삭제
     public void updateDeleteAt() {
         this.deletedAt = LocalDateTime.now();
     }
