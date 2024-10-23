@@ -33,16 +33,16 @@ public class MemberController {
     }
 
     //멤버조회
-//    @GetMapping("/{gatherId}")
-//    public ResponseEntity<List<Member>> getMembers(
-//            @PathVariable long gatherId,
-//            @RequestParam(defaultValue ="1") int page,
-//
-//    ){
-//        Pageable pageable = PageRequest.of(page-1, 10);
-//        List<Gather> memberList = memberService.Gathers(pageable, gatherId);
-//        return ResponseEntity.ok(memberList);
-//    }
+    @GetMapping("/{gatherId}")
+    public ResponseEntity<List<Member>> getMembers(
+            @PathVariable long gatherId,
+            @RequestParam(defaultValue ="1") int page
+
+    ){
+        Pageable pageable = PageRequest.of(page-1, 10);
+        List<Member> memberList = memberService.getMembers(pageable, gatherId);
+        return ResponseEntity.ok(memberList);
+    }
 
     //멤버 가입승인
 

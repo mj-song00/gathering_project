@@ -33,6 +33,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public List<Member> getMembers(Pageable pageable, long gatherId){
-
+        return memberRepository.findByGatherId(pageable, gatherId);
     }
 }

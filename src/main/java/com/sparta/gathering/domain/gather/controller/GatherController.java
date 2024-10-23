@@ -39,9 +39,10 @@ public class GatherController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
             @RequestBody GatherRequest request,
-            @PathVariable long id
+            @PathVariable long id,
+            @AuthenticationPrincipal User user
     ){
-        gatherService.modifyGather(request, id);
+        gatherService.modifyGather(request, id, user);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -50,9 +51,10 @@ public class GatherController {
     //@모임 삭제(soft delete)
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteGather(
-            @PathVariable long id
+            @PathVariable long id,
+            @AuthenticationPrincipal User user
     ){
-        gatherService.deleteGather(id);
+        gatherService.deleteGather(id, user);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.GATHER_DELETE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

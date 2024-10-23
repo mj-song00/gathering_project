@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface GatherService {
     void createGather(GatherRequest request, User user);
-    void modifyGather(GatherRequest request, long id);
+    void modifyGather(GatherRequest request, long id, User user);
 
-    void deleteGather(long id);
+    void deleteGather(long id, User user);
 
     List<Gather> Gathers(Pageable pageable);
 }
