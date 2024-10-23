@@ -27,7 +27,7 @@ public class HashTagService {
         // 유저 권한 확인
 //        isValidMember(user);
         if (hashTagRepository.findByHashTagName(hashTagReq.getHashTagName()).isPresent()) {
-            throw new BaseException(ExceptionEnum.ALREADY_HAVE_TITLE);
+            throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
         }
 
         HashTag hashTag = HashTag.from(hashTagReq);
@@ -40,9 +40,10 @@ public class HashTagService {
     @Transactional
     public void deleteHashTag(User user, UUID hashtagId) {
         HashTag hashTag = hashTagRepository.findById(hashtagId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
+                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_HASHTAG));
         hashTag.updateDeleteAt();
     }
+
 
     // 해시태그 조회
 //    public List<HashTagRes> getHashTagList(User user) {

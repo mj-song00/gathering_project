@@ -38,7 +38,7 @@ public class CategoryController {
             @AuthenticationPrincipal User token,
             @PathVariable UUID categoryId) {
         categoryService.deleteCategory(token, categoryId);
-        ApiResponse<?> response = ApiResponse.successWithoutData(ApiResponseEnum.DELETED_CATEGORY_SUCCESS);
+        ApiResponse<?> response = ApiResponse.successWithOutData(ApiResponseEnum.DELETED_CATEGORY_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

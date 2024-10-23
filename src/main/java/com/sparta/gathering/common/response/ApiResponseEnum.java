@@ -11,7 +11,12 @@ public enum ApiResponseEnum {
 
     // 카테고리 관련
     CREATED_CATEGORY_SUCCESS("카테고리가 성공적으로 생성되었습니다."),
-    DELETED_CATEGORY_SUCCESS("카테고리가 성공적으로 삭제되었습니다.");
+    DELETED_CATEGORY_SUCCESS("카테고리가 성공적으로 삭제되었습니다."),
+
+    // 해시태그 관련
+    CREATED_HASHTAG_SUCCESS("해시태그가 성공적으로 생성되었습니다."),
+    DELETED_HASHTAG_SUCCESS("해시태그가 성공적으로 삭제되었습니다.");
+
 
     private final String message;
 

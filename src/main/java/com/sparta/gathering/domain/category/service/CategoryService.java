@@ -29,7 +29,7 @@ public class CategoryService {
         // 유저 권한 확인
         isValidUser(user);
         if (categoryRepository.findByCategoryName(categoryReq.getCategoryName()).isPresent()) {
-            throw new BaseException(ExceptionEnum.ALREADY_HAVE_TITLE);
+            throw new BaseException(ExceptionEnum.ALREADY_HAVE_CATEGORY);
         }
 
         Category newCategory = Category.from(categoryReq, user);
