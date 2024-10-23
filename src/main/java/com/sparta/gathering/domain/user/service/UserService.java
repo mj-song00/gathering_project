@@ -3,7 +3,6 @@ package com.sparta.gathering.domain.user.service;
 import com.sparta.gathering.domain.user.dto.request.UserRequest;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
-import com.sparta.gathering.domain.user.enums.UserRole;
 
 import java.util.UUID;
 
@@ -21,4 +20,5 @@ public interface UserService {
 
     User save(User user);
 
+    User authenticateUser(String email, String password);
 }

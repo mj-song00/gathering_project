@@ -72,11 +72,12 @@ public class JwtFilter extends OncePerRequestFilter {
         // subject에서 UUID 변환
         UUID uuid = UUID.fromString(claims.getSubject()); // UUID로 변환
 
-        // UUID를 사용하는 User 객체 생성
-        User user = new User(uuid, email, nickName, userRole);
+        // 정적 팩토리 메서드를 사용하여 User 객체 생성
+        User user = User.createWithMinimumInfo(uuid, email, nickName, userRole);
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole.name())));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
 }

@@ -6,15 +6,13 @@ import com.sparta.gathering.domain.user.enums.UserRole;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import jakarta.persistence.*;
 
-
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "User")
@@ -23,11 +21,10 @@ public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-
     private UUID id; // UUID를 BINARY(16)으로 저장
 
     @Column(nullable = false, unique = true)
-    private String email; // 이메일
+    private String email; // 이메일 (불변 필드로 유지)
 
     @Column(nullable = false)
     private String nickName; // 닉네임
@@ -39,8 +36,8 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private UserRole userRole; // 사용자 역할 (ROLE_USER, ROLE_ADMIN)
 
-    @Column(nullable = false)
-    private boolean isDelete = false; // 탈퇴 여부 (기본값 FALSE)
+    @Column
+    private LocalDateTime deletedAt;
 
     @Column
     private String providerId; // 소셜 로그인 제공자의 사용자 ID
@@ -52,28 +49,57 @@ public class User extends Timestamped {
     @Column
     private String profileImage; // 사용자 프로필 이미지 URL (null일 경우 디폴트 이미지)
 
-    public User(String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
-        this.id = UUID.randomUUID();
-        this.email = email;
-        this.nickName = nickName;
-        this.password = password;
-        this.userRole = userRole;
-        this.identityProvider = identityProvider;
+    // UUID 자동 생성
+    public static User createWithAutoUUID(String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
+        User user = new User();
+        user.id = UUID.randomUUID();
+        user.email = email;
+        user.nickName = nickName;
+        user.password = password;
+        user.userRole = userRole;
+        user.identityProvider = identityProvider;
+        return user;
     }
 
-    public User(UUID uuid, String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
-        this.id = uuid;
-        this.email = email;
-        this.nickName = nickName;
-        this.password = password;
-        this.userRole = userRole;
-        this.identityProvider = identityProvider;
+    // 기존 UUID 사용
+    public static User createWithUUID(UUID userId, String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
+        User user = new User();
+        user.id = userId;
+        user.email = email;
+        user.nickName = nickName;
+        user.password = password;
+        user.userRole = userRole;
+        user.identityProvider = identityProvider;
+        return user;
     }
 
-    public User(UUID uuid, String email, String nickName, UserRole userRole) {
-        this.id = uuid;
-        this.email = email;
-        this.nickName = nickName;
-        this.userRole = userRole;
+    // 최소 정보로 객체 생성
+    public static User createWithMinimumInfo(UUID userId, String email, String nickName, UserRole userRole) {
+        User user = new User();
+        user.id = userId;
+        user.email = email;
+        user.nickName = nickName;
+        user.userRole = userRole;
+        return user;
+    }
+
+    // 비밀번호 업데이트
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    // 닉네임 업데이트
+    public void updateNickName(String newNickName) {
+        this.nickName = newNickName;
+    }
+
+    // 소프트 삭제
+    public void deleteUser() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    // 프로필 이미지 업데이트 (보류)
+    public void updateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

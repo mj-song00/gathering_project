@@ -1,11 +1,15 @@
 package com.sparta.gathering.domain.user.service;
 
+import com.sparta.gathering.common.exception.BaseException;
+import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.request.UserRequest;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,16 +18,19 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     @Override
     public User createUser(UserRequest userRequest) {
-
-        User user = new User(
+        // User 객체 생성
+        User user = User.createWithAutoUUID(
                 userRequest.getEmail(),
                 userRequest.getNickName(),
                 userRequest.getPassword(),
@@ -34,27 +41,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setDelete(true);  // Soft delete 처리
-        userRepository.save(user);  // 변경된 사용자 저장
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+        // 소프트 삭제 처리
+        user.deleteUser();
     }
 
-    // ↓ 임시
     @Override
     public User findById(UUID userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
     }
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
     }
 
     @Override
     public User findByProviderIdAndIdentityProvider(String providerId, IdentityProvider identityProvider) {
         return userRepository.findByProviderIdAndIdentityProvider(providerId, identityProvider)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
     }
 
     @Override
@@ -62,5 +72,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-}
+    public User authenticateUser(String email, String rawPassword) {
+        User user = findByEmail(email);
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new BaseException(ExceptionEnum.EMAIL_PASSWORD_MISMATCH);
+        }
+        return user;
+    }
 
+}

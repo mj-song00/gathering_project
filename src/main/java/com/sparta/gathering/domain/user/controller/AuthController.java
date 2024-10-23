@@ -9,11 +9,13 @@ import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.service.RefreshTokenService;
 import com.sparta.gathering.domain.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,36 +26,24 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenService refreshTokenService; // 보류
 
     @Autowired
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, RefreshTokenService refreshTokenService) {
+    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider, RefreshTokenService refreshTokenService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.refreshTokenService = refreshTokenService;
     }
 
     // 일반 로그인
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
-        User user = userService.findByEmail(loginRequest.getEmail());
-
-        // 비밀번호 검증 (임시, 추후 분리)
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new RuntimeException("잘못된 인증입니다.");
-        }
-
-        // JWT 토큰 생성
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest loginRequest) {
+        User user = userService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
         String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getNickName(), user.getUserRole());
-
-        // 응답에 JWT 토큰 포함
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + token)
+                .build();
     }
 
    /* 보류 ############################################################
@@ -81,7 +71,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    // Refresh Token을 통해 Access Token 재발급
+    // Refresh Token를 통해 Access Token 재발급
     @PostMapping("/token/refresh")
     public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         boolean isValid = refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());

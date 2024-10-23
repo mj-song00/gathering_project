@@ -22,4 +22,16 @@ public abstract class Timestamped {
     @LastModifiedDate
     @Column
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = null; // 생성 시에는 updatedAt을 null로 유지
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now(); // 수정 시에만 updatedAt 갱신
+    }
+
 }

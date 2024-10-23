@@ -1,12 +1,13 @@
 package com.sparta.gathering.common.config;
 
+import com.sparta.gathering.common.exception.BaseException;
+import com.sparta.gathering.common.exception.ExceptionEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import com.sparta.gathering.common.exception.ServerException;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,8 +22,7 @@ import java.util.UUID;
 @Component
 public class JwtTokenProvider {
 
-    // private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
-    private static final long TOKEN_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+     private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; // 암호화 알고리즘
     private static final String BEARER_PREFIX = "Bearer "; // Bearer 접두어
     public static final String EMAIL_CLAIM = "email"; // 이메일 클레임
@@ -39,12 +39,12 @@ public class JwtTokenProvider {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(UUID uuid, String email, String nickname , UserRole userRole) {
+    public String createToken(UUID userId, String email, String nickname , UserRole userRole) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(uuid.toString())
+                        .setSubject(userId.toString())
                         .claim(EMAIL_CLAIM, email)
                         .claim(NICKNAME_CLAIM, nickname)
                         .claim(USER_ROLE_CLAIM, userRole.name())
@@ -58,7 +58,7 @@ public class JwtTokenProvider {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ServerException("토큰이 존재하지 않습니다.");
+        throw new BaseException(ExceptionEnum.TOKEN_NOT_FOUND);
     }
 
     public Claims extractClaims(String token) {
