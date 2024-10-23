@@ -1,6 +1,7 @@
 package com.sparta.gathering.domain.member.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.enums.Permission;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,7 +28,12 @@ public class Member extends Timestamped {
 //    @JoinColumn(name = "category_id", nullable = false)
 //    private Category category;
 
-//    public Member Member (Permission permission){
-//        this.permission = permission;
-//    }
+    @ManyToOne
+    @JoinColumn(name="gather_id", nullable=false)
+    private Gather gather;
+
+    public Member (Permission permission, Gather gather){
+        this.permission = permission;
+        this.gather = gather;
+    }
 }
