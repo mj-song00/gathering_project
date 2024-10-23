@@ -21,7 +21,8 @@ public enum ExceptionEnum {
 
     // 카테고리 관련
     NOT_ADMIN_ROLE(HttpStatus.BAD_REQUEST,"NOT_ADMIN_ROLE","관리자만 이용할 수 있습니다."),
-    NOT_FOUNT_CATEGORY(HttpStatus.BAD_REQUEST,"NOT_FOUNT_CATEGORY","존재하지 않는 카테고리입니다.");
+    NOT_FOUNT_CATEGORY(HttpStatus.BAD_REQUEST,"NOT_FOUNT_CATEGORY","존재하지 않는 카테고리입니다."),
+    ALREADY_HAVE_TITLE(HttpStatus.BAD_REQUEST,"ALREADY_HAVE_TITLE","이미 존재하는 카테고리입니다.");
 
     private final HttpStatus status;
     private final String errorCode;

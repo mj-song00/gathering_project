@@ -37,12 +37,13 @@ public class Category extends Timestamped {
     private User user;
 
 
-    private Category(String title) {
+    private Category(String title, User user) {
         this.title = title;
+        this.user = user;
     }
 
-    public static Category from(CategoryReq categoryReq) {
-        return new Category(categoryReq.getTitle());
+    public static Category from(CategoryReq categoryReq, User user) {
+        return new Category(categoryReq.getTitle(), user);
     }
 
 

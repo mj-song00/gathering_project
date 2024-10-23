@@ -6,7 +6,7 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.category.dto.request.CategoryReq;
 import com.sparta.gathering.domain.category.dto.response.CategoryRes;
 import com.sparta.gathering.domain.category.service.CategoryService;
-import com.sparta.gathering.domain.user.entity.RefreshToken;
+import com.sparta.gathering.domain.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,20 +25,20 @@ public class CategoryController {
     // 카테고리 생성
     @PostMapping("/categories")
     public ResponseEntity<ApiResponse<CategoryRes>> createCategory(
-            @AuthenticationPrincipal RefreshToken token,
+            @AuthenticationPrincipal User token,
             @Valid @RequestBody CategoryReq categoryReq) {
         CategoryRes res = categoryService.createCategory(token, categoryReq);
-        ApiResponse<CategoryRes> response = ApiResponse.successWithData(res, ApiResponseEnum.SIGNUP_SUCCESS);
+        ApiResponse<CategoryRes> response = ApiResponse.successWithData(res, ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 카테고리 삭제
-    @DeleteMapping("/categories/{categoryId}")
+    @PatchMapping("/categories/{categoryId}")
     public ResponseEntity<ApiResponse<?>> deleteCategory(
-            @AuthenticationPrincipal RefreshToken token,
+            @AuthenticationPrincipal User token,
             @PathVariable UUID categoryId) {
         categoryService.deleteCategory(token, categoryId);
-        ApiResponse<?> response = ApiResponse.successWithoutData(ApiResponseEnum.SIGNUP_SUCCESS);
+        ApiResponse<?> response = ApiResponse.successWithoutData(ApiResponseEnum.DELETED_CATEGORY_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
