@@ -25,7 +25,7 @@ public class UserRequest {
     @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 입력해주세요.")
     private String password;
 
-    @NotNull(message = "로그인 제공자를 선택해주세요.")
+    @NotNull(message = "로그인 제공자 정보다 누락되었습니다.")
     private IdentityProvider identityProvider; // NONE, GOOGLE, KAKAO 중 선택
 
 }
