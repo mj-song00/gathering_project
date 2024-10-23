@@ -39,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT 토큰이 누락되었습니다.");
+            return;
         }
 
         try {
