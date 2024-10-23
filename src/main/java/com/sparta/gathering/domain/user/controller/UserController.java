@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.user.controller;
 import com.sparta.gathering.common.config.JwtTokenProvider;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.service.UserService;
 import com.sparta.gathering.domain.user.dto.request.UserRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,10 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @Slf4j
 @Tag(name = "User", description = "사용자 API")
@@ -42,15 +42,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // 회원 탈퇴 (Soft Delete)
-    @PatchMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(
-            @PathVariable UUID userId,
-            @RequestHeader("Authorization") String token) {
-        String tokenUserId = jwtTokenProvider.extractClaims(jwtTokenProvider.substringToken(token)).getSubject();
-        userService.deleteUser(userId, tokenUserId);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    @PatchMapping("/me/delete")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user.getId().toString());
+        return ResponseEntity.ok(ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS));
     }
 
 }

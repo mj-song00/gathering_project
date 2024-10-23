@@ -1,15 +1,17 @@
 @base_url = http://localhost:8080
 
-@userId = c0b9313f-cc7e-4dd4-a3c0-a64c52e1dcd9
+@userId = 689e1f72-a536-48f8-a9e4-0ed4986bf2b2
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njc1Nzc3LCJpYXQiOjE3Mjk2NzIxNzd9.2vEL5j5sT1ryslu4ltBpNKJ4G-5Hs1HZw-3kQz6PT38
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5NjkzNjkxLCJpYXQiOjE3Mjk2OTAwOTF9.mPT3dl3xqcEkvALI_604OJ6n-TTylA000D274QMyGXs
+
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test12@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -21,15 +23,19 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "password": "password123"
 }
 
 ### 회원탈퇴 요청
-PATCH {{base_url}}/api/users/{{userId}}
+PATCH {{base_url}}/api/users/me/delete
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
+### 회원탈퇴 요청 (JWT 토큰 만료)
+PATCH {{base_url}}/api/users/me/delete
+Authorization: Bearer {{expired_jwt}}
+Content-Type: application/json
 
 ### Refresh Token을 통한 Access Token 재발급 요청
 POST {{base_url}}/api/auth/token/refresh

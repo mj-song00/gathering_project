@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.member.entity;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.enums.Permission;
+import com.sparta.gathering.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,8 +33,13 @@ public class Member extends Timestamped {
     @JoinColumn(name="gather_id", nullable=false)
     private Gather gather;
 
-    public Member (Permission permission, Gather gather){
-        this.permission = permission;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
+
+    public Member (User user, Gather gather, Permission permission){
+        this.user = user;
         this.gather = gather;
+        this.permission = permission;
     }
 }

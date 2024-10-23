@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,20 +47,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(UUID userId, String tokenUserId) {
-
-        // 토큰에서 추출된 userId가 없을 경우 예외 발생
-        if (tokenUserId == null || tokenUserId.isEmpty()) {
-            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION); // 권한 없음 처리
-        }
-
-        // 요청된 userId와 토큰에서 추출된 userId가 일치하는지 확인
-        if (!userId.toString().equals(tokenUserId)) {
-            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION); // 권한 없음 처리
-        }
+    public void deleteUser(String tokenUserId) {
 
         // 유저 조회
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(UUID.fromString(tokenUserId))
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         // 이미 삭제된 사용자일 경우 예외 발생
@@ -70,8 +61,8 @@ public class UserServiceImpl implements UserService {
         // 소프트 삭제 처리
         user.setDeletedAt();
         userRepository.save(user);
-    }
 
+    }
 
     @Override
     public User findById(UUID userId) {

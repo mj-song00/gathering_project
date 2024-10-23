@@ -8,6 +8,7 @@ import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
+import com.sparta.gathering.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,13 @@ import java.util.List;
 public class GatherServiceImpl implements GatherService{
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
+    //todo : 본인확인 필요!!
 
     // 모임생성
-    public void createGather(GatherRequest request){
+    public void createGather(GatherRequest request, User user ){
         Gather gather = new Gather(request.getTitle());
         gatherRepository.save(gather);
-        Member member = new Member(Permission.MANAGER, gather);
+        Member member = new Member(user, gather,Permission.MANAGER);
         memberRepository.save(member);
     }
 
