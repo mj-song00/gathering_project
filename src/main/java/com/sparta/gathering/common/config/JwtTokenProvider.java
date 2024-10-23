@@ -35,8 +35,13 @@ public class JwtTokenProvider {
 
     @PostConstruct
     public void init() {
-        byte[] bytes = Base64.getDecoder().decode(secretKey);
-        key = Keys.hmacShaKeyFor(bytes);
+        if (secretKey == null || secretKey.isEmpty()) {
+            throw new IllegalArgumentException("JWT secret key를 찾을 수 없습니다.");
+        }
+
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        key = Keys.hmacShaKeyFor(decodedKey);
+        log.info("JWT 서명 키가 정상적으로 설정되었습니다.");
     }
 
     public String createToken(UUID userId, String email, String nickname , UserRole userRole) {
@@ -62,10 +67,15 @@ public class JwtTokenProvider {
     }
 
     public Claims extractClaims(String token) {
+        if (key == null) {
+            log.error("JWT 서명 키가 null입니다.");
+            throw new IllegalArgumentException("JWT 서명 키가 null입니다.");
+        }
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
+
 }
