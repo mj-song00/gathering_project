@@ -1,8 +1,7 @@
-package com.sparta.gathering.domain.category.entity;
+package com.sparta.gathering.domain.hashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
-import com.sparta.gathering.domain.category.dto.request.CategoryReq;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.hashtag.dto.request.HashTagReq;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,36 +15,34 @@ import java.util.UUID;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "category")
+@Table(name = "hashtag")
 @Where(clause = "deleted_at IS NULL")
-@SQLDelete(sql = "UPDATE category SET deleted_at = NOW() WHERE id = ?")
-public class Category extends Timestamped {
+@SQLDelete(sql = "UPDATE hashtag SET deleted_at = NOW() WHERE id = ?")
+public class HashTag extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID id;
 
-    private String categoryName;
+    private String hashTagName;
 
     @ColumnDefault("NULL")
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    private Gathering gathering;
 
-    private Category(String categoryName, User user) {
-        this.categoryName = categoryName;
-        this.user = user;
+    private HashTag(String hashTagName) {
+        this.hashTagName = hashTagName;
     }
 
-    public static Category from(CategoryReq categoryReq, User user) {
-        return new Category(categoryReq.getCategoryName(), user);
+    public static HashTag from(HashTagReq hashTagReq) {
+        return new HashTag(hashTagReq.getHashTagName());
     }
-
 
     public void updateDeleteAt() {
         this.deletedAt = LocalDateTime.now();

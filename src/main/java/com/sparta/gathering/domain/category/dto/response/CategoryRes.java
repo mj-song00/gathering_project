@@ -9,15 +9,15 @@ import java.util.UUID;
 
 public class CategoryRes {
     private final UUID id;
-    private final String title;
+    private final String categoryName;
 
-    private CategoryRes(UUID id, String title) {
+    private CategoryRes(UUID id, String categoryName) {
         this.id = id;
-        this.title = title;
+        this.categoryName = categoryName;
     }
 
     public static CategoryRes from(Category category) {
-        return new CategoryRes(category.getId(), category.getTitle());
+        return new CategoryRes(category.getId(), category.getCategoryName());
     }
 
 }

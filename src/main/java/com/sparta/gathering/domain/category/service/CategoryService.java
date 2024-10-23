@@ -25,14 +25,14 @@ public class CategoryService {
 
     // 카테고리 생성
     @Transactional
-    public CategoryRes createCategory(User token, CategoryReq categoryReq) {
+    public CategoryRes createCategory(User user, CategoryReq categoryReq) {
         // 유저 권한 확인
-        isValidUser(token);
-        if (categoryRepository.findByTitle(categoryReq.getTitle()).isPresent()) {
+        isValidUser(user);
+        if (categoryRepository.findByCategoryName(categoryReq.getCategoryName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_TITLE);
         }
 
-        Category newCategory = Category.from(categoryReq, token);
+        Category newCategory = Category.from(categoryReq, user);
 
         Category savedCategory = categoryRepository.save(newCategory);
 
@@ -51,8 +51,8 @@ public class CategoryService {
 
 
     // userRole ADMIN 확인
-    public User isValidUser(User token) throws BaseException {
-        User newuser = userRepository.findById(token.getId())
+    public User isValidUser(User user) throws BaseException {
+        User newuser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         // 반대로 추가해야함 테스트용
         if (newuser.getUserRole().equals(UserRole.ROLE_ADMIN)) {

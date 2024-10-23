@@ -7,5 +7,5 @@ import lombok.Getter;
 public class CategoryReq {
 
     @NotBlank(message = "카테고리명을 입력해주세요.")
-    private String title;
+    private String categoryName;
 }

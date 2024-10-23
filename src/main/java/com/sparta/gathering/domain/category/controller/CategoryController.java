@@ -25,9 +25,9 @@ public class CategoryController {
     // 카테고리 생성
     @PostMapping("/categories")
     public ResponseEntity<ApiResponse<CategoryRes>> createCategory(
-            @AuthenticationPrincipal User token,
+            @AuthenticationPrincipal User user,
             @Valid @RequestBody CategoryReq categoryReq) {
-        CategoryRes res = categoryService.createCategory(token, categoryReq);
+        CategoryRes res = categoryService.createCategory(user, categoryReq);
         ApiResponse<CategoryRes> response = ApiResponse.successWithData(res, ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
