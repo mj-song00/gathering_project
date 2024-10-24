@@ -2,11 +2,13 @@ package com.sparta.gathering.domain.gather.entity;
 
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.category.entity.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -21,8 +23,13 @@ public class Gather extends Timestamped {
 
     private LocalDateTime deletedAt;
 
-    public Gather(String title){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Gather(String title, Category category){
         this.title = title;
+        this.category = category;
     }
 
     public void updateGatherTitle(String title){
