@@ -2,6 +2,8 @@ package com.sparta.gathering.domain.gather.service;
 
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
+import com.sparta.gathering.domain.category.entity.Category;
+import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
@@ -10,10 +12,10 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
-import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,13 +23,15 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class GatherServiceImpl implements GatherService{
-    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
 
     // 모임생성
-    public void createGather(GatherRequest request, User user ){
-        Gather gather = new Gather(request.getTitle());
+    @Transactional
+    public void createGather(GatherRequest request, User user, UUID categoryId ){
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
+        Gather gather = new Gather(request.getTitle(), category);
         gatherRepository.save(gather);
         Member member = new Member(user, gather, Permission.MANAGER);
         memberRepository.save(member);
@@ -50,6 +54,7 @@ public class GatherServiceImpl implements GatherService{
     }
 
     //모임 삭제
+    @Transactional
     public void deleteGather(Long id, User user){
         UUID managerId = memberRepository.findManagerIdByGatherId(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
