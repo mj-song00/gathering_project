@@ -59,9 +59,9 @@ public class CategoryService {
 
     // 카테고리 삭제
     @Transactional
-    public void deleteCategory(User token, UUID categoryId) {
+    public void deleteCategory(User user, UUID categoryId) {
         // 유저 권한 확인
-        isValidUser(token);
+        isValidUser(user);
         Category category = isValidCategory(categoryId);
         category.updateDeleteAt();
     }
