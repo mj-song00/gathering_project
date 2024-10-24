@@ -8,12 +8,15 @@ import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -29,7 +32,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(UserRequest userRequest) {
-        // User 객체 생성
+        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+            throw new BaseException(ExceptionEnum.USER_ALREADY_EXISTS);
+        }
         User user = User.createWithAutoUUID(
                 userRequest.getEmail(),
                 userRequest.getNickName(),
@@ -40,13 +45,23 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
     @Transactional
-    public void deleteUser(UUID userId) {
-        User user = userRepository.findById(userId)
+    @Override
+    public void deleteUser(String tokenUserId) {
+
+        // 유저 조회
+        User user = userRepository.findById(UUID.fromString(tokenUserId))
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
+        // 이미 삭제된 사용자일 경우 예외 발생
+        if (user.getDeletedAt() != null) {
+            throw new BaseException(ExceptionEnum.ALREADY_DELETED);
+        }
+
         // 소프트 삭제 처리
-        user.deleteUser();
+        user.setDeletedAt();
+        userRepository.save(user);
+
     }
 
     @Override
@@ -65,11 +80,6 @@ public class UserServiceImpl implements UserService {
     public User findByProviderIdAndIdentityProvider(String providerId, IdentityProvider identityProvider) {
         return userRepository.findByProviderIdAndIdentityProvider(providerId, identityProvider)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-    }
-
-    @Override
-    public User save(User user) {
-        return userRepository.save(user);
     }
 
     public User authenticateUser(String email, String rawPassword) {

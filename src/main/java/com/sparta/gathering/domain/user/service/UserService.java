@@ -12,13 +12,12 @@ public interface UserService {
 
     User findById(UUID userId);
 
-    void deleteUser(UUID userId);
+    void deleteUser(String tokenUserId);
 
     User findByEmail(String email);
 
     User findByProviderIdAndIdentityProvider(String providerId, IdentityProvider identityProvider);
 
-    User save(User user);
-
     User authenticateUser(String email, String password);
+
 }

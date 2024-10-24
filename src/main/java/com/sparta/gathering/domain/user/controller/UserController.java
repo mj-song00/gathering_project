@@ -6,17 +6,17 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.service.UserService;
 import com.sparta.gathering.domain.user.dto.request.UserRequest;
-import com.sparta.gathering.domain.user.dto.response.UserResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
+@Slf4j
 @Tag(name = "User", description = "사용자 API")
 @RestController
 @RequestMapping("/api/users")
@@ -24,11 +24,13 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, JwtTokenProvider JwtTokenProvider) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = JwtTokenProvider;
     }
 
     // 회원가입
@@ -36,17 +38,14 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> signup(@Valid @RequestBody UserRequest userRequest) {
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userService.createUser(userRequest);
-        ApiResponse<Void> response = ApiResponse.successWithoutData(ApiResponseEnum.SIGNUP_SUCCESS);
-        // 201 Created 상태와 함께 응답 반환
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.SIGNUP_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // 사용자 삭제 (Soft Delete)
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable UUID userId) {
-        userService.deleteUser(userId);
-        ApiResponse<Void> response = ApiResponse.successWithoutData(ApiResponseEnum.USER_DELETED_SUCCESS);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+    @PatchMapping("/me/delete")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user.getId().toString());
+        return ResponseEntity.ok(ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS));
     }
 
 }

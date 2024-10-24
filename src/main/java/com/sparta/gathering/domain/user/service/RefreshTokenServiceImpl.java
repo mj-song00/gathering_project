@@ -23,7 +23,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public String createRefreshToken(User user) {
         String token = UUID.randomUUID().toString();
-        Timestamp expiryDate = new Timestamp(new Date().getTime() + 604800000); // 7일 만료
+        Timestamp expiryDate = new Timestamp(new Date().getTime() + 3600000); // 1시간 만료
         RefreshToken refreshToken = new RefreshToken(user, token, expiryDate);
         refreshTokenRepository.save(refreshToken);
         return token;
