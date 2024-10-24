@@ -26,12 +26,13 @@ import java.util.UUID;
 public class GatherController {
     private final GatherService gatherService;
 
-    @PostMapping()
+    @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
             @RequestBody GatherRequest request,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID categoryId
     ) {
-        gatherService.createGather(request, user);
+        gatherService.createGather(request, user, categoryId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
