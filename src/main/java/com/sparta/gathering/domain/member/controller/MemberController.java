@@ -5,11 +5,13 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
+import com.sparta.gathering.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,9 +46,38 @@ public class MemberController {
         return ResponseEntity.ok(memberList);
     }
 
-    //멤버 가입승인
+    //멤버 가입승인 - 소모임 manager만
+    @PatchMapping("/{memberId}/{gatherId}")
+    public ResponseEntity<ApiResponse<Void>> approval(
+            @PathVariable long memberId,
+            @PathVariable long gatherId,
+            @AuthenticationPrincipal User user
+    ){
+        memberService.approval(memberId, gatherId, user);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.APPROVAL_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-    //멤버 가입거절
+    //멤버 가입거절-소모임 manager만
+    @PatchMapping("/{memberId}/{gatherId}/refusal")
+    public ResponseEntity<ApiResponse<Void>> refusal(
+            @PathVariable long memberId,
+            @PathVariable long gatherId,
+            @AuthenticationPrincipal User user
+    ){
+        memberService.refusal(memberId, gatherId, user);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.REFUSAL_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     //멤버 탈퇴
+    @PatchMapping("/{memberId}/withdrawal")
+    public ResponseEntity<ApiResponse<Void>>withdrawal(
+            @PathVariable long memberId,
+            @AuthenticationPrincipal User user
+    ){
+        memberService.withdrawal(memberId, user);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.WITHDRAWAL_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 }

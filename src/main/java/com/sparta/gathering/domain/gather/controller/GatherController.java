@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "Gather", description = "소모임 API")
 @RestController
@@ -24,7 +25,7 @@ import java.util.List;
 @RequestMapping("/api/gathers")
 public class GatherController {
     private final GatherService gatherService;
-//todo : 본인확인 로직 필요
+
     @PostMapping()
     public ResponseEntity<ApiResponse<Void>> createGather(
             @RequestBody GatherRequest request,
@@ -39,7 +40,7 @@ public class GatherController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
             @RequestBody GatherRequest request,
-            @PathVariable long id,
+            @PathVariable Long id,
             @AuthenticationPrincipal User user
     ){
         gatherService.modifyGather(request, id, user);
@@ -51,7 +52,7 @@ public class GatherController {
     //@모임 삭제(soft delete)
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteGather(
-            @PathVariable long id,
+            @PathVariable Long id,
             @AuthenticationPrincipal User user
     ){
         gatherService.deleteGather(id, user);

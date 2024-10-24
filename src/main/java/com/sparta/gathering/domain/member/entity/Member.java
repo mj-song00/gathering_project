@@ -42,4 +42,12 @@ public class Member extends Timestamped {
         this.gather = gather;
         this.permission = permission;
     }
+
+    public void updatePermission(Permission permission){
+        this.permission = permission;
+    }
+
+    public void delete(){
+        this.deletedAt = LocalDateTime.now();
+    }
 }

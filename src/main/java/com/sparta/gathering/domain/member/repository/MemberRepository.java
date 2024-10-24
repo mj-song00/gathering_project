@@ -14,9 +14,10 @@ import java.util.UUID;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    void findByUserId(User user);
-    List<Member> findByGatherId(Pageable pageable, long gatherId);
+    List<Member> findByGatherIdAndDeletedAtIsNull(Pageable pageable, long gatherId);
 
-    @Query("SELECT m.user.id FROM Member m WHERE m.gather.id = :gatherId AND m.permission = 'OWNER'")
-    Optional<UUID> findOwnerIdByGatherId(@Param("gatherId") Long gatherId);
+    @Query("SELECT m.user.id, m.permission FROM Member m WHERE m.gather.id = :gatherId and m.permission = com.sparta.gathering.domain.member.enums.Permission.MANAGER")
+    Optional<UUID> findManagerIdByGatherId(@Param("gatherId") Long gatherId);
+
+
 }

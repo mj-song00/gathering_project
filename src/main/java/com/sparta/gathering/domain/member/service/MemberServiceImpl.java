@@ -8,6 +8,7 @@ import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,36 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public List<Member> getMembers(Pageable pageable, long gatherId){
-        return memberRepository.findByGatherId(pageable, gatherId);
+        return memberRepository.findByGatherIdAndDeletedAtIsNull(pageable, gatherId);
+    }
+
+    public void approval(long memberId, long gatherId, User user){
+
+        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+
+        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
+        member.updatePermission(Permission.GUEST);
+        memberRepository.save(member);
+    }
+
+    public void refusal(long memberId, long gatherId, User user){
+        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+
+        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
+        member.delete();
+        memberRepository.save(member);
+    }
+
+    public void withdrawal(long memberId, User user){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
+        if(!member.getUser().getId().equals(user.getId())) throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
+        if(member.getDeletedAt() != null) throw new BaseException(ExceptionEnum.ALREADY_DELETED_MEMBER);
+
+        member.delete();
+        memberRepository.save(member);
     }
 }

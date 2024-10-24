@@ -29,17 +29,17 @@ public class GatherServiceImpl implements GatherService{
     public void createGather(GatherRequest request, User user ){
         Gather gather = new Gather(request.getTitle());
         gatherRepository.save(gather);
-        Member member = new Member(user, gather,Permission.MANAGER);
+        Member member = new Member(user, gather, Permission.MANAGER);
         memberRepository.save(member);
     }
 
     //모임 수정 gather
-    public void modifyGather(GatherRequest request, long id, User user){
+    public void modifyGather(GatherRequest request, Long id, User user){
 
-        UUID ownerId = memberRepository.findOwnerIdByGatherId(id)
+        UUID managerId = memberRepository.findManagerIdByGatherId(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
-        if (!ownerId.equals(user.getId())) {
+        if (!managerId.equals(user.getId())) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
 
@@ -50,11 +50,11 @@ public class GatherServiceImpl implements GatherService{
     }
 
     //모임 삭제
-    public void deleteGather(long id, User user){
-        UUID ownerId = memberRepository.findOwnerIdByGatherId(id)
+    public void deleteGather(Long id, User user){
+        UUID managerId = memberRepository.findManagerIdByGatherId(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
-        if (!ownerId.equals(user.getId()) || user.getUserRole() != UserRole.ROLE_ADMIN ) {
+        if ( !managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
 
