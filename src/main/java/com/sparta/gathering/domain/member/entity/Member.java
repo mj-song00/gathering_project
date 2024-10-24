@@ -25,10 +25,6 @@ public class Member extends Timestamped {
     @Column
     private LocalDateTime deletedAt;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "category_id", nullable = false)
-//    private Category category;
-
     @ManyToOne
     @JoinColumn(name="gather_id", nullable=false)
     private Gather gather;
