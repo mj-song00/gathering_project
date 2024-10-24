@@ -39,16 +39,8 @@ public class GatherServiceImpl implements GatherService{
 
     //모임 수정 gather
     public void modifyGather(GatherRequest request, Long id, User user){
-
-        UUID managerId = memberRepository.findManagerIdByGatherId(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
-        if (!managerId.equals(user.getId())) {
-            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-        }
-
+        validateManager(id, user);
         Gather gather = gatherRepository.findById(id).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-
         gather.updateGatherTitle(request.getTitle());
         gatherRepository.save(gather);
     }
@@ -56,13 +48,7 @@ public class GatherServiceImpl implements GatherService{
     //모임 삭제
     @Transactional
     public void deleteGather(Long id, User user){
-        UUID managerId = memberRepository.findManagerIdByGatherId(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
-        if ( !managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
-            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-        }
-
+        validateManager(id, user);
         Gather gather = gatherRepository.findById(id).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.delete();
         gatherRepository.save(gather);
@@ -71,5 +57,14 @@ public class GatherServiceImpl implements GatherService{
     //모임 불러오기
     public List<Gather> Gathers(Pageable pageable) {
        return gatherRepository.findByDeletedAtIsNullOrderByCreatedAtDesc(pageable);
+    }
+
+    private void validateManager(Long id, User user) {
+        UUID managerId = memberRepository.findManagerIdByGatherId(id)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+
+        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+        }
     }
 }
