@@ -26,7 +26,6 @@ public class JwtTokenProvider {
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; // 암호화 알고리즘
     private static final String BEARER_PREFIX = "Bearer "; // Bearer 접두어
     public static final String EMAIL_CLAIM = "email"; // 이메일 클레임
-    public static final String NICKNAME_CLAIM = "nickName"; // 닉네임 클레임
     public static final String USER_ROLE_CLAIM = "userRole"; // 유저 권한 클레임
 
     @Value("${jwt.secret}")
@@ -51,7 +50,6 @@ public class JwtTokenProvider {
                 Jwts.builder()
                         .setSubject(userId.toString())
                         .claim(EMAIL_CLAIM, email)
-                        .claim(NICKNAME_CLAIM, nickname)
                         .claim(USER_ROLE_CLAIM, userRole.name())
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date) // 발급일
