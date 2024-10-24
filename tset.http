@@ -6,7 +6,7 @@
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
-### 회원가입 요청
+### 회원가입 요청.
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
