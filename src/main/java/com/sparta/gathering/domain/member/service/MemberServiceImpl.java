@@ -13,6 +13,7 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class MemberServiceImpl implements MemberService {
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
 
-
+    @Transactional
     public void createMember(UUID userId, long gatherId){
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = gatherRepository.findById(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -38,26 +39,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public void approval(long memberId, long gatherId, User user){
-
-        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
-
-        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-
+        validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.GUEST);
         memberRepository.save(member);
     }
 
+    @Transactional
     public void refusal(long memberId, long gatherId, User user){
-        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
-
-        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-
+        validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
+        member.updatePermission(Permission.REFUSAL);
         member.delete();
         memberRepository.save(member);
     }
 
+    @Transactional
     public void withdrawal(long memberId, User user){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         if(!member.getUser().getId().equals(user.getId())) throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
@@ -65,5 +62,14 @@ public class MemberServiceImpl implements MemberService {
 
         member.delete();
         memberRepository.save(member);
+    }
+
+    private void validateManager(long gatherId, User user) {
+        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+
+        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+        }
     }
 }

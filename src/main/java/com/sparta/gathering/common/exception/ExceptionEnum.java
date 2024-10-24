@@ -26,6 +26,7 @@ public enum ExceptionEnum {
     ALREADY_DELETED(HttpStatus.BAD_REQUEST, "ALREADY_DELETED", "이미 탈퇴된 사용자입니다."),
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "USER_ALREADY_EXISTS", "이미 존재하는 사용자입니다."),
     EMAIL_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_PASSWORD_MISMATCH", "이메일 혹은 비밀번호가 일치하지 않습니다."),
+
     // 카테고리 관련
     NOT_ADMIN_ROLE(HttpStatus.BAD_REQUEST,"NOT_ADMIN_ROLE","관리자만 이용할 수 있습니다."),
     NOT_FOUNT_CATEGORY(HttpStatus.BAD_REQUEST,"NOT_FOUNT_CATEGORY","존재하지 않는 카테고리입니다."),
