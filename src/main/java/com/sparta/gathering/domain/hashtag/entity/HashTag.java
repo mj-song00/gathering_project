@@ -1,6 +1,7 @@
 package com.sparta.gathering.domain.hashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.hashtag.dto.request.HashTagReq;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "hashtag")
 @Where(clause = "deleted_at IS NULL")
-@SQLDelete(sql = "UPDATE hashtag SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE `hashtag` SET deleted_at = NOW() WHERE id = ?")
 public class HashTag extends Timestamped {
 
     @Id
@@ -32,16 +33,17 @@ public class HashTag extends Timestamped {
     private LocalDateTime deletedAt;
 
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private Gathering gathering;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gather_id")
+    private Gather gather;
 
-    private HashTag(String hashTagName) {
+    private HashTag(String hashTagName,Gather gather) {
         this.hashTagName = hashTagName;
+        this.gather = gather;
     }
 
-    public static HashTag from(HashTagReq hashTagReq) {
-        return new HashTag(hashTagReq.getHashTagName());
+    public static HashTag from(HashTagReq hashTagReq,Gather gather) {
+        return new HashTag(hashTagReq.getHashTagName(), gather );
     }
 
     public void updateDeleteAt() {

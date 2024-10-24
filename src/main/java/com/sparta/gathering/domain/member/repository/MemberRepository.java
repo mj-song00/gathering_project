@@ -1,7 +1,6 @@
 package com.sparta.gathering.domain.member.repository;
 
 import com.sparta.gathering.domain.member.entity.Member;
-import com.sparta.gathering.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +19,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<UUID> findManagerIdByGatherId(@Param("gatherId") Long gatherId);
 
 
+    Optional<Member> findByUserId(UUID id);
 }

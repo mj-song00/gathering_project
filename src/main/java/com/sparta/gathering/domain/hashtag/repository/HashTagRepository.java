@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface HashTagRepository extends JpaRepository<HashTag, UUID> {
 
     Optional<HashTag> findByHashTagName(String hashTagName);
+
+    Optional<HashTag> findByGatherId(Long gatherId);
 }
