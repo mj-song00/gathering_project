@@ -38,21 +38,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public void approval(long memberId, long gatherId, User user){
-
-        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
-
-        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-
+        validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.GUEST);
         memberRepository.save(member);
     }
 
     public void refusal(long memberId, long gatherId, User user){
-        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
-
-        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-
+        validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.delete();
         memberRepository.save(member);
@@ -65,5 +58,14 @@ public class MemberServiceImpl implements MemberService {
 
         member.delete();
         memberRepository.save(member);
+    }
+
+    private void validateManager(long gatherId, User user) {
+        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+
+        if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+        }
     }
 }
