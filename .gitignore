@@ -37,7 +37,6 @@ out/
 .vscode/
 
 ## env ##
-.env
 .env.dev
 .env.prod
 

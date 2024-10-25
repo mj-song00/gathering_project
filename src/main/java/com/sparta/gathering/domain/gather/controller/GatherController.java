@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.gather.controller;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import com.sparta.gathering.domain.user.entity.User;
@@ -63,12 +64,12 @@ public class GatherController {
 
 
     @GetMapping()
-    public ResponseEntity<List<Gather>> Gathers(
+    public ResponseEntity<List<GatherListResponse>> Gathers(
             @RequestParam(defaultValue ="1") int page)
     {
         Pageable pageable = PageRequest.of(page-1, 10);
 
-        List<Gather> gatherList = gatherService.Gathers(pageable);
+        List<GatherListResponse> gatherList = gatherService.Gathers(pageable);
         return ResponseEntity.ok(gatherList);
     }
 }
