@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.gather.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.board.entity.Board;
+import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class Gather extends Timestamped {
 
     @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Schedule> scheduleList = new ArrayList<>();
 
     public Gather(String title){
         this.title = title;

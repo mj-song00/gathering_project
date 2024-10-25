@@ -24,6 +24,11 @@ public enum ApiResponseEnum {
     BOARD_UPDATED("보드가 성공적으로 수정되었습니다."),
     BOARD_DELETED("보드가 성공적으로 삭제되었습니다."),
 
+    // 스케쥴 관련
+    SCHEDULE_CREATED("스케쥴이 성공적으로 생성되었습니다."),
+    SCHEDULE_UPDATED("스케쥴이 성공적으로 수정되었습니다."),
+    SCHEDULE_DELETED("스케쥴이 성공적으로 ��제되었습니다."),
+
     //gather 관련
     GATHER_CREATE_SUCCESS("생성 성공"),
     GATHER_DELETE_SUCCESS("삭제 완료"),
