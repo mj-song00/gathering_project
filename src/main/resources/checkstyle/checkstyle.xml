@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+  "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+
+  <property name="charset" value="UTF-8"/>
+  <property name="severity" value="warning"/>
+
+  <module name="FileTabCharacter">
+    <property name="eachLine" value="true"/>
+  </module>
+
+  <module name="TreeWalker">
+    <!-- Import 규칙 - 와일드카드 import 허용 -->
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+
+    <!-- 이름 규칙 -->
+    <module name="LocalVariableName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
+    </module>
+    <module name="MemberName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
+    </module>
+    <module name="MethodName">
+      <property name="format" value="^[a-zA-Z][a-zA-Z0-9]*$"/> <!-- 대문자 시작 허용 -->
+    </module>
+    <module name="PackageName"/>
+    <module name="ParameterName">
+      <property name="format" value="^[a-z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
+    </module>
+    <module name="TypeName"/>
+    <module name="ConstantName">
+      <property name="format" value="^[A-Z][A-Z0-9_]*$"/> <!-- 상수는 UPPER_CASE 형식 -->
+    </module>
+
+  </module>
+</module>
