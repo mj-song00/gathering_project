@@ -3,11 +3,9 @@ package com.sparta.gathering.domain.user.entity;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -50,7 +48,7 @@ public class User extends Timestamped {
     private String profileImage; // 사용자 프로필 이미지 URL (null일 경우 디폴트 이미지)
 
     // UUID 자동 생성
-    public static User createWithAutoUUID(String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
+    public static User createWithAutoUUID(String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider, String profileImage) {
         User user = new User();
         user.id = UUID.randomUUID();
         user.email = email;
@@ -58,6 +56,7 @@ public class User extends Timestamped {
         user.password = password;
         user.userRole = userRole;
         user.identityProvider = identityProvider;
+        user.profileImage = profileImage;
         return user;
     }
 
@@ -85,8 +84,14 @@ public class User extends Timestamped {
         this.deletedAt = LocalDateTime.now();
     }
 
-    // 프로필 이미지 업데이트 (보류)
-    public void updateProfileImage(String profileImage) {
+    // 프로필 이미지 삭제
+    public void setDeleteProfileImage() {
+        this.profileImage = null;
+
+    }
+
+    // 프로필 이미지 업데이트
+    public void setUpdateProfileImage(String profileImage) {
         this.profileImage = profileImage;
     }
 }
