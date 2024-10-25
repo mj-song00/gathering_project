@@ -19,6 +19,10 @@ public enum ApiResponseEnum {
     DELETED_HASHTAG_SUCCESS("해시태그가 성공적으로 삭제되었습니다."),
     GET_HASHTAG_SUCCESS("해시태그가 성공적으로 조회되었습니다."),
 
+    // 보드 관련
+    BOARD_CREATED("보드가 성공적으로 생성되었습니다."),
+    BOARD_UPDATED("보드가 성공적으로 수정되었습니다."),
+    BOARD_DELETED("보드가 성공적으로 삭제되었습니다."),
 
     //gather 관련
     GATHER_CREATE_SUCCESS("생성 성공"),

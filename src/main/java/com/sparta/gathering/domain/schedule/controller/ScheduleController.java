@@ -14,6 +14,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
-    @PostMapping("/schedules")
 
 }

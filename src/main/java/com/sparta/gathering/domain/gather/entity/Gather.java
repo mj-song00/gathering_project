@@ -2,11 +2,14 @@ package com.sparta.gathering.domain.gather.entity;
 
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.board.entity.Board;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -21,6 +24,9 @@ public class Gather extends Timestamped {
 
     private LocalDateTime deletedAt;
 
+    @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Board> boardList = new ArrayList<>();
+
     public Gather(String title){
         this.title = title;
     }
@@ -32,4 +38,5 @@ public class Gather extends Timestamped {
     public void delete(){
         this.deletedAt = LocalDateTime.now();
     }
+
 }

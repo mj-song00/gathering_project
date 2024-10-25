@@ -19,7 +19,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/boards")
-    @Operation(tags = {"boards"}, description = "Board 생성")
+    @Operation(summary = "create board", description = "Board 생성")
     public ApiResponse<?> createBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @RequestBody BoardRequestDto boardRequestDto)
@@ -29,7 +29,7 @@ public class BoardController {
     }
 
     @PutMapping("/boards/{boardsId}")
-    @Operation(tags = {"boards"}, description = "Board 수정")
+    @Operation(summary = "update board", description = "Board 수정")
     public ApiResponse<?> updateBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId,
@@ -40,13 +40,13 @@ public class BoardController {
     }
 
     @DeleteMapping("/boards/{boardsId}")
-    @Operation(tags = {"boards"}, description = "Board 삭제")
+    @Operation(summary = "delete board", description = "Board 삭제")
     public ApiResponse<?> deleteBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId)
     {
         boardService.deleteBoard(gatherId, boardsId);
-        return ApiResponse.successWithoutData(ApiResponseEnum.BOARD_DELETED);
+        return ApiResponse.successWithData(null,ApiResponseEnum.BOARD_DELETED);
     }
 
 }
