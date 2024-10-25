@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface GatherRepository extends JpaRepository<Gather, Long> {
-    //List<GatherListResponse> findByDeletedAtIsNullOrderByCreatedAtDesc(Pageable pageable);
     @Query("SELECT g FROM Gather g WHERE g.deletedAt IS NULL ORDER BY g.createdAt DESC")
     List<GatherListResponse> findGathers(Pageable pageable);
 }
