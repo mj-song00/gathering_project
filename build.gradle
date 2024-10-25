@@ -68,6 +68,10 @@ dependencies {
     // S3
     implementation 'com.amazonaws:aws-java-sdk:1.11.313'
 
+    // JAXB API
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
 
 }
 

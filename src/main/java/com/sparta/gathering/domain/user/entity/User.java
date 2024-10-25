@@ -84,8 +84,14 @@ public class User extends Timestamped {
         this.deletedAt = LocalDateTime.now();
     }
 
-    // 프로필 이미지 업데이트 (보류)
-//    public void updateProfileImage(String profileImage) {
-//        this.profileImage = profileImage;
-//    }
+    // 프로필 이미지 삭제
+    public void setDeleteProfileImage() {
+        this.profileImage = null;
+
+    }
+
+    // 프로필 이미지 업데이트
+    public void setUpdateProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

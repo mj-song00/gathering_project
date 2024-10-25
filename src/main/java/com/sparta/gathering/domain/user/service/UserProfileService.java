@@ -61,43 +61,34 @@ public class UserProfileService {
             throw new BaseException(ExceptionEnum.UPLOAD_FAILED);
         }
 
-        String res = s3Client.getUrl(bucketName, fileName).toString();
-
-        User newuser = User.createWithAutoUUID(
-                user.getEmail(),
-                user.getNickName(),
-                user.getPassword(),
-                user.getUserRole(),
-                user.getIdentityProvider(),
-                res
-        );
+        User newuser = userRepository.findById(userId).orElse(null);
+        newuser.setUpdateProfileImage(fileName);
         userRepository.save(newuser);
 
+
+        String res = s3Client.getUrl(bucketName, fileName).toString();
         return res;
     }
 
     // 이미지 조회 - 누구나 조회 가능
     @Transactional(readOnly = true)
     public String getUserProfileImages(UUID userId) {
-        // 사용자에게 이미 등록된 이미지가 있는지 확인
         ListObjectsV2Request file = findImage(userId);
-        if (file == null) {
+        // 사용자에게 이미 등록된 이미지가 있는지 확인
+        User user = userRepository.findById(userId).orElse(null);
+        if (user.getProfileImage() == null) {
             return defaultProfileImageUrl; // 기본이미지
         }
-
-        String prefix = userId + "_";
-        ListObjectsV2Request req = new ListObjectsV2Request().withBucketName(bucketName).withPrefix(prefix);
-        ListObjectsV2Result result = s3Client.listObjectsV2(req);
-
-        return result.toString(); //보유 이미지
+        ListObjectsV2Result result = s3Client.listObjectsV2(file);
+        return s3Client.getUrl(bucketName, result.getObjectSummaries().get(0).getKey().toString()).toString();
     }
 
     // 이미지 삭제
     public void deleteUserProfileImage(User user, UUID userId) {
         isValidUser(user, userId);
+        User newUser = userRepository.findById(userId).orElse(null);
         // 사용자에게 이미 등록된 이미지가 있는지 확인
         ListObjectsV2Request file = findImage(userId);
-
         if (file == null) {
             throw new BaseException(ExceptionEnum.PERMISSION_DENIED);
         }
@@ -110,6 +101,8 @@ public class UserProfileService {
                 throw new BaseException(ExceptionEnum.DELETE_FAILED);
             }
         }
+        newUser.setDeleteProfileImage();
+        userRepository.save(newUser);
     }
 
     // 파일 유효성 확인
