@@ -88,14 +88,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private void setAuthentication(Claims claims) {
         String email = claims.get(jwtTokenProvider.EMAIL_CLAIM, String.class);
-        String nickName = claims.get(jwtTokenProvider.NICKNAME_CLAIM, String.class);
         UserRole userRole = UserRole.valueOf(claims.get(jwtTokenProvider.USER_ROLE_CLAIM, String.class));
 
         // subject에서 UUID 변환
         UUID userId = UUID.fromString(claims.getSubject());
 
         // User 객체 생성
-        User user = User.createWithMinimumInfo(userId, email, nickName, userRole);
+        User user = User.createWithMinimumInfo(userId, email, userRole);
 
         String role = userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
 

@@ -37,7 +37,7 @@ public class User extends Timestamped {
     private UserRole userRole; // 사용자 역할 (ROLE_USER, ROLE_ADMIN)
 
     @Column
-    private LocalDateTime deletedAt;
+    private LocalDateTime deletedAt; // 회원 탈퇴 여부 및 탈퇴 시간
 
     @Column
     private String providerId; // 소셜 로그인 제공자의 사용자 ID
@@ -61,24 +61,11 @@ public class User extends Timestamped {
         return user;
     }
 
-    // 기존 UUID 사용
-    public static User createWithUUID(UUID userId, String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider) {
-        User user = new User();
-        user.id = userId;
-        user.email = email;
-        user.nickName = nickName;
-        user.password = password;
-        user.userRole = userRole;
-        user.identityProvider = identityProvider;
-        return user;
-    }
-
     // 최소 정보로 객체 생성
-    public static User createWithMinimumInfo(UUID userId, String email, String nickName, UserRole userRole) {
+    public static User createWithMinimumInfo(UUID userId, String email, UserRole userRole) {
         User user = new User();
         user.id = userId;
         user.email = email;
-        user.nickName = nickName;
         user.userRole = userRole;
         return user;
     }

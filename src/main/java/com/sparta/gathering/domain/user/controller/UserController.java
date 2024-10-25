@@ -6,6 +6,7 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.service.UserService;
 import com.sparta.gathering.domain.user.dto.request.UserRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class UserController {
     }
 
     // 회원가입
+    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> signup(@Valid @RequestBody UserRequest userRequest) {
         userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
@@ -42,6 +44,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(summary = "회원 탈퇴", description = "본인의 계정을 탈퇴합니다.")
     @PatchMapping("/me/delete")
     public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal User user) {
         userService.deleteUser(user.getId().toString());
