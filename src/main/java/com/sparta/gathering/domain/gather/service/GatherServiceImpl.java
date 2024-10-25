@@ -32,7 +32,7 @@ public class GatherServiceImpl implements GatherService {
   public void createGather(GatherRequest request, User user, UUID categoryId) {
     Category category = categoryRepository.findById(categoryId)
         .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-    Gather gather = new Gather(request.getTitle(), category);
+    Gather gather = new Gather(request.getTitle(), request.getDescription(), category);
     gatherRepository.save(gather);
     Member member = new Member(user, gather, Permission.MANAGER);
     memberRepository.save(member);
