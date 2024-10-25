@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    @Value("${default.profile.image.url}")
+    private String defaultProfileImageUrl;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -39,7 +42,8 @@ public class UserServiceImpl implements UserService {
                 userRequest.getNickName(),
                 userRequest.getPassword(),
                 UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
-                userRequest.getIdentityProvider()  // 일반 로그인 사용자는 NONE
+                userRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
+                defaultProfileImageUrl
         );
         return userRepository.save(user);
     }
