@@ -15,39 +15,37 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    @Value("${default.profile.image.url}")
-    private String defaultProfileImageUrl;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  @Value("${default.profile.image.url}")
+  private String defaultProfileImageUrl;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+  @Autowired
+  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
-    @Transactional
-    @Override
-    public User createUser(UserRequest userRequest) {
-        if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
-            throw new BaseException(ExceptionEnum.USER_ALREADY_EXISTS);
-        }
-        User user = User.createWithAutoUUID(
-                userRequest.getEmail(),
-                userRequest.getNickName(),
-                userRequest.getPassword(),
-                UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
-                userRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
-                defaultProfileImageUrl
-        );
-        return userRepository.save(user);
+  @Transactional
+  @Override
+  public User createUser(SignupRequest SignupRequest) {
+    if (userRepository.findByEmail(SignupRequest.getEmail()).isPresent()) {
+      throw new BaseException(ExceptionEnum.USER_ALREADY_EXISTS);
     }
+    User user = User.createWithAutoUUID(
+        SignupRequest.getEmail(),
+        SignupRequest.getNickName(),
+        SignupRequest.getPassword(),
+        UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
+        SignupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
+        defaultProfileImageUrl
+    );
+    return userRepository.save(user);
+  }
 
   @Transactional
   @Override
