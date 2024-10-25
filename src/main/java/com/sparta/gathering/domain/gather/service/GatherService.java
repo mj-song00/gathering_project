@@ -1,7 +1,7 @@
 package com.sparta.gathering.domain.gather.service;
 
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.entity.Gather;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.user.entity.User;
 import org.springframework.data.domain.Pageable;
 
@@ -14,5 +14,5 @@ public interface GatherService {
 
     void deleteGather(Long id, User user);
 
-    List<Gather> Gathers(Pageable pageable);
+    List<GatherListResponse> Gathers(Pageable pageable);
 }
