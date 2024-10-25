@@ -7,9 +7,11 @@ import lombok.Getter;
 public class GatherListResponseItem {
     private Long id; // Gather ID
     private String title; // Gather 제목
+    private String description;
 
     public GatherListResponseItem(Gather gather) {
         this.id = gather.getId(); // Gather ID
         this.title = gather.getTitle(); // Gather 제목
+        this.description = gather.getDescription();
     }
 }
