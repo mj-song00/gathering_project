@@ -9,26 +9,22 @@ import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+
   @Value("${default.profile.image.url}")
   private String defaultProfileImageUrl;
-
-  @Autowired
-  public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-  }
 
   @Transactional
   @Override
