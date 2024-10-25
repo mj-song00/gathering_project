@@ -11,14 +11,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 @Getter
 @NoArgsConstructor
@@ -57,18 +54,19 @@ public class User extends Timestamped {
   @Column
   private String profileImage; // 사용자 프로필 이미지 URL (null일 경우 디폴트 이미지)
 
-    // UUID 자동 생성
-    public static User createWithAutoUUID(String email, String nickName, String password, UserRole userRole, IdentityProvider identityProvider, String profileImage) {
-        User user = new User();
-        user.id = UUID.randomUUID();
-        user.email = email;
-        user.nickName = nickName;
-        user.password = password;
-        user.userRole = userRole;
-        user.identityProvider = identityProvider;
-        user.profileImage = profileImage;
-        return user;
-    }
+  // UUID 자동 생성
+  public static User createWithAutoUUID(String email, String nickName, String password,
+      UserRole userRole, IdentityProvider identityProvider, String profileImage) {
+    User user = new User();
+    user.id = UUID.randomUUID();
+    user.email = email;
+    user.nickName = nickName;
+    user.password = password;
+    user.userRole = userRole;
+    user.identityProvider = identityProvider;
+    user.profileImage = profileImage;
+    return user;
+  }
 
   // 최소 정보로 객체 생성
   public static User createWithMinimumInfo(UUID userId, String email, UserRole userRole) {
@@ -93,14 +91,14 @@ public class User extends Timestamped {
     this.deletedAt = LocalDateTime.now();
   }
 
-    // 프로필 이미지 삭제
-    public void setDeleteProfileImage() {
-        this.profileImage = null;
+  // 프로필 이미지 삭제
+  public void setDeleteProfileImage() {
+    this.profileImage = null;
 
-    }
+  }
 
-    // 프로필 이미지 업데이트
-    public void setUpdateProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+  // 프로필 이미지 업데이트
+  public void setUpdateProfileImage(String profileImage) {
+    this.profileImage = profileImage;
+  }
 }

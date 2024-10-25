@@ -32,16 +32,16 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public User createUser(SignupRequest SignupRequest) {
-    if (userRepository.findByEmail(SignupRequest.getEmail()).isPresent()) {
+  public User createUser(SignupRequest signupRequest) {
+    if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
       throw new BaseException(ExceptionEnum.USER_ALREADY_EXISTS);
     }
     User user = User.createWithAutoUUID(
-        SignupRequest.getEmail(),
-        SignupRequest.getNickName(),
-        SignupRequest.getPassword(),
+        signupRequest.getEmail(),
+        signupRequest.getNickName(),
+        signupRequest.getPassword(),
         UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
-        SignupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
+        signupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
         defaultProfileImageUrl
     );
     return userRepository.save(user);
