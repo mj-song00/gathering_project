@@ -42,8 +42,11 @@ public enum ExceptionEnum {
     //멤버 관련
     MANAGER_NOT_FOUND(HttpStatus.UNAUTHORIZED,"MANAGER_NOT_FOUND","권한을 확인해주세요"),
     MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED,"MEMBER_NOT_FOUND","멤버를 찾을 수 없습니다."),
-    ALREADY_DELETED_MEMBER(HttpStatus.NOT_FOUND,"MEMBER_NOT_FOUND", "탈퇴한 게스트입니다.");
+    ALREADY_DELETED_MEMBER(HttpStatus.NOT_FOUND,"MEMBER_NOT_FOUND", "탈퇴한 게스트입니다."),
 
+    //댓글 관련
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMENT_NOT_FOUND","댓글 내용을 찾을 수 없습니다."),
+    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND,"SCHEDULE_NOT_FOUND","일정 내용을 찾을 수 없습니다.");
     private final HttpStatus status;
     private final String errorCode;
     private final String message;
