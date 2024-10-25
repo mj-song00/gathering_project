@@ -5,6 +5,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
@@ -55,8 +56,8 @@ public class GatherServiceImpl implements GatherService{
     }
 
     //모임 불러오기
-    public List<Gather> Gathers(Pageable pageable) {
-       return gatherRepository.findByDeletedAtIsNullOrderByCreatedAtDesc(pageable);
+    public List<GatherListResponse> Gathers(Pageable pageable) {
+        return gatherRepository.findGathers(pageable);
     }
 
     private void validateManager(Long id, User user) {
