@@ -4,24 +4,68 @@ CREATE database gathering;
 
 USE gathering;
 
-CREATE TABLE User (
-                      id BINARY(16) PRIMARY KEY, -- UUID를 BINARY(16)로 저장하여 고유 식별자로 사용
-                      email VARCHAR(255) UNIQUE NOT NULL, -- 사용자 이메일은 고유하며 필수 입력
-                      nick_name VARCHAR(100) NOT NULL, -- 사용자의 닉네임. NULL 불가, 중복 허용
-                      password VARCHAR(255), -- 비밀번호. 일반 로그인 사용자는 필요하지만, 소셜 로그인 사용자는 NULL이 가능
-                      user_role ENUM('ROLE_USER', 'ROLE_ADMIN') NOT NULL, -- 사용자의 권한 지정 (일반 사용자 또는 관리자)
-                      deleted_at TIMESTAMP NULL DEFAULT NULL, -- 삭제 일시. NULL일 경우 삭제되지 않음
-                      provider_id VARCHAR(255), -- 소셜 로그인 사용자의 경우 소셜 제공자에서 제공한 고유 사용자 ID
-                      identity_provider ENUM('KAKAO', 'GOOGLE', 'NONE') NOT NULL, -- 소셜 로그인 제공자 정보. NONE은 일반 로그인 사용자를 의미
-                      profile_image VARCHAR(255), -- 사용자 프로필 이미지 URL. NULL일 시 디폴트 이미지
-                      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 계정 생성 날짜
-                      updated_at TIMESTAMP NULL, -- 처음에는 NULL로 유지하다가 계정 정보 수정 시 업데이트
-                      CONSTRAINT unique_provider_id UNIQUE (provider_id, identity_provider) -- 소셜 로그인 중복 방지를 위한 제약 조건
+CREATE TABLE user
+(
+    id                BINARY(16)                       NOT NULL,
+    created_at        DATETIME(6),
+    updated_at        DATETIME(6),
+    deleted_at        DATETIME(6),
+    email             VARCHAR(255)                     NOT NULL UNIQUE,
+    identity_provider ENUM ('GOOGLE', 'KAKO', 'NONE')  NOT NULL,
+    nick_name         VARCHAR(255)                     NOT NULL,
+    password          VARCHAR(255),
+    profile_image     VARCHAR(255),
+    provider_id       VARCHAR(255),
+    user_role         ENUM ('ROLE_ADMIN', 'ROLE_USER') NOT NULL,
+    PRIMARY KEY (id)
 );
 
-CREATE TABLE RefreshToken (
-                              id BINARY(16) PRIMARY KEY, -- UUID로 저장
-                              user_id BINARY(16) NOT NULL, -- User 테이블의 외래 키 (UUID)
-                              refresh_token VARCHAR(255) NOT NULL, -- Refresh Token 값
-                              expiry_date TIMESTAMP NOT NULL -- Refresh Token 만료 일시
+CREATE TABLE category
+(
+    id            BINARY(16) NOT NULL,
+    created_at    DATETIME(6),
+    updated_at    DATETIME(6),
+    deleted_at    DATETIME(6),
+    user_id       BINARY(16),
+    category_name VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
+);
+
+CREATE TABLE gather
+(
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    created_at  DATETIME(6),
+    updated_at  DATETIME(6),
+    deleted_at  DATETIME(6),
+    category_id BINARY(16),
+    title       VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (category_id) REFERENCES category (id)
+);
+
+CREATE TABLE hashtag
+(
+    id            BINARY(16) NOT NULL,
+    created_at    DATETIME(6),
+    updated_at    DATETIME(6),
+    deleted_at    DATETIME(6),
+    gather_id     BIGINT,
+    hash_tag_name VARCHAR(255),
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id)
+);
+
+CREATE TABLE member
+(
+    id         BIGINT     NOT NULL AUTO_INCREMENT,
+    created_at DATETIME(6),
+    updated_at DATETIME(6),
+    deleted_at DATETIME(6),
+    gather_id  BIGINT     NOT NULL,
+    user_id    BINARY(16) NOT NULL,
+    permission ENUM ('GUEST', 'MANAGER', 'PENDDING', 'REFUSAL'),
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id),
+    FOREIGN KEY (user_id) REFERENCES user (id)
 );
