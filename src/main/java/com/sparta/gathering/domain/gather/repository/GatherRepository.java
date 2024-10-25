@@ -12,6 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface GatherRepository extends JpaRepository<Gather, Long> {
-    @Query(value = "SELECT * FROM gather WHERE category_id = :categoryId", nativeQuery = true)
+    @Query("SELECT g FROM Gather g WHERE g.deletedAt IS NULL AND g.category.id = :categoryId ORDER BY g.createdAt DESC")
     Page<Gather> findGathersByCategoryId(Pageable pageable, @Param("categoryId") UUID categoryId);
 }
