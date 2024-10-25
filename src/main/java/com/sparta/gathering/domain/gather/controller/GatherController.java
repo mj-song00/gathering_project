@@ -9,6 +9,7 @@ import com.sparta.gathering.domain.gather.service.GatherService;
 import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -63,13 +64,21 @@ public class GatherController {
     }
 
 
-    @GetMapping()
-    public ResponseEntity<List<GatherListResponse>> Gathers(
-            @RequestParam(defaultValue ="1") int page)
+    @GetMapping("/{categoryId}")
+    public ApiResponse<GatherListResponse> Gathers(
+            @RequestParam(defaultValue ="1") int page,
+            @PathVariable UUID categoryId )
+
     {
         Pageable pageable = PageRequest.of(page-1, 10);
 
-        List<GatherListResponse> gatherList = gatherService.Gathers(pageable);
-        return ResponseEntity.ok(gatherList);
+        Page<Gather> gatherList = gatherService.Gathers(pageable, categoryId);
+        GatherListResponse response = new GatherListResponse(
+                gatherList.getContent(), // Gather 리스트
+                gatherList.getNumber(), // 현재 페이지 번호
+                gatherList.getTotalPages(), // 총 페이지 수
+                gatherList.getTotalElements() // 총 요소 수
+        );
+        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
 }
