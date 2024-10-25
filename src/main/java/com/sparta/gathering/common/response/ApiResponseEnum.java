@@ -23,6 +23,7 @@ public enum ApiResponseEnum {
     //gather 관련
     GATHER_CREATE_SUCCESS("생성 성공"),
     GATHER_DELETE_SUCCESS("삭제 완료"),
+    GET_SUCCESS("조회 성공"),
 
     //멤버 관련
     CREATE_SUCCESS("멤버 생성에 성공하였습니다."),

@@ -5,7 +5,6 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
@@ -14,11 +13,11 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,8 +55,8 @@ public class GatherServiceImpl implements GatherService{
     }
 
     //모임 불러오기
-    public List<GatherListResponse> Gathers(Pageable pageable) {
-        return gatherRepository.findGathers(pageable);
+    public Page<Gather> Gathers(Pageable pageable, UUID categoryId) {
+        return gatherRepository.findGathersByCategoryId(pageable, categoryId);
     }
 
     private void validateManager(Long id, User user) {
