@@ -43,3 +43,4 @@ out/
 ## application.yml ##
 /src/main/resources/application-dev.yml
 
+.env
