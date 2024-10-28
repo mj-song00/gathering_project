@@ -42,7 +42,7 @@ public class JwtTokenProvider {
   public String createToken(UUID userId, String email, UserRole userRole) {
     Date date = new Date();
 
-    return BEARER_PREFIX +
+    return
         Jwts.builder()
             .setSubject(userId.toString())
             .claim(EMAIL_CLAIM, email)

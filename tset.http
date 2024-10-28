@@ -1,17 +1,17 @@
 @base_url = http://localhost:8080
 
-@userId = 689e1f72-a536-48f8-a9e4-0ed4986bf2b2
+@user_Id =
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5NjkzNjkxLCJpYXQiOjE3Mjk2OTAwOTF9.mPT3dl3xqcEkvALI_604OJ6n-TTylA000D274QMyGXs
+@jwt_token =
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
-### 회원가입 요청.
+### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test12@example.com",
+  "email": "test@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -23,12 +23,12 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test00@example.com",
+  "email": "test@example.com",
   "password": "password123"
 }
 
 ### 회원탈퇴 요청
-PATCH {{base_url}}/api/users/{{userId}}
+PATCH {{base_url}}/api/users/me/delete
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
@@ -37,15 +37,6 @@ Content-Type: application/json
 PATCH {{base_url}}/api/users/me/delete
 Authorization: Bearer {{expired_jwt}}
 Content-Type: application/json
-
-
-### Refresh Token을 통한 Access Token 재발급 요청
-POST {{base_url}}/api/auth/token/refresh
-Content-Type: application/json
-
-{
-  "refresh_token": ""
-}
 
 ### 카테고리 생성
 POST {{base_url}}/api/categories
@@ -62,11 +53,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-
 }
 
 ### 카테고리 수정
-PUT {{base_url}}/api/categories/9b0bdb8b-9a90-4579-aac9-862a4d18cb15
+PUT {{base_url}}/api/categories/{{user_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -76,12 +66,11 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 카테고리 삭제
-PATCH {{base_url}}/api/categories/32aeabed-65c5-4978-a1c7-d2e3c9524381
+PATCH {{base_url}}/api/categories/{{user_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-
 }
 
 ### 모임 생성
@@ -94,7 +83,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 멤버 생성
-POST {{base_url}}/api/members/user/7b0e804b-7292-4bc0-8437-2c6726319b68/gather/1
+POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -126,20 +115,18 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-
 }
 
 ### 해시태그 삭제
-PATCH {{base_url}}/api/gatherings/{gatherId}/hashtags/
+PATCH {{base_url}}/api/gatherings/1/hashtags
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-
 }
 
 ### 이미지 등록
-POST {{base_url}}/api/users/020a1d09-67f0-43e2-8a76-e5bf525c2491/profile-image
+POST {{base_url}}/api/users/{{user_Id}}/profile-image
 Content-Type: multipart/form-data
 Authorization: Bearer {{jwt_token}}
 
