@@ -2,12 +2,13 @@ package com.sparta.gathering.domain.member.controller;
 
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.member.dto.response.MemberListResponse;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
 import com.sparta.gathering.domain.user.entity.User;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,14 +42,19 @@ public class MemberController {
 
   //멤버조회
   @GetMapping("/{gatherId}")
-  public ResponseEntity<List<Member>> getMembers(
+  public ApiResponse<MemberListResponse> getMembers(
       @PathVariable long gatherId,
       @RequestParam(defaultValue = "1") int page
-
   ) {
     Pageable pageable = PageRequest.of(page - 1, 10);
-    List<Member> memberList = memberService.getMembers(pageable, gatherId);
-    return ResponseEntity.ok(memberList);
+    Page<Member> memberList = memberService.getMembers(pageable, gatherId);
+    MemberListResponse response = new MemberListResponse(
+            memberList.getContent(),
+            memberList.getNumber(),
+            memberList.getTotalPages(),
+            memberList.getTotalElements()
+    );
+    return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
   }
 
   //멤버 가입승인 - 소모임 manager만
