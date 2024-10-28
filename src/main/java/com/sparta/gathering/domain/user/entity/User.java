@@ -77,18 +77,32 @@ public class User extends Timestamped {
     return user;
   }
 
-  // 비밀번호 업데이트
-  public void updatePassword(String newPassword) {
-    this.password = newPassword;
+  // 소셜 로그인 사용자를 위한 생성 메서드
+  public static User createSocialUser(String email, String providerId, UserRole userRole,
+      IdentityProvider identityProvider, String nickName, String profileImage) {
+    User user = new User();
+    user.id = UUID.randomUUID();
+    user.email = email;
+    user.providerId = providerId;
+    user.identityProvider = identityProvider;
+    user.userRole = userRole;
+    user.nickName = nickName;
+    user.profileImage = profileImage;
+    return user;
   }
 
-  // 닉네임 업데이트
-  public void updateNickName(String newNickName) {
-    this.nickName = newNickName;
-  }
-
+  // 회원 탈퇴
   public void setDeletedAt() {
     this.deletedAt = LocalDateTime.now();
+  }
+
+  // 소셜 로그인 정보 업데이트
+  public void updateProviderInfo(String providerId, IdentityProvider provider, String nickName,
+      String profileImage) {
+    this.providerId = providerId;
+    this.identityProvider = provider;
+    this.nickName = nickName != null ? nickName : this.nickName;
+    this.profileImage = profileImage != null ? profileImage : this.profileImage;
   }
 
   // 프로필 이미지 삭제
@@ -101,4 +115,5 @@ public class User extends Timestamped {
   public void setUpdateProfileImage(String profileImage) {
     this.profileImage = profileImage;
   }
+
 }
