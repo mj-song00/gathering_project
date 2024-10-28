@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 public class GatherRequest {
     @NotNull(message="모임명을 입력해주세요")
     private String title;
+    @NotNull(message="설명을 입력해 주세요")
+    private String description;
 }
