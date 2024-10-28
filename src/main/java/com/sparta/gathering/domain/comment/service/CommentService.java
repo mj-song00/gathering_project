@@ -2,11 +2,13 @@ package com.sparta.gathering.domain.comment.service;
 
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
 import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.entity.Comment;
 import com.sparta.gathering.domain.comment.repository.CommentRepository;
+import com.sparta.gathering.domain.member.entity.Member;
+import com.sparta.gathering.domain.member.enums.Permission;
+import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +25,15 @@ import java.util.UUID;
 public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
 
     //댓글 생성
     @Transactional
-    public ApiResponse<Void> createComment(Long boardId, User user, CommentRequest request) {
+    public void createComment(Long scheduleId, User user, CommentRequest request) {
 
-    }
-    public void saveComment(
-            Long scheduleId,
-            User user,
-            CommentRequest request
-    ) {
-        String nickName = user.getNickName();
-//        User newuser = userRepository.findById(user.getId()).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        Schedule schedule = findSchedule(scheduleId); //PathVariable 에서 boardId를 가져와서 일치하는 board객체를 찾아 저장한다.
+        isValidMember(user);//유저가 모임의 멤버 또는 매니저인지 확인
 
+        Schedule schedule = findSchedule(scheduleId); //PathVariable 에서 scheduleId를 가져와서 일치하는 schedule 객체를 찾아 저장한다.
 
         Comment comment = new Comment( // comment객체를 생성하면서 값을 넣어준다.
                 user,
@@ -45,7 +41,7 @@ public class CommentService {
                 schedule
         );
 
-        commentRepository.save(comment); // 데이터 베이스에 comment를 저장한다.
+        commentRepository.save(comment); // 데이터 베이스에 comment 를 저장한다.
     }
 
     //댓글 수정
@@ -78,14 +74,14 @@ public class CommentService {
     @Transactional
     public Long deleteComment(User user, Long boardId, Long commentId) {
         // 유저 인증 (댓글 작성자 or 게시판 작성자)
-        User newUser = findUser(user.getId());
 
+        isValidMember(user);
         // 댓글 찾기
         Comment comment = commentRepository.findByBoardIdAndId(boardId, commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물의 해당 댓글을 찾지 못했습니다."));
 
         // 게시판 찾기
-//        Schedule schedule = comment.getSchedule();
+        Schedule schedule = comment.getSchedule();
 
         // 댓글 작성자 or 게시판 작성자가 아니라면 예외처리
         checkAuth(user.getId(), comment.getUser().getId(), schedule.getUser().getId());
@@ -114,4 +110,12 @@ public class CommentService {
         }
     }
 
+    public void isValidMember(User user) throws BaseException {
+
+        Member member = memberRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+        if (!(member.getPermission().equals(Permission.GUEST) || member.getPermission().equals(Permission.MANAGER))) {
+            throw new BaseException(ExceptionEnum.PERMISSION_DENIED_ROLE);
+        }
+    }
 }

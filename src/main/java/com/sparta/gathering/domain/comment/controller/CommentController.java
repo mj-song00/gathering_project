@@ -2,7 +2,9 @@ package com.sparta.gathering.domain.comment.controller;
 import com.sparta.gathering.common.annotation.Auth;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.category.dto.response.CategoryRes;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
+import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.service.CommentService;
 import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Tag(name = "Comment", description = "댓글 API")
 @RestController
@@ -22,28 +26,40 @@ public class CommentController {
     private final CommentService commentService;
 
     //댓글 생성
-    @Operation(summary = "댓글 생성", description = "모든 사용자 생성 가능합니다.")
-    @PostMapping("/{boardId}/comments")
+
+    /**
+     * 댓글생성
+     * @param scheduleId 생성할
+     * @param request
+     * @param user
+     * @return
+     */
+    @Operation(summary = "댓글 생성", description = "모든 멤버 생성 가능합니다.")
+    @PostMapping("/{scheduleId}/comments")
     public ResponseEntity<ApiResponse<Void>> saveComment(
-            @PathVariable Long boardId,
+            @PathVariable Long scheduleId,
             @RequestBody CommentRequest request,
             @AuthenticationPrincipal User user
     ) {
-        return ResponseEntity.ok(commentService.createComment(boardId, user, request));
-
+        commentService.createComment(scheduleId, user, request);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATE_SUCCESS);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-//
-//    /**
-//     * 댓글 조회
-//     * @param boardId 게시판 ID
-//     * @return 댓글 작성 유저 이름, 내용, 작성일, 수정일
-//     */
-//    @GetMapping("/{boardId}/comments")
-//    public ResponseEntity<List<GetCommentListResponseDto>> getComment(
-//            @PathVariable Long boardId
-//    ){
-//        return ResponseEntity.ok(commentService.getComment(boardId));
-//    }
+
+    /**
+     * 댓글 조회
+     * @param boardId 게시판 ID
+     * @return 댓글 작성 유저 이름, 내용, 작성일, 수정일
+     */
+    @Operation(summary = "댓글 조회", description = "모든 사용자 조회 가능합니다.")
+    @GetMapping("/{boardId}/comments")
+    public ResponseEntity<ApiResponse<List<CommentResponse>>> getComment(
+            @PathVariable Long boardId
+    ) {
+        List<CommentResponse> list = commentService.getComment(boardId);
+        ApiResponse<List<CommentResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_CATEGORY_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     /**
      * 댓글 수정
@@ -53,6 +69,7 @@ public class CommentController {
      * @param user 유저 ID, 유저 이메일
      * @return 수정된 댓글 내용
      */
+    @Operation(summary = "댓글 수정", description = "댓글 생성자만 수정 가능합니다.")
     @PutMapping("/{scheduleId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<Void>> updateComment(
             @RequestBody CommentRequest request,
@@ -62,7 +79,7 @@ public class CommentController {
     ) {
         commentService.updateComment(request,boardId,commentId,user);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATE_SUCCESS);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     /**
@@ -72,6 +89,7 @@ public class CommentController {
      * @param commentId 댓글 ID
      * @return 삭제한 댓글 ID
      */
+    @Operation(summary = "댓글 삭제", description = "댓글 생성자와 매니저만 삭제 가능합니다.")
     @PatchMapping("/{scheduleId}/comments/{commentId}/delete")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @AuthenticationPrincipal User user,
