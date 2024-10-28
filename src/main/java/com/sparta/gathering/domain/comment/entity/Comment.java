@@ -2,11 +2,10 @@ package com.sparta.gathering.domain.comment.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.member.entity.Member;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 
@@ -20,25 +19,29 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @Column(nullable = false)
     private String nickName;
 
+    @Column(nullable = false)
     private String comment;//댓글
 
+    @Column
     private LocalDateTime deleteAt;
 
     @ManyToOne
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(User user,String comment,Schedule schedule){
-        this.user= user;
-        this.nickName = user.getNickName();
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+
+    public Comment(String comment,Schedule schedule,Member member){
+        this.nickName = member.getUser().getNickName();
         this.comment = comment;
         this.schedule = schedule;
+        this.member = member;
     }
     public void update(String comment){
         this.comment = comment ;

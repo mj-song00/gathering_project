@@ -2,16 +2,15 @@ package com.sparta.gathering.domain.comment.dto.response;
 
 import com.sparta.gathering.domain.comment.entity.Comment;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Getter
 public class CommentResponse {
 
-    private String nickName;
-    private String comment;
-    private LocalDateTime creation_Date;
-    private LocalDateTime modified_Date;
+    private final String nickName;
+    private final String comment;
+    private final LocalDateTime creation_Date;
+    private final LocalDateTime modified_Date;
 
     public CommentResponse(Comment comment) {
         this.nickName = comment.getNickName();
