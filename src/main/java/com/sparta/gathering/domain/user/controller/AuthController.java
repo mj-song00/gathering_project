@@ -47,9 +47,7 @@ public class AuthController {
   public void kakaoSocialLoginSuccess(
       @AuthenticationPrincipal OAuth2User oauth2user,
       HttpServletResponse response) throws IOException {
-    // 사용자 생성 또는 조회
     User user = kakaoSocialAuthService.processOauth2User(oauth2user);
-    // JWT 토큰 생성
     String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getUserRole());
     response.sendRedirect("/home.html?token=" + "Bearer " + token);
   }

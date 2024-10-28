@@ -58,7 +58,7 @@ public class SecurityConfig {
                   "/login.html",           // 로그인 페이지 접근 허용
                   "/signup.html",          // 회원가입 페이지 접근 허용
                   "/js/**",               // JavaScript 파일 접근 허용
-                  "home.html",            // 홈 페이지 접근 허용
+                  "/home.html",            // 홈 페이지 접근 허용
                   "/error/**"              // 에러 페이지 접근 허용
               ).permitAll()
               .anyRequest().authenticated(); // 그 외의 요청은 인증 필요
@@ -66,12 +66,12 @@ public class SecurityConfig {
         .formLogin(form -> form
             .loginPage("/login.html") // 로그인 페이지 경로
             .defaultSuccessUrl("/api/auth/login") // 로그인 성공 시 리디렉트
-            .failureUrl("/login.html?error=true") // 로그인 실패 시 리디렉트할 페이지
+            .failureUrl("/login.html?error=true") // 로그인 실패 시 리디렉트
         )
         .oauth2Login(oauth2 -> oauth2
             .defaultSuccessUrl("/api/auth/social-login/kakao/success",
-                true)   // 소셜 로그인 성공 시 리디렉트할 페이지
-            .failureUrl("/api/auth/social-login/failure")    // 로그인 실패 시 리디렉트할 페이지
+                true)   // 소셜 로그인 성공 시 리디렉트
+            .failureUrl("/api/auth/social-login/failure")    // 로그인 실패 시 리디렉트
         )
         // JWT 인증 필터 추가
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
