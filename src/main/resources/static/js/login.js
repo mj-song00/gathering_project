@@ -1,4 +1,4 @@
-// login.js
+// 로그인 함수
 async function login(event) {
   event.preventDefault();
   const email = document.getElementById("email").value;
