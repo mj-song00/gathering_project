@@ -28,10 +28,10 @@ public class UserProfileService {
   private final AmazonS3 s3Client;
   private final UserRepository userRepository;
 
-  @Value("${default.profile.image.url}")
+  @Value("${DEFAULT_PROFILE_IMAGE_URL}")
   private String defaultProfileImageUrl;
 
-  @Value("${cloud.aws.s3.bucketName}")
+  @Value("${S3_BUCKET_NAME}")
   private String bucketName;
 
 
