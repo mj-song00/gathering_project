@@ -75,7 +75,7 @@ public class UserProfileService {
     ListObjectsV2Request file = findImage(userId);
     // 사용자에게 이미 등록된 이미지가 있는지 확인
     User user = userRepository.findById(userId).orElse(null);
-    if (user.getProfileImage() == null) {
+    if (user.getProfileImage().equals( defaultProfileImageUrl)) {
       return defaultProfileImageUrl; // 기본이미지
     }
     ListObjectsV2Result result = s3Client.listObjectsV2(file);
