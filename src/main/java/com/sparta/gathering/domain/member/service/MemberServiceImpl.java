@@ -11,11 +11,10 @@ import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-    public List<Member> getMembers(Pageable pageable, long gatherId){
+    public Page<Member> getMembers(Pageable pageable, long gatherId){
         return memberRepository.findByGatherIdAndDeletedAtIsNull(pageable, gatherId);
     }
 
