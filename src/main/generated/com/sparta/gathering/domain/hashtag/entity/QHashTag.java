@@ -56,7 +56,7 @@ public class QHashTag extends EntityPathBase<HashTag> {
 
     public QHashTag(Class<? extends HashTag> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.gather = inits.isInitialized("gather") ? new com.sparta.gathering.domain.gather.entity.QGather(forProperty("gather")) : null;
+        this.gather = inits.isInitialized("gather") ? new com.sparta.gathering.domain.gather.entity.QGather(forProperty("gather"), inits.get("gather")) : null;
     }
 
 }

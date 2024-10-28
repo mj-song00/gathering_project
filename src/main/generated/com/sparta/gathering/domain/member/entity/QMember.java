@@ -58,7 +58,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.gather = inits.isInitialized("gather") ? new com.sparta.gathering.domain.gather.entity.QGather(forProperty("gather")) : null;
+        this.gather = inits.isInitialized("gather") ? new com.sparta.gathering.domain.gather.entity.QGather(forProperty("gather"), inits.get("gather")) : null;
         this.user = inits.isInitialized("user") ? new com.sparta.gathering.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
