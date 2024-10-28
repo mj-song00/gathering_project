@@ -27,6 +27,16 @@ public enum ExceptionEnum {
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "USER_ALREADY_EXISTS", "이미 존재하는 사용자입니다."),
     EMAIL_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_PASSWORD_MISMATCH", "이메일 혹은 비밀번호가 일치하지 않습니다."),
 
+    // 이미지 파일 등록 관련
+    PERMISSION_DENIED(HttpStatus.BAD_REQUEST,"PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),
+    FILE_NOT_FOUND(HttpStatus.BAD_REQUEST,"FILE_NOT_FOUND", "해당 파일이 존재하지 않습니다."),
+    DELETE_FAILED(HttpStatus.BAD_REQUEST,"DELETE_FAILED","파일 삭제 실패되었습니다."),
+    INVALID_FILE_SIZE(HttpStatus.BAD_REQUEST,"INVALID_FILE_SIZE", "파일 크기가 5MB를 초과합니다."),
+    INVALID_FILE_TYPE( HttpStatus.BAD_REQUEST,"INVALID_FILE_TYPE","지원하지 않는 파일 형식입니다."),
+    PERMISSION_DENIED_ROLE( HttpStatus.BAD_REQUEST,"PERMISSION_DENIED_ROLE","권한이 없습니다."),
+    UPLOAD_FAILED( HttpStatus.BAD_REQUEST,"UPLOAD_FAILED","S3에 파일 업로드 실패되었습니다. "),
+    PROFILE_IMAGE_ALREADY_EXISTS( HttpStatus.BAD_REQUEST,"PROFILE_IMAGE_ALREADY_EXISTS","이미 존재하는 이미지입니다."),
+
     // 카테고리 관련
     NOT_ADMIN_ROLE(HttpStatus.BAD_REQUEST,"NOT_ADMIN_ROLE","관리자만 이용할 수 있습니다."),
     NOT_FOUNT_CATEGORY(HttpStatus.BAD_REQUEST,"NOT_FOUNT_CATEGORY","존재하지 않는 카테고리입니다."),

@@ -2,16 +2,16 @@
 
 @userId = 689e1f72-a536-48f8-a9e4-0ed4986bf2b2
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3YjBlODA0Yi03MjkyLTRiYzAtODQzNy0yYzY3MjYzMTliNjgiLCJlbWFpbCI6InRlc3Q0QGV4YW1wbGUuY29tIiwibmlja05hbWUiOiLtmY3quLjrj5kiLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTcyOTc1NDA4NywiaWF0IjoxNzI5NzUwNDg3fQ.au3OGOdfh4Ki-1pwYBX15DFssPnodW-jjPLqdKs6t3o
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5NjkzNjkxLCJpYXQiOjE3Mjk2OTAwOTF9.mPT3dl3xqcEkvALI_604OJ6n-TTylA000D274QMyGXs
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
-### 회원가입 요청
+### 회원가입 요청.
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "test12@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -23,7 +23,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "test00@example.com",
   "password": "password123"
 }
 
@@ -137,6 +137,16 @@ Authorization: Bearer {{jwt_token}}
 {
 
 }
+
+### 이미지 등록
+POST {{base_url}}/api/users/020a1d09-67f0-43e2-8a76-e5bf525c2491/profile-image
+Content-Type: multipart/form-data
+Authorization: Bearer {{jwt_token}}
+
+{
+"file": https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1QoiaHL8SAnH1qLQmbN4Ba06h8RYXZfh8Ow&s
+}
+
 
 
 
