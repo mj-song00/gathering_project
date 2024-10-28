@@ -26,6 +26,7 @@ public class Gather extends Timestamped {
   private Long id;
 
   private String title;
+  private String description;
 
   private LocalDateTime deletedAt;
 
@@ -33,8 +34,9 @@ public class Gather extends Timestamped {
   @JoinColumn(name = "category_id")
   private Category category;
 
-  public Gather(String title, Category category) {
+  public Gather(String title, String description, Category category) {
     this.title = title;
+    this.description = description;
     this.category = category;
   }
 

@@ -40,6 +40,7 @@ CREATE TABLE gather
     deleted_at  DATETIME(6),
     category_id BINARY(16),
     title       VARCHAR(255),
+    description VARCHAR(255),
     PRIMARY KEY (id),
     FOREIGN KEY (category_id) REFERENCES category (id)
 );
