@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/boards")
+    @PostMapping("/board")
     @Operation(summary = "create board", description = "Board 생성")
     public ApiResponse<?> createBoard(
             @PathVariable(name = "gatherId") Long gatherId,
