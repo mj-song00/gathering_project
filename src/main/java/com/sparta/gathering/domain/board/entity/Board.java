@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "boards")
+@Table(name = "board")
 public class Board extends Timestamped {
 
     @Id
@@ -38,17 +38,19 @@ public class Board extends Timestamped {
     @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
 
-    public Board(String boardTitle, String boardContent) {
+    public Board(String boardTitle, String boardContent, Gather gather) {
+        this.gather = gather;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
     }
 
-    public void update(String boardTitle, String boardContent) {
+    public void update(String boardTitle, String boardContent, Gather gather) {
+        this.gather = gather;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
     }
 
-    public void delete(LocalDateTime now){
+    public void delete(LocalDateTime now) {
         this.deletedAt = now;
     }
 }

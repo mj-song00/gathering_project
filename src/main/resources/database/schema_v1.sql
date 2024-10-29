@@ -71,5 +71,32 @@ CREATE TABLE member
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
+CREATE TABLE schedule
+(
+    id               BIGINT       NOT NULL AUTO_INCREMENT,
+    created_at       DATETIME(6),
+    updated_at       DATETIME(6),
+    deleted_at       DATETIME(6),
+    schedule_title   VARCHAR(255) NOT NULL,
+    schedule_content VARCHAR(255) NOT NULL,
+    gather_id        BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id)
+);
+
+CREATE TABLE board
+(
+    id            BIGINT       NOT NULL AUTO_INCREMENT,
+    created_at    DATETIME(6),
+    updated_at    DATETIME(6),
+    deleted_at    DATETIME(6),
+    board_title   VARCHAR(255) NOT NULL,
+    board_content VARCHAR(255) NOT NULL,
+    gather_id     BIGINT       NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id)
+);
+
+
 
 
