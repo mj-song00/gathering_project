@@ -97,6 +97,24 @@ CREATE TABLE board
     FOREIGN KEY (gather_id) REFERENCES gather (id)
 );
 
+CREATE TABLE comment
+(
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    nickName    varchar(20),
+    comment     varchar(255),
+    created_at  DATETIME(6),
+    updated_at  DATETIME(6),
+    deleted_at  DATETIME(6),
+    schedule_id BIGINT NOT NULL,
+    member_id   BIGINT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (schedule_id) REFERENCES schedule (id),
+    FOREIGN KEY (member_id) REFERENCES member (id)
+);
+
+
+
+
 
 
 
