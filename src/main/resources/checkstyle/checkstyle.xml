@@ -9,12 +9,9 @@
     <property name="eachLine" value="true"/>
   </module>
   <module name="TreeWalker">
-    <!-- Import 규칙 - 미사용 import 제거 -->
+    <!-- Import 규칙 - 미사용 import 금지 -->
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
-
-    <!-- Import 규칙 - 와일드카드 import 금지 -->
-    <module name="AvoidStarImport"/>
 
     <!-- 이름 규칙 -->
     <module name="LocalVariableName">
