@@ -50,7 +50,8 @@ public class SecurityConfig {
           // 인증 없이 접근 가능한 경로 설정
           auth
               .requestMatchers(
-                  "/",                 // 루트 경로
+                  "/**"                // 모든 경로
+                  /* "/",                 // 루트 경로
                   "/api/auth/login",  // 일반 로그인 API
                   "/api/users/signup", // 회원가입 API
                   "/oauth2/**",       // OAuth2 인증 경로
@@ -59,11 +60,11 @@ public class SecurityConfig {
                   "/signup.html",          // 회원가입 페이지 접근 허용
                   "/js/**",               // JavaScript 파일 접근 허용
                   "/home.html",            // 홈 페이지 접근 허용
-                  "/error/**"              // 에러 페이지 접근 허용
+                  "/error/**"              // 에러 페이지 접근 허용*/
               ).permitAll()
               .anyRequest().authenticated(); // 그 외의 요청은 인증 필요
         })
-        .formLogin(form -> form
+        /*.formLogin(form -> form
             .loginPage("/login.html") // 로그인 페이지 경로
             .defaultSuccessUrl("/api/auth/login") // 로그인 성공 시 리디렉트
             .failureUrl("/login.html?error=true") // 로그인 실패 시 리디렉트
@@ -72,7 +73,7 @@ public class SecurityConfig {
             .defaultSuccessUrl("/api/auth/social-login/kakao/success",
                 true)   // 소셜 로그인 성공 시 리디렉트
             .failureUrl("/api/auth/social-login/failure")    // 로그인 실패 시 리디렉트
-        )
+        )*/
         // JWT 인증 필터 추가
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -85,7 +86,7 @@ public class SecurityConfig {
     return new JwtFilter(jwtTokenProvider);
   }
 
-  // 현재 활성화된 프로파일이 dev인지 확인하는 메서드
+  // 현재 활성화된 프로파일 dev 여부 확인
   private boolean isDevProfile() {
     return Arrays.asList(environment.getActiveProfiles()).contains("dev");
   }

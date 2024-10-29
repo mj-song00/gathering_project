@@ -84,15 +84,15 @@ public class JwtFilter extends OncePerRequestFilter {
     String path = request.getRequestURI();
     return path.startsWith("/swagger-ui") ||
         path.startsWith("/v3/api-docs") ||
-        path.startsWith("/") ||
+        path.startsWith("/api/auth/login") ||
+        path.startsWith("/api/users/signup");
+    /*  path.startsWith("/") ||
         path.startsWith("/error") ||
         path.startsWith("/error/**") ||
-        path.startsWith("/api/users/signup") ||
         path.startsWith("/oauth2/") ||
-        path.startsWith("/api/auth/**") ||
         path.startsWith("/login/oauth2/code/kakao") ||
         path.equals("/login.html") ||
-        path.equals("/signup.html");
+        path.equals("/signup.html");  */
   }
 
   private void setAuthentication(Claims claims) {
