@@ -3,7 +3,6 @@ package com.sparta.gathering.common.config.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.common.response.ApiResponse;
-import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -42,8 +41,9 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull FilterChain chain) throws IOException {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
-            log.error("JWT 토큰 형식이 잘못되었습니다.", new IOException("JWT 형식 오류"));
-            sendErrorResponse(response, ExceptionEnum.MALFORMED_JWT_TOKEN);
+            IllegalArgumentException e = new IllegalArgumentException("JWT 토큰 형식이 잘못되었습니다.");
+            log.error("JWT 토큰 형식 오류", e);
+            sendErrorResponse(response, ExceptionEnum.MALFORMED_JWT_TOKEN, e);
             return;
         }
 
@@ -53,38 +53,38 @@ public class JwtFilter extends OncePerRequestFilter {
             setAuthentication(claims);
             chain.doFilter(request, response);
         } catch (SecurityException e) {
-            log.error("JWT 토큰이 존재하지 않음", e);
-            sendErrorResponse(response, ExceptionEnum.JWT_TOKEN_NOT_FOUND);
+            sendErrorResponse(response, ExceptionEnum.JWT_TOKEN_NOT_FOUND, e);
         } catch (MalformedJwtException e) {
-            log.error("잘못된 JWT 토큰", e);
-            sendErrorResponse(response, ExceptionEnum.INVALID_JWT_SIGNATURE);
+            sendErrorResponse(response, ExceptionEnum.INVALID_JWT_SIGNATURE, e);
         } catch (ExpiredJwtException e) {
-            log.error("만료된 JWT 토큰", e);
-            sendErrorResponse(response, ExceptionEnum.EXPIRED_JWT_TOKEN);
+            sendErrorResponse(response, ExceptionEnum.EXPIRED_JWT_TOKEN, e);
         } catch (UnsupportedJwtException e) {
-            log.error("지원되지 않는 JWT 토큰", e);
-            sendErrorResponse(response, ExceptionEnum.UNSUPPORTED_JWT_TOKEN);
+            sendErrorResponse(response, ExceptionEnum.UNSUPPORTED_JWT_TOKEN, e);
         } catch (IllegalArgumentException e) {
-            log.error("JWT 토큰이 비어있음", e);
-            sendErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN);
+            sendErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN, e);
         } catch (Exception e) {
-            log.error("JWT 토큰 검증 중 오류 발생", e);
-            sendErrorResponse(response, ExceptionEnum.INTERNAL_SERVER_ERROR);
+            sendErrorResponse(response, ExceptionEnum.INTERNAL_SERVER_ERROR, e);
         }
     }
 
-    private void sendErrorResponse(HttpServletResponse response, ExceptionEnum exception)
+    // 예외 스택 트레이스를 포함하여 처리
+    private void sendErrorResponse(HttpServletResponse response, ExceptionEnum exception,
+            Exception e)
             throws IOException {
+        log.error("JWT 인증 오류 - {}", exception.getMessage(), e);
+        prepareErrorResponse(response, exception);
+    }
 
+    // 응답 처리
+    private void prepareErrorResponse(HttpServletResponse response, ExceptionEnum exception)
+            throws IOException {
         response.setStatus(exception.getStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 
         ApiResponse<?> errorResponse = ApiResponse.errorWithOutData(exception,
                 exception.getStatus());
-
         String json = new ObjectMapper().writeValueAsString(errorResponse);
-
         response.getWriter().write(json);
     }
 
@@ -95,33 +95,39 @@ public class JwtFilter extends OncePerRequestFilter {
                 path.startsWith("/v3/api-docs") ||
                 path.startsWith("/api/auth/login") ||
                 path.startsWith("/api/users/signup");
-            /*  path.startsWith("/") ||
+                /*
+                path.startsWith("/") ||
                 path.startsWith("/error") ||
                 path.startsWith("/error/**") ||
                 path.startsWith("/oauth2/") ||
                 path.startsWith("/login/oauth2/code/kakao") ||
                 path.equals("/login.html") ||
-                path.equals("/signup.html");  */
+                path.equals("/signup.html");
+                */
     }
 
+    // JWT 토큰에서 추출한 정보로 사용자 인증 정보 설정
     private void setAuthentication(Claims claims) {
         String email = claims.get(JwtTokenProvider.EMAIL_CLAIM, String.class);
         UserRole userRole = UserRole.valueOf(
                 claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
-
-        // subject에서 UUID 변환
         UUID userId = UUID.fromString(claims.getSubject());
-
-        // User 객체 생성
-        User user = User.createWithMinimumInfo(userId, email, userRole);
 
         String role =
                 userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+
+        // AuthenticatedUser로 인증 정보 설정
+        AuthenticatedUser userDetails = new AuthenticatedUser(userId, email,
+                Collections.singletonList(authority));
 
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(user, null,
-                        Collections.singletonList(new SimpleGrantedAuthority(role)));
+                new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 설정된 사용자 정보를 로그 출력
+        log.info("생성된 AuthenticatedUser ID: {}, Email: {}, Role: {}", userId, email, role);
     }
 
 }
