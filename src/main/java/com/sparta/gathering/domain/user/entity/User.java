@@ -86,15 +86,6 @@ public class User extends Timestamped {
         this.deletedAt = LocalDateTime.now();
     }
 
-    // 소셜 로그인 정보 업데이트
-    public void updateProviderInfo(String nickName, IdentityProvider provider, String providerId,
-            String profileImage) {
-        this.nickName = nickName != null ? nickName : this.nickName;
-        this.identityProvider = provider;
-        this.providerId = providerId;
-        this.profileImage = profileImage != null ? profileImage : this.profileImage;
-    }
-
     // 프로필 이미지 삭제
     public void setDeleteProfileImage() {
         this.profileImage = null;
