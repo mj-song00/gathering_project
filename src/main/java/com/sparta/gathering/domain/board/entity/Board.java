@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Entity
@@ -32,6 +31,9 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String boardContent;
 
+    @Column
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
@@ -46,7 +48,7 @@ public class Board extends Timestamped {
         this.boardContent = boardContent;
     }
 
-    public void setGather(Gather gather) {
-        this.gather = gather;
+    public void delete(LocalDateTime now){
+        this.deletedAt = now;
     }
 }
