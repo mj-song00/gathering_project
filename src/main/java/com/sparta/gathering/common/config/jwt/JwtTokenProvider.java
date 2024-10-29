@@ -21,7 +21,7 @@ public class JwtTokenProvider {
 
     public static final String EMAIL_CLAIM = "email"; // 이메일 클레임
     public static final String USER_ROLE_CLAIM = "userRole"; // 유저 권한 클레임
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    private static final long TOKEN_TIME = 30 * 60 * 1000L; // 30분
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256; // 암호화 알고리즘
     private static final String BEARER_PREFIX = "Bearer "; // Bearer 접두어
     @Value("${jwt.secret}")
