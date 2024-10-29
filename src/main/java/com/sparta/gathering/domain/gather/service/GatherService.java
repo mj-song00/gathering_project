@@ -15,5 +15,5 @@ public interface GatherService {
 
   void deleteGather(Long id, User user);
 
-  Page<Gather> Gathers(Pageable pageable, UUID categoryId);
+  Page<Gather> gathers(Pageable pageable, UUID categoryId);
 }

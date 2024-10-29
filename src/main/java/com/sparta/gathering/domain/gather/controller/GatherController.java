@@ -66,13 +66,13 @@ public class GatherController {
 
 
   @GetMapping("/{categoryId}")
-  public ApiResponse<GatherListResponse> Gathers(
+  public ApiResponse<GatherListResponse> gathers(
       @RequestParam(defaultValue = "1") int page,
       @RequestParam(defaultValue = "10") int size,
       @PathVariable UUID categoryId) {
     Pageable pageable = PageRequest.of(page - 1, size);
 
-    Page<Gather> gatherList = gatherService.Gathers(pageable, categoryId);
+    Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);
     GatherListResponse response = new GatherListResponse(
         gatherList.getContent(), // Gather 리스트
         gatherList.getNumber(), // 현재 페이지 번호
@@ -82,4 +82,5 @@ public class GatherController {
 
     return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
   }
+  //
 }
