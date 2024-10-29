@@ -5,7 +5,6 @@ import com.sparta.gathering.domain.gather.entity.Gather;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +23,7 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String boardContent;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +33,6 @@ public class Board extends Timestamped {
     public Board(String boardTitle, String boardContent) {
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
-        this.deletedAt = LocalDateTime.now();
     }
 
     public void update(String boardTitle, String boardContent) {
@@ -42,4 +40,7 @@ public class Board extends Timestamped {
         this.boardContent = boardContent;
     }
 
+    public void delete(LocalDateTime now){
+        this.deletedAt = now;
+    }
 }

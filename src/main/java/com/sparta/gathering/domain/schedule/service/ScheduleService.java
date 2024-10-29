@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -71,6 +73,8 @@ public class ScheduleService {
 
         // gather의 scheduleList에서 스케줄을 제거
         gather.getScheduleList().remove(schedule);
+
+        schedule.delete(LocalDateTime.now());
 
         // 스케줄 삭제
         scheduleRepository.delete(schedule);

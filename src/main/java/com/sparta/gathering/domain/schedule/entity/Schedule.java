@@ -24,7 +24,7 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String scheduleContent;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,12 +34,15 @@ public class Schedule extends Timestamped {
     public Schedule(String scheduleTitle, String scheduleContent) {
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
-        this.deletedAt = LocalDateTime.now();
     }
 
     public void update(String scheduleTitle, String scheduleContent) {
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
+    }
+
+    public void delete(LocalDateTime now){
+        this.deletedAt = now;
     }
 
 }

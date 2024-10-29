@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -70,6 +72,8 @@ public class BoardService {
 
         // gather의 boardList에서 보드를 제거
         gather.getBoardList().remove(board);
+
+        board.delete(LocalDateTime.now());
 
         // 보드 삭제
         boardRepository.delete(board);
