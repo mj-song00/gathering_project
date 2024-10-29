@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class MemberListResponseItem {
     private Long id;
-    private String Nickname;
+    private String nickName;
     private Permission permission;
     private String profileImage;
 
     public MemberListResponseItem(Member member){
         this.id= member.getId();
-        this.Nickname = member.getUser().getNickName();
+        this.nickName = member.getUser().getNickName();
         this.permission = member.getPermission();
         this.profileImage = member.getUser().getProfileImage();
     }

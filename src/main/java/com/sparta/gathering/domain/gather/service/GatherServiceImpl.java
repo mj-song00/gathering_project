@@ -12,13 +12,12 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +62,11 @@ public class GatherServiceImpl implements GatherService {
     @Transactional(readOnly = true)
     public Page<Gather> gathers(Pageable pageable, UUID categoryId) {
         return gatherRepository.findByCategoryWithHashTags(pageable, categoryId);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Gather> findTitle(Pageable pageable, String keyword){
+       return gatherRepository.findByTitleContaining(pageable, keyword);
     }
 
     private void validateManager(Long id, User user) {

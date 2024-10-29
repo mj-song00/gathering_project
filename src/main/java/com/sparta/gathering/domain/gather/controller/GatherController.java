@@ -4,11 +4,11 @@ import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
+import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,69 +18,88 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Tag(name = "Gather", description = "소모임 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/gathers")
 public class GatherController {
 
-  private final GatherService gatherService;
+    private final GatherService gatherService;
 
-  @PostMapping("/{categoryId}")
-  public ResponseEntity<ApiResponse<Void>> createGather(
-      @RequestBody GatherRequest request,
-      @AuthenticationPrincipal User user,
-      @PathVariable UUID categoryId
-  ) {
-    gatherService.createGather(request, user, categoryId);
-    ApiResponse<Void> response = ApiResponse.successWithOutData(
-        ApiResponseEnum.GATHER_CREATE_SUCCESS);
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
-  }
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<ApiResponse<Void>> createGather(
+            @RequestBody GatherRequest request,
+            @AuthenticationPrincipal User user,
+            @PathVariable UUID categoryId
+    ) {
+        gatherService.createGather(request, user, categoryId);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(
+                ApiResponseEnum.GATHER_CREATE_SUCCESS);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
-  //모임 수정
-  @PutMapping("/{id}")
-  public ResponseEntity<ApiResponse<Void>> modifyGather(
-      @RequestBody GatherRequest request,
-      @PathVariable Long id,
-      @AuthenticationPrincipal User user
-  ) {
-    gatherService.modifyGather(request, id, user);
-    ApiResponse<Void> response = ApiResponse.successWithOutData(
-        ApiResponseEnum.GATHER_CREATE_SUCCESS);
-    return ResponseEntity.status(HttpStatus.OK).body(response);
-  }
-
-
-  //@모임 삭제(soft delete)
-  @PatchMapping("/{id}")
-  public ResponseEntity<ApiResponse<Void>> deleteGather(
-      @PathVariable Long id,
-      @AuthenticationPrincipal User user
-  ) {
-    gatherService.deleteGather(id, user);
-    ApiResponse<Void> response = ApiResponse.successWithOutData(
-        ApiResponseEnum.GATHER_DELETE_SUCCESS);
-    return ResponseEntity.status(HttpStatus.OK).body(response);
-  }
+    //모임 수정
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> modifyGather(
+            @RequestBody GatherRequest request,
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        gatherService.modifyGather(request, id, user);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(
+                ApiResponseEnum.GATHER_CREATE_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 
-  @GetMapping("/{categoryId}")
-  public ApiResponse<GatherListResponse> gathers(
-      @RequestParam(defaultValue = "1") int page,
-      @RequestParam(defaultValue = "10") int size,
-      @PathVariable UUID categoryId) {
-    Pageable pageable = PageRequest.of(page - 1, size);
+    //@모임 삭제(soft delete)
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteGather(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        gatherService.deleteGather(id, user);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(
+                ApiResponseEnum.GATHER_DELETE_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
-    Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);
-    GatherListResponse response = new GatherListResponse(
-        gatherList.getContent(), // Gather 리스트
-        gatherList.getNumber(), // 현재 페이지 번호
-        gatherList.getTotalPages(), // 총 페이지 수
-        gatherList.getTotalElements() // 총 요소 수
-    );
 
-    return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
-  }
-  //
+    @GetMapping("/{categoryId}")
+    public ApiResponse<GatherListResponse> gathers(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @PathVariable UUID categoryId) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);
+        GatherListResponse response = new GatherListResponse(
+                gatherList.getContent(), // Gather 리스트
+                gatherList.getNumber(), // 현재 페이지 번호
+                gatherList.getTotalPages(), // 총 페이지 수
+                gatherList.getTotalElements() // 총 요소 수
+        );
+
+        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+    }
+
+    //title 검색
+    @GetMapping("/search")
+    public ApiResponse<SearchResponse> search(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Gather> searchList = gatherService.findTitle(pageable, keyword);
+        SearchResponse response = new SearchResponse(
+                searchList.getContent(), // Gather 리스트
+                searchList.getNumber(), // 현재 페이지 번호
+                searchList.getTotalPages(), // 총 페이지 수
+                searchList.getTotalElements() // 총 요소 수
+        );
+        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+    }
 }
