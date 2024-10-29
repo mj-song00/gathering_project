@@ -1,10 +1,10 @@
 @base_url = http://localhost:8080
 
-@user_Id = eee86d4d-4990-4ec4-aa8b-05afd4314ebe
+@user_Id =
 
-@category_Id = ae7787ca-f3f0-450f-8c92-c2e36f02941b
+@category_Id =
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTNlOTJiYi1jMTYzLTQ3NzctYmJlMi04YTFjYjdlYWNiYmYiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxNzMwMjA5NDMyLCJpYXQiOjE3MzAyMDU4MzJ9.1KRXplayN1f-AKY9KUDh0Lso2JasBTZa0FBuvj3nfQo
+@jwt_token =
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
@@ -50,13 +50,14 @@ PATCH {{base_url}}/api/users/me/delete
 Authorization: Bearer {{expired_jwt}}
 Content-Type: application/json
 
+
 ### 카테고리 생성
 POST {{base_url}}/api/categories
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "공부"
+  "categoryName": "보디빌딩"
 }
 
 ### 카테고리 조회
