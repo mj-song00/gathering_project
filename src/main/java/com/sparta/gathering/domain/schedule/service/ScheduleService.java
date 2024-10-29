@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -26,7 +28,6 @@ public class ScheduleService {
 
         // Schedule 엔티티 생성 및 Gather 엔티티 설정
         Schedule schedule = new Schedule(scheduleRequestDto.getScheduleTitle(), scheduleRequestDto.getScheduleContent());
-        schedule.setGather(gather);  // Schedule에 Gather 엔티티 설정
 
         // Gather의 scheduleList에 새로운 Schedule 추가
         gather.getScheduleList().add(schedule); // 양방향 연관관계 설정
@@ -72,6 +73,8 @@ public class ScheduleService {
 
         // gather의 scheduleList에서 스케줄을 제거
         gather.getScheduleList().remove(schedule);
+
+        schedule.delete(LocalDateTime.now());
 
         // 스케줄 삭제
         scheduleRepository.delete(schedule);
