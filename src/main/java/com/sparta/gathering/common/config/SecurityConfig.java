@@ -1,5 +1,7 @@
 package com.sparta.gathering.common.config;
 
+import com.sparta.gathering.common.config.jwt.JwtFilter;
+import com.sparta.gathering.common.config.jwt.JwtTokenProvider;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -54,8 +56,6 @@ public class SecurityConfig {
                                     "/api/users/signup" // 회원가입 API
                                    /*
                                       "/",                 // 루트 경로
-                                      "/api/auth/login",  // 일반 로그인 API
-                                      "/api/users/signup", // 회원가입 API
                                       "/oauth2/**",       // OAuth2 인증 경로
                                       "/login/oauth2/code/kakao", // 카카오 Redirect URI
                                       "/login.html",           // 로그인 페이지 접근 허용

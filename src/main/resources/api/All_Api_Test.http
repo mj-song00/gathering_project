@@ -11,7 +11,7 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -74,13 +74,16 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 모임 생성
-POST {{base_url}}/api/gathers
+POST {{base_url}}/api/gathers/800b0e57-5b22-4e82-9b14-9e47cedfe375
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "scheduleTitle": "풋살",
-  "scheduleContent": "할래?"
+  "title": "풋살",
+  "description": "할래",
+  "hashtags": [
+    "string"
+  ]
 }
 
 ### 멤버 생성
@@ -135,7 +138,15 @@ Authorization: Bearer {{jwt_token}}
 "file": https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1QoiaHL8SAnH1qLQmbN4Ba06h8RYXZfh8Ow&s
 }
 
+### 스케쥴 생성 @@수정필요@@
+POST {{base_url}}/api/gather/4/schedule
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
+{
+  "scheduleTitle": "하실분",
+  "scheduleContent": "모집"
+}
 
 
 

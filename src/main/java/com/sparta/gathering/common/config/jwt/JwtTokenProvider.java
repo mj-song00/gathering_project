@@ -1,4 +1,4 @@
-package com.sparta.gathering.common.config;
+package com.sparta.gathering.common.config.jwt;
 
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;

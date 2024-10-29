@@ -1,4 +1,4 @@
-package com.sparta.gathering.common.config;
+package com.sparta.gathering.common.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.gathering.common.exception.ExceptionEnum;
@@ -42,6 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull FilterChain chain) throws IOException {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
+            log.error("JWT 토큰 형식이 잘못되었습니다.", new IOException("JWT 형식 오류"));
             sendErrorResponse(response, ExceptionEnum.MALFORMED_JWT_TOKEN);
             return;
         }

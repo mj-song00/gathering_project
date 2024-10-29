@@ -1,6 +1,6 @@
 package com.sparta.gathering.domain.user.controller;
 
-import com.sparta.gathering.common.config.JwtTokenProvider;
+import com.sparta.gathering.common.config.jwt.JwtTokenProvider;
 import com.sparta.gathering.domain.user.dto.request.LoginRequest;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.service.KakaoSocialAuthService;
