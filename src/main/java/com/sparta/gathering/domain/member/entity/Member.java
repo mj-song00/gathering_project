@@ -26,24 +26,24 @@ public class Member extends Timestamped {
     private LocalDateTime deletedAt;
 
     @ManyToOne
-    @JoinColumn(name="gather_id", nullable=false)
+    @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Member (User user, Gather gather, Permission permission){
+    public Member(User user, Gather gather, Permission permission) {
         this.user = user;
         this.gather = gather;
         this.permission = permission;
     }
 
-    public void updatePermission(Permission permission){
+    public void updatePermission(Permission permission) {
         this.permission = permission;
     }
 
-    public void delete(){
+    public void delete() {
         this.deletedAt = LocalDateTime.now();
     }
 }
