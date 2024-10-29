@@ -38,8 +38,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(@NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain chain) throws IOException {
+                                  @NonNull HttpServletResponse response,
+                                  @NonNull FilterChain chain) throws IOException {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
     if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
       sendErrorResponse(response, ExceptionEnum.MALFORMED_JWT_TOKEN);
@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   private void sendErrorResponse(HttpServletResponse response, ExceptionEnum exception)
-      throws IOException {
+          throws IOException {
 
     response.setStatus(exception.getStatus().value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -83,22 +83,22 @@ public class JwtFilter extends OncePerRequestFilter {
   protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getRequestURI();
     return path.startsWith("/swagger-ui") ||
-        path.startsWith("/v3/api-docs") ||
-        path.startsWith("/") ||
-        path.startsWith("/error") ||
-        path.startsWith("/error/**") ||
-        path.startsWith("/api/users/signup") ||
-        path.startsWith("/oauth2/") ||
-        path.startsWith("/api/auth/**") ||
-        path.startsWith("/login/oauth2/code/kakao") ||
-        path.equals("/login.html") ||
-        path.equals("/signup.html");
+            path.startsWith("/v3/api-docs") ||
+            path.startsWith("/api/auth/login") ||
+            path.startsWith("/api/users/signup");
+     /* path.startsWith("/") ||
+      path.startsWith("/error") ||
+      path.startsWith("/error/**") ||
+      path.startsWith("/oauth2/") ||
+      path.startsWith("/login/oauth2/code/kakao") ||
+      path.equals("/login.html") ||
+      path.equals("/signup.html");*/
   }
 
   private void setAuthentication(Claims claims) {
     String email = claims.get(JwtTokenProvider.EMAIL_CLAIM, String.class);
     UserRole userRole = UserRole.valueOf(
-        claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
+            claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
 
     // subject에서 UUID 변환
     UUID userId = UUID.fromString(claims.getSubject());
@@ -109,8 +109,8 @@ public class JwtFilter extends OncePerRequestFilter {
     String role = userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
 
     UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(user, null,
-            Collections.singletonList(new SimpleGrantedAuthority(role)));
+            new UsernamePasswordAuthenticationToken(user, null,
+                    Collections.singletonList(new SimpleGrantedAuthority(role)));
     SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 

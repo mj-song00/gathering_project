@@ -5,6 +5,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.hashtag.dto.request.HashTagReq;
+import com.sparta.gathering.domain.hashtag.dto.request.HashTagsReq;
 import com.sparta.gathering.domain.hashtag.dto.response.HashTagRes;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,16 +33,19 @@ public class HashTagService {
 
     // 해시태그 생성
     @Transactional
-    public HashTagRes createHashTag(User user, Gather gather, HashTagReq hashTagReq) {
+    public List<HashTagRes> createHashTag(User user, Gather gather, HashTagsReq hashTagReq) {
         isValidGather(gather);
         // 멤버 권한 확인
         isValidMember(user);
-        if (hashTagRepository.findByHashTagName(hashTagReq.getHashTagName()).isPresent()) {
+        if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
         }
 
-        HashTag hashTag = HashTag.from(hashTagReq, gather);
-        HashTag savedHashTag = hashTagRepository.save(hashTag);
+        List<HashTag> hashTag =  new ArrayList<>();
+        for(String hashTagName: hashTagReq.getHashTagName()){
+            hashTag.add(HashTag.from(hashTagName, gather));
+        }
+        List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
         return HashTagRes.from(savedHashTag);
 
     }

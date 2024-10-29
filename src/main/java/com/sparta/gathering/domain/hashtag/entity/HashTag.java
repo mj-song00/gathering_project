@@ -11,6 +11,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -37,7 +39,7 @@ public class HashTag extends Timestamped {
     @JoinColumn(name = "gather_id")
     private Gather gather;
 
-    private HashTag(String hashTagName,Gather gather) {
+    private HashTag(String hashTagName, Gather gather) {
         this.hashTagName = hashTagName;
         this.gather = gather;
     }
@@ -45,9 +47,17 @@ public class HashTag extends Timestamped {
     public static HashTag from(HashTagReq hashTagReq,Gather gather) {
         return new HashTag(hashTagReq.getHashTagName(), gather );
     }
+    public static HashTag from(String HashTagName, Gather gather){
+        return new HashTag(HashTagName, gather);
+    }
+
+    public static HashTag of(String hashTagName, Gather gather) {
+        return new HashTag(hashTagName, gather);
+    }
 
     public void updateDeleteAt() {
         this.deletedAt = LocalDateTime.now();
     }
+
 
 }
