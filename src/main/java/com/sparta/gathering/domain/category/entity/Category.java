@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.category.dto.request.CategoryReq;
 import com.sparta.gathering.domain.user.entity.User;
@@ -32,10 +33,10 @@ public class Category extends Timestamped {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @JsonIgnore  // 직렬화 방지를 위해 추가
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
     public Category(String categoryName, User user) {
         this.categoryName = categoryName;
@@ -55,5 +56,4 @@ public class Category extends Timestamped {
     public void updateDeleteAt() {
         this.deletedAt = LocalDateTime.now();
     }
-
 }

@@ -41,6 +41,7 @@ public class GatherServiceImpl implements GatherService {
     }
 
     //모임 수정 gather
+    @Transactional
     public void modifyGather(GatherRequest request, Long id, User user) {
         validateManager(id, user);
         Gather gather = gatherRepository.findById(id)

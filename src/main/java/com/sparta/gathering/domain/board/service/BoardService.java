@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.board.service;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.board.dto.request.BoardRequestDto;
+import com.sparta.gathering.domain.board.dto.response.BoardResponseDto; // BoardResponseDto 추가
 import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.board.repository.BoardRepository;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -18,8 +19,7 @@ public class BoardService {
     private final GatherRepository gatherRepository;
 
     @Transactional
-    public Board createBoard(Long gatherId, BoardRequestDto boardRequestDto) {
-
+    public BoardResponseDto createBoard(Long gatherId, BoardRequestDto boardRequestDto) {
         // gatherId를 사용하여 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -28,15 +28,15 @@ public class BoardService {
         Board board = new Board(boardRequestDto.getBoardTitle(), boardRequestDto.getBoardContent());
         board.setGather(gather);  // Board에 Gather 엔티티 설정
 
-        // Board 저장
+        gather.getBoardList().add(board); // 양방향 연관관계 설정
         boardRepository.save(board);
 
-        // 저장된 Board 반환
-        return board;
+        // 저장된 Board를 DTO로 변환하여 반환
+        return new BoardResponseDto(board.getId(), board.getBoardTitle(), board.getBoardContent());
     }
 
     @Transactional
-    public Board updateBoard(Long gatherId, Long boardsId, BoardRequestDto boardRequestDto) {
+    public BoardResponseDto updateBoard(Long gatherId, Long boardsId, BoardRequestDto boardRequestDto) {
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -51,7 +51,10 @@ public class BoardService {
         board.update(boardRequestDto.getBoardTitle(), boardRequestDto.getBoardContent());
 
         // 변경된 보드 저장
-        return boardRepository.save(board);  // 저장 후 바로 반환
+        Board updatedBoard = boardRepository.save(board);  // 저장 후 반환
+
+        // 저장된 Board를 DTO로 변환하여 반환
+        return new BoardResponseDto(updatedBoard.getId(), updatedBoard.getBoardTitle(), updatedBoard.getBoardContent());
     }
 
     @Transactional
