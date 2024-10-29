@@ -24,6 +24,9 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String scheduleContent;
 
+    @Column
+    private LocalDateTime deletedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gather_id")
     private Gather gather;
@@ -38,7 +41,8 @@ public class Schedule extends Timestamped {
         this.scheduleContent = scheduleContent;
     }
 
-    public void setGather(Gather gather) {
-        this.gather = gather;
+    public void delete(LocalDateTime now){
+        this.deletedAt = now;
     }
+
 }
