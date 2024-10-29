@@ -16,9 +16,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,15 +47,15 @@ public class Gather extends Timestamped {
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
-    private final List<Board> boardList = new ArrayList<>();
+    private List<Board> boardList = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
-    private final List<Schedule> scheduleList = new ArrayList<>();
+    private List<Schedule> scheduleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<HashTag> hashTagList = new ArrayList<>();
+    private List<HashTag> hashTagList = new ArrayList<>();
 
 
     public Gather(String title) {

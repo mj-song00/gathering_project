@@ -1,10 +1,8 @@
 @base_url = http://localhost:8080
 
-@user_Id = e708c596-6339-48fd-b75e-8abacdce8465
+@user_Id =
 
-@categorie_Id = 7452612b-afad-4960-ba47-ba47fbb994dd
-
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4Y2NmMDNkZi0zMzkxLTQ0M2QtOWM4OC01OTM5MzJhMWYzNGUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJleHAiOjE3MzAxOTIyNjIsImlhdCI6MTczMDE4ODY2Mn0.6ONswwlEDDOtB4I1rdjf5ZLS9fFNUFwMK2V1wL9wGak
+@jwt_token =
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
@@ -46,7 +44,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "운동"
+  "categoryName": "공부"
 }
 
 ### 카테고리 조회
@@ -76,20 +74,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 모임 생성
-POST {{base_url}}/api/gathers/{{categorie_Id}}
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "title": "즐거운 풋살모임",
-  "description": "풋살모임",
-  "hashtags": [
-    "즐거운 풋살입니다"
-  ]
-}
-
-### 스케쥴 생성
-POST {{base_url}}/api/1/schedule
+POST {{base_url}}/api/gathers
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

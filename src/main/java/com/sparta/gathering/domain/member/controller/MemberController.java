@@ -6,7 +6,9 @@ import com.sparta.gathering.domain.member.dto.response.MemberListResponse;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
 import com.sparta.gathering.domain.user.entity.User;
+
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,8 +67,7 @@ public class MemberController {
             @AuthenticationPrincipal User user
     ) {
         memberService.approval(memberId, gatherId, user);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.APPROVAL_SUCCESS);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.APPROVAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -78,8 +79,7 @@ public class MemberController {
             @AuthenticationPrincipal User user
     ) {
         memberService.refusal(memberId, gatherId, user);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.REFUSAL_SUCCESS);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.REFUSAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -90,8 +90,7 @@ public class MemberController {
             @AuthenticationPrincipal User user
     ) {
         memberService.withdrawal(memberId, user);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.WITHDRAWAL_SUCCESS);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.WITHDRAWAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
