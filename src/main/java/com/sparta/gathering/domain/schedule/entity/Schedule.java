@@ -10,7 +10,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "Schedules")
@@ -25,11 +24,8 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String scheduleContent;
 
-    @Column(nullable = false)
-    private LocalDateTime deletedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gather_id",nullable = false)
+    @JoinColumn(name = "gather_id")
     private Gather gather;
 
     public Schedule(String scheduleTitle, String scheduleContent) {
@@ -40,5 +36,9 @@ public class Schedule extends Timestamped {
     public void update(String scheduleTitle, String scheduleContent) {
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
+    }
+
+    public void setGather(Gather gather) {
+        this.gather = gather;
     }
 }
