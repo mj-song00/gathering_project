@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         signupRequest.getEmail(),
         signupRequest.getNickName(),
         signupRequest.getPassword(),
-        UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
+        UserRole.ROLE_ADMIN,  // 기본적으로 ROLE_USER로 설정
         signupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
         defaultProfileImageUrl
     );

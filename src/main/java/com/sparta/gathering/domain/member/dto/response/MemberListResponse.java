@@ -12,7 +12,7 @@ public class MemberListResponse {
     private int totalPages;
     private long totalElements;
 
-    public MemberListResponse(List<Member> members, int currentPage, int totalPages, long totalElements){
+    public MemberListResponse(List<Member> members, int currentPage, int totalPages, long totalElements) {
         this.members = members.stream()
                 .map(MemberListResponseItem::new)
                 .toList();

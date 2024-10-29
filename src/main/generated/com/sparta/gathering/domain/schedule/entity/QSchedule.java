@@ -1,4 +1,4 @@
-package com.sparta.gathering.domain.member.entity;
+package com.sparta.gathering.domain.schedule.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QMember is a Querydsl query type for Member
+ * QSchedule is a Querydsl query type for Schedule
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QMember extends EntityPathBase<Member> {
+public class QSchedule extends EntityPathBase<Schedule> {
 
-    private static final long serialVersionUID = -1368539602L;
+    private static final long serialVersionUID = -395834392L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QMember member = new QMember("member1");
+    public static final QSchedule schedule = new QSchedule("schedule");
 
     public final com.sparta.gathering.common.entity.QTimestamped _super = new com.sparta.gathering.common.entity.QTimestamped(this);
 
@@ -33,33 +33,32 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final EnumPath<com.sparta.gathering.domain.member.enums.Permission> permission = createEnum("permission", com.sparta.gathering.domain.member.enums.Permission.class);
+    public final StringPath scheduleContent = createString("scheduleContent");
+
+    public final StringPath scheduleTitle = createString("scheduleTitle");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final com.sparta.gathering.domain.user.entity.QUser user;
-
-    public QMember(String variable) {
-        this(Member.class, forVariable(variable), INITS);
+    public QSchedule(String variable) {
+        this(Schedule.class, forVariable(variable), INITS);
     }
 
-    public QMember(Path<? extends Member> path) {
+    public QSchedule(Path<? extends Schedule> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QMember(PathMetadata metadata) {
+    public QSchedule(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QMember(PathMetadata metadata, PathInits inits) {
-        this(Member.class, metadata, inits);
+    public QSchedule(PathMetadata metadata, PathInits inits) {
+        this(Schedule.class, metadata, inits);
     }
 
-    public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
+    public QSchedule(Class<? extends Schedule> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.gather = inits.isInitialized("gather") ? new com.sparta.gathering.domain.gather.entity.QGather(forProperty("gather"), inits.get("gather")) : null;
-        this.user = inits.isInitialized("user") ? new com.sparta.gathering.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }
