@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.user.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
@@ -11,7 +12,7 @@ public interface UserService {
 
     User findById(UUID userId);
 
-    void deleteUser(String tokenUserId);
+    void deleteUser(AuthenticatedUser authenticatedUser);
 
     User findByEmail(String email);
 
