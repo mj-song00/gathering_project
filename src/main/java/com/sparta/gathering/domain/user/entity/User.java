@@ -67,25 +67,16 @@ public class User extends Timestamped {
         return user;
     }
 
-    // 최소 정보로 객체 생성
-    public static User createWithMinimumInfo(UUID userId, String email, UserRole userRole) {
-        User user = new User();
-        user.id = userId;
-        user.email = email;
-        user.userRole = userRole;
-        return user;
-    }
-
     // 소셜 로그인 사용자를 위한 생성 메서드
-    public static User createSocialUser(String email, String providerId, UserRole userRole,
-            IdentityProvider identityProvider, String nickName, String profileImage) {
+    public static User createSocialUser(String email, String nickName, UserRole userRole,
+            IdentityProvider identityProvider, String providerId, String profileImage) {
         User user = new User();
         user.id = UUID.randomUUID();
         user.email = email;
-        user.providerId = providerId;
-        user.identityProvider = identityProvider;
-        user.userRole = userRole;
         user.nickName = nickName;
+        user.userRole = userRole;
+        user.identityProvider = identityProvider;
+        user.providerId = providerId;
         user.profileImage = profileImage;
         return user;
     }
@@ -96,11 +87,11 @@ public class User extends Timestamped {
     }
 
     // 소셜 로그인 정보 업데이트
-    public void updateProviderInfo(String providerId, IdentityProvider provider, String nickName,
+    public void updateProviderInfo(String nickName, IdentityProvider provider, String providerId,
             String profileImage) {
-        this.providerId = providerId;
-        this.identityProvider = provider;
         this.nickName = nickName != null ? nickName : this.nickName;
+        this.identityProvider = provider;
+        this.providerId = providerId;
         this.profileImage = profileImage != null ? profileImage : this.profileImage;
     }
 
