@@ -7,19 +7,19 @@ import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
-
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,14 +29,15 @@ public class GatherServiceImpl implements GatherService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
 
+
     // 모임생성
     @Transactional
     public void createGather(GatherRequest request, User user, UUID categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category);
-        gatherRepository.save(gather);
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category,  request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
+        gatherRepository.save(gather);
         memberRepository.save(member);
     }
 
@@ -60,8 +61,9 @@ public class GatherServiceImpl implements GatherService {
     }
 
     //모임 불러오기
+    @Transactional(readOnly = true)
     public Page<Gather> Gathers(Pageable pageable, UUID categoryId) {
-        return gatherRepository.findGathersByCategoryId(pageable, categoryId);
+        return gatherRepository.findByCategoryWithHashTags(pageable, categoryId);
     }
 
     private void validateManager(Long id, User user) {

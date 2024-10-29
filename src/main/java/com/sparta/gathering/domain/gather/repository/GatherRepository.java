@@ -12,6 +12,12 @@ import java.util.UUID;
 
 @Repository
 public interface GatherRepository extends JpaRepository<Gather, Long> {
-    @Query("SELECT g FROM Gather g WHERE g.deletedAt IS NULL AND g.category.id = :categoryId ORDER BY g.createdAt DESC")
-    Page<Gather> findGathersByCategoryId(Pageable pageable, @Param("categoryId") UUID categoryId);
+
+    @Query("SELECT DISTINCT g FROM Gather g " +
+            "JOIN FETCH g.category c " +
+            "LEFT JOIN FETCH g.hashTagList h " +
+            "WHERE g.deletedAt IS NULL " +
+            "AND g.category.id = :categoryId " +
+            "ORDER BY g.createdAt DESC")
+    Page<Gather> findByCategoryWithHashTags(@Param("categoryId") Pageable pageable, UUID categoryId);
 }
