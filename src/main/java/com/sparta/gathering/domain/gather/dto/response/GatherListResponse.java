@@ -8,10 +8,10 @@ import java.util.List;
 
 @Getter
 public class GatherListResponse {
-    private List<GatherListResponseItem> items; // Gather 아이템 리스트
-    private int currentPage; // 현재 페이지 번호
-    private int totalPages; // 총 페이지 수
-    private long totalElements; // 총 요소 수
+    private final List<GatherListResponseItem> items; // Gather 아이템 리스트
+    private final  int currentPage; // 현재 페이지 번호
+    private final  int totalPages; // 총 페이지 수
+    private final  long totalElements; // 총 요소 수
 
     public GatherListResponse(List<Gather> gathers, int currentPage, int totalPages, long totalElements) {
         this.items = gathers.stream()

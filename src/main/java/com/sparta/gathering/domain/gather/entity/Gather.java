@@ -1,9 +1,11 @@
 package com.sparta.gathering.domain.gather.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.gathering.common.entity.Timestamped;
 
 import com.sparta.gathering.domain.board.entity.Board;
+import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,11 +25,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 @Entity
 @NoArgsConstructor
 @Table(name = "gather")
@@ -45,25 +42,37 @@ public class Gather extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
 
-    @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Board> boardList = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "gather",fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Schedule> scheduleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "gather",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HashTag> hashTagList = new ArrayList<>();
+
 
     public Gather(String title) {
         this.title = title;
     }
 
-    public Gather(String title, String description, Category category) {
+    public Gather(String title, String description, Category category, List<String> hashtags ) {
         this.title = title;
         this.description = description;
         this.category = category;
+        // 해시태그 객체 생성 및 양방향 관계 설정
+        for (String hashTagName : hashtags) {
+            this.hashTagList.add(HashTag.of(hashTagName, this));
+        }
     }
+
 
 
     public void updateGatherTitle(String title) {
