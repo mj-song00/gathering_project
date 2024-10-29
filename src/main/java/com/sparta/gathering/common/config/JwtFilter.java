@@ -38,8 +38,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(@NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain chain) throws IOException {
+                                  @NonNull HttpServletResponse response,
+                                  @NonNull FilterChain chain) throws IOException {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
     if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
       sendErrorResponse(response, ExceptionEnum.MALFORMED_JWT_TOKEN);
@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
   }
 
   private void sendErrorResponse(HttpServletResponse response, ExceptionEnum exception)
-      throws IOException {
+          throws IOException {
 
     response.setStatus(exception.getStatus().value());
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -98,7 +98,7 @@ public class JwtFilter extends OncePerRequestFilter {
   private void setAuthentication(Claims claims) {
     String email = claims.get(JwtTokenProvider.EMAIL_CLAIM, String.class);
     UserRole userRole = UserRole.valueOf(
-        claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
+            claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
 
     // subject에서 UUID 변환
     UUID userId = UUID.fromString(claims.getSubject());
@@ -109,8 +109,8 @@ public class JwtFilter extends OncePerRequestFilter {
     String role = userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
 
     UsernamePasswordAuthenticationToken authentication =
-        new UsernamePasswordAuthenticationToken(user, null,
-            Collections.singletonList(new SimpleGrantedAuthority(role)));
+            new UsernamePasswordAuthenticationToken(user, null,
+                    Collections.singletonList(new SimpleGrantedAuthority(role)));
     SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 

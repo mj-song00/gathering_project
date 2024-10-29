@@ -20,20 +20,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final JwtTokenProvider jwtTokenProvider;
-  private final Environment environment;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final Environment environment;
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-  @Bean
-  public AuthenticationManager authenticationManager(
-      AuthenticationConfiguration authenticationConfiguration) throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
-
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+  
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -77,17 +77,18 @@ public class SecurityConfig {
         // JWT 인증 필터 추가
         .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-    return http.build();
-  }
+        return http.build();
+    }
 
-  // JWT 인증 필터를 빈으로 등록
-  @Bean
-  public JwtFilter jwtAuthenticationFilter() {
-    return new JwtFilter(jwtTokenProvider);
-  }
+    // JWT 인증 필터를 빈으로 등록
+    @Bean
+    public JwtFilter jwtAuthenticationFilter() {
+        return new JwtFilter(jwtTokenProvider);
+    }
 
   // 현재 활성화된 프로파일 dev 여부 확인
   private boolean isDevProfile() {
     return Arrays.asList(environment.getActiveProfiles()).contains("dev");
   }
+
 }

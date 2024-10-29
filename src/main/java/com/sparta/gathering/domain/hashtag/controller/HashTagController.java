@@ -3,7 +3,7 @@ package com.sparta.gathering.domain.hashtag.controller;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.hashtag.dto.request.HashTagReq;
+import com.sparta.gathering.domain.hashtag.dto.request.HashTagsReq;
 import com.sparta.gathering.domain.hashtag.dto.response.HashTagRes;
 import com.sparta.gathering.domain.hashtag.service.HashTagService;
 import com.sparta.gathering.domain.user.entity.User;
@@ -26,12 +26,12 @@ public class HashTagController {
     // 해시태그 생성
     @Operation(summary = "해시태그 생성", description = "모임의 MANAGER 만 생성 가능합니다.")
     @PostMapping
-    public ResponseEntity<ApiResponse<HashTagRes>> createHashTag(
+    public ResponseEntity<ApiResponse<List<HashTagRes>>> createHashTag(
             @AuthenticationPrincipal User user,
             @PathVariable Gather gatherId,
-            @RequestBody HashTagReq hashTagReq) {
-        HashTagRes res = hashTagService.createHashTag(user, gatherId, hashTagReq);
-        ApiResponse<HashTagRes> response = ApiResponse.successWithData(res, ApiResponseEnum.CREATED_HASHTAG_SUCCESS);
+            @RequestBody HashTagsReq hashTagReq) {
+        List<HashTagRes> res = hashTagService.createHashTag(user, gatherId, hashTagReq);
+        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(res, ApiResponseEnum.CREATED_HASHTAG_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

@@ -37,34 +37,44 @@ public class Gather extends Timestamped {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
+  @JsonIgnore
   private Category category;
 
 
-  @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonIgnore
   private List<Board> boardList = new ArrayList<>();
 
 
-  @OneToMany(mappedBy = "gather", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToMany(mappedBy = "gather",fetch = FetchType.LAZY ,cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonIgnore
   private List<Schedule> scheduleList = new ArrayList<>();
 
+  @OneToMany(mappedBy = "gather",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<HashTag> hashTagList = new ArrayList<>();
+
+
   public Gather(String title) {
-    this.title = title;
+      this.title = title;
   }
 
-  public Gather(String title, String description, Category category) {
-    this.title = title;
-    this.description = description;
-    this.category = category;
+  public Gather(String title, String description, Category category, List<String> hashtags ) {
+      this.title = title;
+      this.description = description;
+      this.category = category;
+      // 해시태그 객체 생성 및 양방향 관계 설정
+      for (String hashTagName : hashtags) {
+          this.hashTagList.add(HashTag.of(hashTagName, this));
+      }
   }
 
 
   public void updateGatherTitle(String title) {
-    this.title = title;
+      this.title = title;
   }
 
-
-  public void delete() {
-    this.deletedAt = LocalDateTime.now();
-  }
+public void delete() {
+  this.deletedAt = LocalDateTime.now();
+}
 
 }

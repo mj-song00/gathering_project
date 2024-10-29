@@ -5,6 +5,6 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class HashTagReq {
-    private String hashTagName;
+public class HashTagsReq {
+    private List<String> hashTagName;
 }
