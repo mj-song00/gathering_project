@@ -27,24 +27,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserController {
 
-  private final UserService userService;
-  private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-  @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
-  @PostMapping("/signup")
-  public ResponseEntity<ApiResponse<Void>> signup(@Valid @RequestBody SignupRequest signupRequest) {
-    signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-    userService.createUser(signupRequest);
-    ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.SIGNUP_SUCCESS);
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
-  }
+    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse<Void>> signup(
+            @Valid @RequestBody SignupRequest signupRequest) {
+        signupRequest.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        userService.createUser(signupRequest);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.SIGNUP_SUCCESS);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
-  @Operation(summary = "회원 탈퇴", description = "본인의 계정을 탈퇴합니다.")
-  @PatchMapping("/me/delete")
-  public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal User user) {
-    userService.deleteUser(user.getId().toString());
-    return ResponseEntity.ok(ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS));
-  }
+    @Operation(summary = "회원 탈퇴", description = "본인의 계정을 탈퇴합니다.")
+    @PatchMapping("/me/delete")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@AuthenticationPrincipal User user) {
+        userService.deleteUser(user.getId().toString());
+        return ResponseEntity.ok(
+                ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS));
+    }
 
 }
 

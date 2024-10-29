@@ -9,21 +9,26 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/{gatherId}")
 @Tag(name = "Board API", description = "보드 API")
 public class BoardController {
+
     private final BoardService boardService;
 
     @PostMapping("/board")
     @Operation(summary = "create board", description = "Board 생성")
     public ApiResponse<?> createBoard(
             @PathVariable(name = "gatherId") Long gatherId,
-            @RequestBody BoardRequestDto boardRequestDto)
-    {
+            @RequestBody BoardRequestDto boardRequestDto) {
         Board board = boardService.createBoard(gatherId, boardRequestDto);
         return ApiResponse.successWithData(board, ApiResponseEnum.BOARD_CREATED);
     }
@@ -33,8 +38,7 @@ public class BoardController {
     public ApiResponse<?> updateBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId,
-            @RequestBody BoardRequestDto boardRequestDto)
-    {
+            @RequestBody BoardRequestDto boardRequestDto) {
         Board updatedBoard = boardService.updateBoard(gatherId, boardsId, boardRequestDto);
         return ApiResponse.successWithData(updatedBoard, ApiResponseEnum.BOARD_UPDATED);
     }
@@ -43,10 +47,9 @@ public class BoardController {
     @Operation(summary = "delete board", description = "Board 삭제")
     public ApiResponse<?> deleteBoard(
             @PathVariable(name = "gatherId") Long gatherId,
-            @PathVariable(name = "boardsId") Long boardsId)
-    {
+            @PathVariable(name = "boardsId") Long boardsId) {
         boardService.deleteBoard(gatherId, boardsId);
-        return ApiResponse.successWithData(null,ApiResponseEnum.BOARD_DELETED);
+        return ApiResponse.successWithData(null, ApiResponseEnum.BOARD_DELETED);
     }
 
 }

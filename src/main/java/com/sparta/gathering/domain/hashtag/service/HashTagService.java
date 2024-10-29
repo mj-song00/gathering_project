@@ -25,67 +25,67 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class HashTagService {
 
-  private final HashTagRepository hashTagRepository;
-  private final UserRepository userRepository;
-  private final MemberRepository memberRepository;
-  private final GatherRepository gatherRepository;
+    private final HashTagRepository hashTagRepository;
+    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
+    private final GatherRepository gatherRepository;
 
-  // 해시태그 생성
-  @Transactional
-  public List<HashTagRes> createHashTag(User user, Gather gather, HashTagsReq hashTagReq) {
-    isValidGather(gather);
-    // 멤버 권한 확인
-    isValidMember(user);
-    if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
-      throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
+    // 해시태그 생성
+    @Transactional
+    public List<HashTagRes> createHashTag(User user, Gather gather, HashTagsReq hashTagReq) {
+        isValidGather(gather);
+        // 멤버 권한 확인
+        isValidMember(user);
+        if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
+            throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
+        }
+
+        List<HashTag> hashTag = new ArrayList<>();
+        for (String hashTagName : hashTagReq.getHashTagName()) {
+            hashTag.add(HashTag.from(hashTagName, gather));
+        }
+        List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
+        return HashTagRes.from(savedHashTag);
+
     }
 
-    List<HashTag> hashTag = new ArrayList<>();
-    for (String hashTagName : hashTagReq.getHashTagName()) {
-      hashTag.add(HashTag.from(hashTagName, gather));
+    // 해시태그 삭제
+    @Transactional
+    public void deleteHashTag(User user, Gather gather, UUID hashtagId) {
+        isValidGather(gather);
+        // 멤버 권한 확인
+        isValidMember(user);
+        HashTag hashTag = hashTagRepository.findById(hashtagId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_HASHTAG));
+        hashTag.updateDeleteAt();
     }
-    List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
-    return HashTagRes.from(savedHashTag);
-
-  }
-
-  // 해시태그 삭제
-  @Transactional
-  public void deleteHashTag(User user, Gather gather, UUID hashtagId) {
-    isValidGather(gather);
-    // 멤버 권한 확인
-    isValidMember(user);
-    HashTag hashTag = hashTagRepository.findById(hashtagId)
-        .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_HASHTAG));
-    hashTag.updateDeleteAt();
-  }
 
 
-  // 해시태그 조회
-  public List<HashTagRes> getHashTagList(User user, Gather gather) {
-    Gather newgather = isValidGather(gather);
-    return hashTagRepository.findByGatherId(newgather.getId())
-        .stream()
-        .map(HashTagRes::from)
-        .toList();
-  }
-
-  // 모임 확인
-  public Gather isValidGather(Gather gather) {
-    return gatherRepository.findById(gather.getId())
-        .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-  }
-
-  // Manager 권한 확인
-  public Member isValidMember(User user) throws BaseException {
-    Member member = memberRepository.findByUserId(user.getId())
-        .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
-    if (!member.getPermission().equals(Permission.MANAGER)) {
-      throw new BaseException(ExceptionEnum.NOT_ADMIN_ROLE);
+    // 해시태그 조회
+    public List<HashTagRes> getHashTagList(User user, Gather gather) {
+        Gather newgather = isValidGather(gather);
+        return hashTagRepository.findByGatherId(newgather.getId())
+                .stream()
+                .map(HashTagRes::from)
+                .toList();
     }
-    return member;
-  }
+
+    // 모임 확인
+    public Gather isValidGather(Gather gather) {
+        return gatherRepository.findById(gather.getId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+    }
+
+    // Manager 권한 확인
+    public Member isValidMember(User user) throws BaseException {
+        Member member = memberRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
+        if (!member.getPermission().equals(Permission.MANAGER)) {
+            throw new BaseException(ExceptionEnum.NOT_ADMIN_ROLE);
+        }
+        return member;
+    }
 
 
 }

@@ -8,19 +8,25 @@ import com.sparta.gathering.domain.hashtag.dto.response.HashTagRes;
 import com.sparta.gathering.domain.hashtag.service.HashTagService;
 import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/gatherings/{gatherId}/hashtags")
 @RequiredArgsConstructor
 public class HashTagController {
+
     private final HashTagService hashTagService;
 
     // 해시태그 생성
@@ -31,7 +37,8 @@ public class HashTagController {
             @PathVariable Gather gatherId,
             @RequestBody HashTagsReq hashTagReq) {
         List<HashTagRes> res = hashTagService.createHashTag(user, gatherId, hashTagReq);
-        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(res, ApiResponseEnum.CREATED_HASHTAG_SUCCESS);
+        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(res,
+                ApiResponseEnum.CREATED_HASHTAG_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -42,7 +49,8 @@ public class HashTagController {
             @AuthenticationPrincipal User user,
             @PathVariable Gather gatherId) {
         List<HashTagRes> list = hashTagService.getHashTagList(user, gatherId);
-        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(list, ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
+        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(list,
+                ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -54,7 +62,8 @@ public class HashTagController {
             @PathVariable Gather gatherId,
             @PathVariable UUID hashtagId) {
         hashTagService.deleteHashTag(user, gatherId, hashtagId);
-        ApiResponse<?> response = ApiResponse.successWithOutData(ApiResponseEnum.DELETED_HASHTAG_SUCCESS);
+        ApiResponse<?> response = ApiResponse.successWithOutData(
+                ApiResponseEnum.DELETED_HASHTAG_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

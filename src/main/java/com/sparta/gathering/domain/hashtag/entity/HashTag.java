@@ -28,42 +28,42 @@ import org.hibernate.annotations.Where;
 @SQLDelete(sql = "UPDATE `hashtag` SET deleted_at = NOW() WHERE id = ?")
 public class HashTag extends Timestamped {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(columnDefinition = "BINARY(16)", nullable = false)
-  private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
+    private UUID id;
 
-  private String hashTagName;
+    private String hashTagName;
 
-  @ColumnDefault("NULL")
-  @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
+    @ColumnDefault("NULL")
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "gather_id")
-  private Gather gather;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gather_id")
+    private Gather gather;
 
-  private HashTag(String hashTagName, Gather gather) {
-    this.hashTagName = hashTagName;
-    this.gather = gather;
-  }
+    private HashTag(String hashTagName, Gather gather) {
+        this.hashTagName = hashTagName;
+        this.gather = gather;
+    }
 
-  public static HashTag from(HashTagReq hashTagReq, Gather gather) {
-    return new HashTag(hashTagReq.getHashTagName(), gather);
-  }
+    public static HashTag from(HashTagReq hashTagReq, Gather gather) {
+        return new HashTag(hashTagReq.getHashTagName(), gather);
+    }
 
-  public static HashTag from(String hashTagName, Gather gather) {
-    return new HashTag(hashTagName, gather);
-  }
+    public static HashTag from(String hashTagName, Gather gather) {
+        return new HashTag(hashTagName, gather);
+    }
 
-  public static HashTag of(String hashTagName, Gather gather) {
-    return new HashTag(hashTagName, gather);
-  }
+    public static HashTag of(String hashTagName, Gather gather) {
+        return new HashTag(hashTagName, gather);
+    }
 
-  public void updateDeleteAt() {
-    this.deletedAt = LocalDateTime.now();
-  }
+    public void updateDeleteAt() {
+        this.deletedAt = LocalDateTime.now();
+    }
 
 
 }

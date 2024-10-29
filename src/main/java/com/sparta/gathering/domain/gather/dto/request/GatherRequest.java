@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GatherRequest {
 
-  @NotNull(message = "모임명을 입력해주세요")
-  private String title;
-  @NotNull(message = "설명을 입력해 주세요")
-  private String description;
-  // @NotNull(message="해시태그를 입력해 주세요")
-  private List<String> hashtags;
+    @NotNull(message = "모임명을 입력해주세요")
+    private String title;
+    @NotNull(message = "설명을 입력해 주세요")
+    private String description;
+    // @NotNull(message="해시태그를 입력해 주세요")
+    private List<String> hashtags;
 }

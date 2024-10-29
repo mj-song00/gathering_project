@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface GatherService {
 
-  void createGather(GatherRequest request, User user, UUID categoryId);
+    void createGather(GatherRequest request, User user, UUID categoryId);
 
-  void modifyGather(GatherRequest request, Long id, User user);
+    void modifyGather(GatherRequest request, Long id, User user);
 
-  void deleteGather(Long id, User user);
+    void deleteGather(Long id, User user);
 
-  Page<Gather> Gathers(Pageable pageable, UUID categoryId);
+    Page<Gather> Gathers(Pageable pageable, UUID categoryId);
 }

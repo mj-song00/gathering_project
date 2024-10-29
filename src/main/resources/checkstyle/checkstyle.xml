@@ -5,17 +5,16 @@
 
 <module name="Checker">
 
-  <property name="charset" value="UTF-8"/>
-  <property name="severity" value="warning"/>
-
   <module name="FileTabCharacter">
     <property name="eachLine" value="true"/>
   </module>
-
   <module name="TreeWalker">
-    <!-- Import 규칙 - 와일드카드 import 허용 -->
+    <!-- Import 규칙 - 미사용 import 제거 -->
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
+
+    <!-- Import 규칙 - 와일드카드 import 금지 -->
+    <module name="AvoidStarImport"/>
 
     <!-- 이름 규칙 -->
     <module name="LocalVariableName">
@@ -35,6 +34,17 @@
     <module name="ConstantName">
       <property name="format" value="^[A-Z][A-Z0-9_]*$"/> <!-- 상수는 UPPER_CASE 형식 -->
     </module>
+    <!-- Indentation 설정 -->
+    <module name="Indentation">
+      <property name="basicOffset" value="4"/> <!-- 들여쓰기 Indent: 4 -->
+      <property name="tabWidth" value="4"/> <!-- 탭 Tab size: 4 -->
+      <property name="lineWrappingIndentation"
+        value="8"/> <!-- 줄이 길어질 경우의 추가 들여쓰기 Continuation indent: 8 -->
+    </module>
 
   </module>
+
+  <property name="charset" value="UTF-8"/>
+
+  <property name="severity" value="warning"/>
 </module>

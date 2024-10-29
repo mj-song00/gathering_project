@@ -26,36 +26,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  private final UserService userService;
-  private final KakaoSocialAuthService kakaoSocialAuthService;
-  private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
+    private final KakaoSocialAuthService kakaoSocialAuthService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-  // 일반 로그인
-  @Operation(summary = "로그인", description = "일반 사용자의 로그인을 진행합니다.")
-  @PostMapping("/login")
-  public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest loginRequest) {
-    User user = userService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
-    String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getUserRole());
-    return ResponseEntity.ok()
-        .header("Authorization", "Bearer " + token)
-        .build();
-  }
+    // 일반 로그인
+    @Operation(summary = "로그인", description = "일반 사용자의 로그인을 진행합니다.")
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest loginRequest) {
+        User user = userService.authenticateUser(loginRequest.getEmail(),
+                loginRequest.getPassword());
+        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(),
+                user.getUserRole());
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + token)
+                .build();
+    }
 
-  // 카카오 소셜 로그인 성공
-  @Operation(summary = "카카오 소셜 로그인 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 페이지로 리디렉트합니다.")
-  @GetMapping("/social-login/kakao/success")
-  public void kakaoSocialLoginSuccess(
-      @AuthenticationPrincipal OAuth2User oauth2user,
-      HttpServletResponse response) throws IOException {
-    User user = kakaoSocialAuthService.processOauth2User(oauth2user);
-    String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(), user.getUserRole());
-    response.sendRedirect("/home.html?token=" + "Bearer " + token);
-  }
+    // 카카오 소셜 로그인 성공
+    @Operation(summary = "카카오 소셜 로그인 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 페이지로 리디렉트합니다.")
+    @GetMapping("/social-login/kakao/success")
+    public void kakaoSocialLoginSuccess(
+            @AuthenticationPrincipal OAuth2User oauth2user,
+            HttpServletResponse response) throws IOException {
+        User user = kakaoSocialAuthService.processOauth2User(oauth2user);
+        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(),
+                user.getUserRole());
+        response.sendRedirect("/home.html?token=" + "Bearer " + token);
+    }
 
-  // 소셜 로그인 실패
-  @Operation(summary = "소셜 로그인 실패", description = "소셜 로그인 실패 시 처리")
-  @GetMapping("/social-login/failure")
-  public void socialLoginFailure(HttpServletResponse response) throws IOException {
-    response.sendRedirect("/login.html?error=true");
-  }
+    // 소셜 로그인 실패
+    @Operation(summary = "소셜 로그인 실패", description = "소셜 로그인 실패 시 처리")
+    @GetMapping("/social-login/failure")
+    public void socialLoginFailure(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/login.html?error=true");
+    }
+
 }

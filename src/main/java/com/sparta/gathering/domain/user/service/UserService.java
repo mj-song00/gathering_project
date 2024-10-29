@@ -7,16 +7,16 @@ import java.util.UUID;
 
 public interface UserService {
 
-  User createUser(SignupRequest userRequest);
+    User createUser(SignupRequest userRequest);
 
-  User findById(UUID userId);
+    User findById(UUID userId);
 
-  void deleteUser(String tokenUserId);
+    void deleteUser(String tokenUserId);
 
-  User findByEmail(String email);
+    User findByEmail(String email);
 
-  User findByProviderIdAndIdentityProvider(String providerId, IdentityProvider identityProvider);
+    User findByProviderIdAndIdentityProvider(String providerId, IdentityProvider identityProvider);
 
-  User authenticateUser(String email, String password);
+    User authenticateUser(String email, String password);
 
 }
