@@ -1,3 +1,4 @@
+// 회원 가입 함수
 async function signup(event) {
   event.preventDefault();
   const email = document.getElementById("email").value;
@@ -25,7 +26,7 @@ async function signup(event) {
   if (response.ok) {
     // 성공 시 로그인 페이지로 이동
     window.location.href = "/login.html";
-    
+
   } else if (response.status === 400 && result.data) {
     // 실패 시 필드별 오류 메시지 표시
     if (result.data.email) {

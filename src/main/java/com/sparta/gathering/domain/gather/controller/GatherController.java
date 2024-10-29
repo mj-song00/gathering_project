@@ -68,8 +68,9 @@ public class GatherController {
   @GetMapping("/{categoryId}")
   public ApiResponse<GatherListResponse> Gathers(
       @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size,
       @PathVariable UUID categoryId) {
-    Pageable pageable = PageRequest.of(page - 1, 10);
+    Pageable pageable = PageRequest.of(page - 1, size);
 
     Page<Gather> gatherList = gatherService.Gathers(pageable, categoryId);
     GatherListResponse response = new GatherListResponse(
@@ -78,6 +79,7 @@ public class GatherController {
         gatherList.getTotalPages(), // 총 페이지 수
         gatherList.getTotalElements() // 총 요소 수
     );
+
     return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
   }
 }

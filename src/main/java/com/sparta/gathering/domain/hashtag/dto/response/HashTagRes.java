@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.hashtag.dto.response;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -19,5 +20,9 @@ public class HashTagRes {
 
     public static HashTagRes from(HashTag hashTag) {
         return new HashTagRes(hashTag.getId(),hashTag.getHashTagName());
+    }
+
+    public static List<HashTagRes> from(List<HashTag> savedHashTag) {
+        return savedHashTag.stream().map(HashTagRes::from).toList();
     }
 }
