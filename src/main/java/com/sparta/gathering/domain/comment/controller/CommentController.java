@@ -1,8 +1,6 @@
 package com.sparta.gathering.domain.comment.controller;
-import com.sparta.gathering.common.annotation.Auth;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
-import com.sparta.gathering.domain.category.dto.response.CategoryRes;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
 import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.service.CommentService;
@@ -38,8 +36,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> saveComment(
             @PathVariable Long scheduleId,
             @RequestBody CommentRequest request,
-            @AuthenticationPrincipal User user
-    ) {
+            @AuthenticationPrincipal User user) {
         commentService.createComment(scheduleId, user, request);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATED_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -53,8 +50,7 @@ public class CommentController {
     @Operation(summary = "댓글 조회", description = "모든 사용자 조회 가능합니다.")
     @GetMapping("/{scheduleId}/comments")
     public ResponseEntity<ApiResponse<List<CommentResponse>>> getComment(
-            @PathVariable Long scheduleId
-    ) {
+            @PathVariable Long scheduleId) {
         List<CommentResponse> list = commentService.getComment(scheduleId);
         ApiResponse<List<CommentResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -73,8 +69,7 @@ public class CommentController {
             @RequestBody CommentRequest request,
             @PathVariable Long scheduleId,
             @PathVariable Long commentId,
-            @AuthenticationPrincipal User user
-    ) {
+            @AuthenticationPrincipal User user) {
         commentService.updateComment(request,scheduleId,commentId,user);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.UPDATE_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -92,8 +87,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @AuthenticationPrincipal User user,
             @PathVariable Long scheduleId,
-            @PathVariable Long commentId
-    ) {
+            @PathVariable Long commentId ) {
         commentService.deleteComment(user, scheduleId, commentId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.DELETED_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);

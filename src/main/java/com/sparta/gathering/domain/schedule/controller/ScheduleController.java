@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/{gatherId}/schedule")
+@RequestMapping("/api/{gatherId}/schedule")// api/gather/{gatherId}/schedule 로 변경
 @Tag(name = "Schedule API", description = "스케줄 API")
 public class ScheduleController {
     private final ScheduleService scheduleService;
