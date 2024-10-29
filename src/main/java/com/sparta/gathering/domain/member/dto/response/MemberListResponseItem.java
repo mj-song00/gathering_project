@@ -11,8 +11,8 @@ public class MemberListResponseItem {
     private Permission permission;
     private String profileImage;
 
-    public MemberListResponseItem(Member member){
-        this.id= member.getId();
+    public MemberListResponseItem(Member member) {
+        this.id = member.getId();
         this.nickName = member.getUser().getNickName();
         this.permission = member.getPermission();
         this.profileImage = member.getUser().getProfileImage();

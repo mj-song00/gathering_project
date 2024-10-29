@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.UUID;
 
 @Service
@@ -25,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
     private final GatherRepository gatherRepository;
 
     @Transactional
-    public void createMember(UUID userId, long gatherId){
+    public void createMember(UUID userId, long gatherId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = gatherRepository.findById(gatherId).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
 
@@ -33,11 +34,11 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-    public Page<Member> getMembers(Pageable pageable, long gatherId){
+    public Page<Member> getMembers(Pageable pageable, long gatherId) {
         return memberRepository.findByGatherIdAndDeletedAtIsNull(pageable, gatherId);
     }
 
-    public void approval(long memberId, long gatherId, User user){
+    public void approval(long memberId, long gatherId, User user) {
         validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.GUEST);
@@ -45,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public void refusal(long memberId, long gatherId, User user){
+    public void refusal(long memberId, long gatherId, User user) {
         validateManager(gatherId, user);
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.REFUSAL);
@@ -54,10 +55,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public void withdrawal(long memberId, User user){
+    public void withdrawal(long memberId, User user) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
-        if(!member.getUser().getId().equals(user.getId())) throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
-        if(member.getDeletedAt() != null) throw new BaseException(ExceptionEnum.ALREADY_DELETED_MEMBER);
+        if (!member.getUser().getId().equals(user.getId())) throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
+        if (member.getDeletedAt() != null) throw new BaseException(ExceptionEnum.ALREADY_DELETED_MEMBER);
 
         member.delete();
         memberRepository.save(member);
