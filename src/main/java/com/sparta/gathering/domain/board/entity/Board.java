@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "boards")
@@ -33,9 +32,6 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private String boardContent;
 
-    @Column(nullable = false)
-    private LocalDateTime deletedAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
@@ -48,5 +44,9 @@ public class Board extends Timestamped {
     public void update(String boardTitle, String boardContent) {
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
+    }
+
+    public void setGather(Gather gather) {
+        this.gather = gather;
     }
 }

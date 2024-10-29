@@ -5,6 +5,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.schedule.dto.request.ScheduleRequestDto;
+import com.sparta.gathering.domain.schedule.dto.response.ScheduleResponseDto; // 추가된 import
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import com.sparta.gathering.domain.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class ScheduleService {
     private final GatherRepository gatherRepository;
 
     @Transactional
-    public Schedule createSchedule(Long gatherId, ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto createSchedule(Long gatherId, ScheduleRequestDto scheduleRequestDto) {
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -27,12 +28,16 @@ public class ScheduleService {
         Schedule schedule = new Schedule(scheduleRequestDto.getScheduleTitle(), scheduleRequestDto.getScheduleContent());
         schedule.setGather(gather);  // Schedule에 Gather 엔티티 설정
 
-        // Schedule 저장
-        return scheduleRepository.save(schedule);
+        // Gather의 scheduleList에 새로운 Schedule 추가
+        gather.getScheduleList().add(schedule); // 양방향 연관관계 설정
+        scheduleRepository.save(schedule);
+
+        // ScheduleResponseDto로 변환하여 반환
+        return toResponseDto(schedule);
     }
 
     @Transactional
-    public Schedule updateSchedule(Long gatherId, Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto updateSchedule(Long gatherId, Long scheduleId, ScheduleRequestDto scheduleRequestDto) {
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -47,7 +52,10 @@ public class ScheduleService {
         schedule.update(scheduleRequestDto.getScheduleTitle(), scheduleRequestDto.getScheduleContent());
 
         // 변경된 스케줄 저장
-        return scheduleRepository.save(schedule);  // 저장 후 바로 반환
+        scheduleRepository.save(schedule);  // 저장 후
+
+        // ScheduleResponseDto로 변환하여 반환
+        return toResponseDto(schedule);
     }
 
     @Transactional
@@ -68,5 +76,13 @@ public class ScheduleService {
         // 스케줄 삭제
         scheduleRepository.delete(schedule);
     }
-}
 
+    // Schedule을 ScheduleResponseDto로 변환하는 메소드 추가
+    private ScheduleResponseDto toResponseDto(Schedule schedule) {
+        ScheduleResponseDto responseDto = new ScheduleResponseDto();
+        responseDto.setScheduleId(schedule.getId());
+        responseDto.setScheduleTitle(schedule.getScheduleTitle());
+        responseDto.setScheduleContent(schedule.getScheduleContent());
+        return responseDto;
+    }
+}
