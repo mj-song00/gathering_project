@@ -1,10 +1,7 @@
 package com.sparta.gathering.domain.user.controller;
 
-import com.sparta.gathering.common.config.jwt.JwtTokenProvider;
 import com.sparta.gathering.domain.user.dto.request.LoginRequest;
-import com.sparta.gathering.domain.user.entity.User;
-import com.sparta.gathering.domain.user.service.KakaoSocialAuthService;
-import com.sparta.gathering.domain.user.service.UserService;
+import com.sparta.gathering.domain.user.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,32 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
-    private final KakaoSocialAuthService kakaoSocialAuthService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
 
     // 일반 로그인
     @Operation(summary = "로그인", description = "일반 사용자의 로그인을 진행합니다.")
     @PostMapping("/login")
     public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest loginRequest) {
-        User user = userService.authenticateUser(loginRequest.getEmail(),
-                loginRequest.getPassword());
-        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(),
-                user.getUserRole());
+        String token = authService.login(loginRequest);
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + token)
-                .build();
+                .header("Authorization", "Bearer " + token).build();
     }
 
     // 카카오 소셜 로그인 성공
-    @Operation(summary = "카카오 소셜 로그인 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 페이지로 리디렉트합니다.")
+    @Operation(summary = "카카오 소셜 로그인 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 화면으로 리디렉트합니다.")
     @GetMapping("/social-login/kakao/success")
     public void kakaoSocialLoginSuccess(
             @AuthenticationPrincipal OAuth2User oauth2user,
             HttpServletResponse response) throws IOException {
-        User user = kakaoSocialAuthService.processOauth2User(oauth2user);
-        String token = jwtTokenProvider.createToken(user.getId(), user.getEmail(),
-                user.getUserRole());
+        String token = authService.kakaoSocialLogin(oauth2user);
         response.sendRedirect("/home.html?token=" + "Bearer " + token);
     }
 
@@ -63,3 +52,4 @@ public class AuthController {
     }
 
 }
+
