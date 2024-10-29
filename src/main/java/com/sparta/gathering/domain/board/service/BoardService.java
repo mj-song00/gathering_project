@@ -26,7 +26,6 @@ public class BoardService {
 
         // Board 엔티티 생성 및 Gather 엔티티 설정
         Board board = new Board(boardRequestDto.getBoardTitle(), boardRequestDto.getBoardContent());
-        board.setGather(gather);  // Board에 Gather 엔티티 설정
 
         gather.getBoardList().add(board); // 양방향 연관관계 설정
         boardRepository.save(board);

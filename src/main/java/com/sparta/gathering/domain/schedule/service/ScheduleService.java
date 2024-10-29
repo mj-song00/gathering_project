@@ -26,7 +26,6 @@ public class ScheduleService {
 
         // Schedule 엔티티 생성 및 Gather 엔티티 설정
         Schedule schedule = new Schedule(scheduleRequestDto.getScheduleTitle(), scheduleRequestDto.getScheduleContent());
-        schedule.setGather(gather);  // Schedule에 Gather 엔티티 설정
 
         // Gather의 scheduleList에 새로운 Schedule 추가
         gather.getScheduleList().add(schedule); // 양방향 연관관계 설정
