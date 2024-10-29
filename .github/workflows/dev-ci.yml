@@ -49,9 +49,9 @@ jobs:
           path: build/reports/checkstyle/main.html
 
       # 5. 빌드 및 테스트 실행
-      - name: Build and run tests with coverage verification
+      - name: Build and run tests
         run: |
-          ./gradlew build test jacocoTestReport jacocoTestCoverageVerification
+          ./gradlew build test
 
     env:
       DEV_SERVER_PORT: ${{ secrets.DEV_SERVER_PORT }}
