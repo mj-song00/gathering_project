@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gathering Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<div>
+    <h2 th:text="'Gathering: ' + ${gatheringName}">Gathering Name</h2>
+    <div id="chat">
+        <ul id="messageArea">
+            <!-- 채팅 메시지가 여기에 추가됩니다. -->
+        </ul>
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const gatheringId = [[${gatheringId}]]; // 모임 ID
+    const username = /*[[${username}]]*/ 'User1'; // 사용자 이름 (로그인된 사용자 정보에서 가져오기)
+
+    let stompClient = null;
+
+    // WebSocket 연결 및 채팅 구독
+    function connect() {
+        const socket = new SockJS('/ws/chat');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function() {
+            stompClient.subscribe(`/topic/gathering/${gatheringId}`, function(message) {
+                const chatMessage = JSON.parse(message.body);
+                showMessage(chatMessage);
+            });
+
+            // 사용자 입장 메시지 보내기
+            stompClient.send("/app/chat.addUser", {}, JSON.stringify({
+                sender: username,
+                gatheringId: gatheringId,
+                type: 'JOIN'
+            }));
+        });
+    }
+
+    // 메시지 보내기
+    function sendMessage() {
+        const messageContent = document.getElementById('messageInput').value;
+        if (messageContent && stompClient) {
+            const chatMessage = {
+                sender: username,
+                content: messageContent,
+                gatheringId: gatheringId,
+                type: 'CHAT'
+            };
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+            document.getElementById('messageInput').value = '';
+        }
+    }
+
+    // 채팅 메시지 화면에 출력
+    function showMessage(message) {
+        const messageArea = document.getElementById('messageArea');
+        const messageElement = document.createElement('li');
+        messageElement.classList.add(message.type === 'CHAT' ? 'chat-message' : 'event-message');
+        messageElement.textContent = message.sender + ": " + message.content;
+        messageArea.appendChild(messageElement);
+    }
+
+    connect(); // WebSocket 연결 시작
+</script>
+</body>
+</html>
