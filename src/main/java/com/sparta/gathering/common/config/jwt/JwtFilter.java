@@ -22,12 +22,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -67,23 +65,19 @@ public class JwtFilter extends OncePerRequestFilter {
         }
     }
 
-    // 예외 스택 트레이스를 포함하여 처리
+    // 클라이언트에게 오류 응답 전송
     private void sendErrorResponse(HttpServletResponse response, ExceptionEnum exception,
-            Exception e)
-            throws IOException {
+            Exception e) throws IOException {
         log.error("JWT 인증 오류 - {}", exception.getMessage(), e);
-        prepareErrorResponse(response, exception);
-    }
-
-    // 응답 처리
-    private void prepareErrorResponse(HttpServletResponse response, ExceptionEnum exception)
-            throws IOException {
+        // SecurityContextHolder 인증 정보 클리어
+        SecurityContextHolder.clearContext();
+        log.info("SecurityContextHolder 인증 정보 클리어 완료");
+        // 클라이언트 응답 구성
         response.setStatus(exception.getStatus().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        ApiResponse<?> errorResponse = ApiResponse.errorWithOutData(exception,
-                exception.getStatus());
+        // 클라이언트에는 기본 메시지 전달
+        ApiResponse<?> errorResponse = ApiResponse.errorWithOutData(exception, exception.getStatus());
         String json = new ObjectMapper().writeValueAsString(errorResponse);
         response.getWriter().write(json);
     }
@@ -113,17 +107,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 claims.get(JwtTokenProvider.USER_ROLE_CLAIM, String.class));
         UUID userId = UUID.fromString(claims.getSubject());
 
-        String role =
-                userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
+        String role = userRole.name().startsWith("ROLE_") ? userRole.name() : "ROLE_" + userRole.name();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
 
         // AuthenticatedUser로 인증 정보 설정
-        AuthenticatedUser userDetails = new AuthenticatedUser(userId, email,
-                Collections.singletonList(authority));
+        AuthenticatedUser userDetails = new AuthenticatedUser(userId, email, Collections.singletonList(authority));
 
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(userDetails, null,
-                        userDetails.getAuthorities());
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // 설정된 사용자 정보를 로그 출력
