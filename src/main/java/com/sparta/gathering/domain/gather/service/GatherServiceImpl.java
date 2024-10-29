@@ -12,7 +12,9 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
+
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,9 +33,8 @@ public class GatherServiceImpl implements GatherService {
     // 모임생성
     @Transactional
     public void createGather(GatherRequest request, User user, UUID categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category,  request.getHashtags());
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
         gatherRepository.save(gather);
         memberRepository.save(member);
@@ -42,8 +43,7 @@ public class GatherServiceImpl implements GatherService {
     //모임 수정 gather
     public void modifyGather(GatherRequest request, Long id, User user) {
         validateManager(id, user);
-        Gather gather = gatherRepository.findById(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        Gather gather = gatherRepository.findById(id).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.updateGatherTitle(request.getTitle());
         gatherRepository.save(gather);
     }
@@ -52,8 +52,7 @@ public class GatherServiceImpl implements GatherService {
     @Transactional
     public void deleteGather(Long id, User user) {
         validateManager(id, user);
-        Gather gather = gatherRepository.findById(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        Gather gather = gatherRepository.findById(id).orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.delete();
         gatherRepository.save(gather);
     }
@@ -65,13 +64,12 @@ public class GatherServiceImpl implements GatherService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Gather> findTitle(Pageable pageable, String keyword){
-       return gatherRepository.findByTitleContaining(pageable, keyword);
+    public Page<Gather> findTitle(Pageable pageable, String keyword) {
+        return gatherRepository.findByTitleContaining(pageable, keyword);
     }
 
     private void validateManager(Long id, User user) {
-        UUID managerId = memberRepository.findManagerIdByGatherId(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+        UUID managerId = memberRepository.findManagerIdByGatherId(id).orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
 
         if (!managerId.equals(user.getId()) && user.getUserRole() != UserRole.ROLE_ADMIN) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
