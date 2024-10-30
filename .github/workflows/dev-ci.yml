@@ -39,7 +39,7 @@ jobs:
 
       - name: Linting 및 코드 품질 검사
         run: ./gradlew clean checkstyleMain --no-build-cache
-
+        continue-on-error: false
 
       - name: Checkstyle HTML 보고서 저장
         if: always()
