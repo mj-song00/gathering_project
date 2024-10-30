@@ -2,17 +2,25 @@ package com.sparta.gathering.domain.board.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "boards")
+@Table(name = "board")
 public class Board extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,20 +35,22 @@ public class Board extends Timestamped {
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gather_id",nullable = false)
+    @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
 
-    public Board(String boardTitle, String boardContent) {
+    public Board(String boardTitle, String boardContent, Gather gather) {
+        this.gather = gather;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
     }
 
-    public void update(String boardTitle, String boardContent) {
+    public void update(String boardTitle, String boardContent, Gather gather) {
+        this.gather = gather;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
     }
 
-    public void delete(LocalDateTime now){
+    public void delete(LocalDateTime now) {
         this.deletedAt = now;
     }
 }

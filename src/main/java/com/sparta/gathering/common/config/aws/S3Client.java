@@ -1,14 +1,13 @@
-package com.sparta.gathering.common.config;
+package com.sparta.gathering.common.config.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import org.springframework.context.annotation.Bean;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
+import org.springframework.context.annotation.Bean;
 
 public class S3Client {
 
@@ -27,7 +26,8 @@ public class S3Client {
         return executePut(request);
     }
 
-    public String upload(InputStream in, long length, String key, String contentType, Map<String, String> metadata) {
+    public String upload(InputStream in, long length, String key, String contentType,
+            Map<String, String> metadata) {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(length);
         objectMetadata.setContentType(contentType);
