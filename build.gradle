@@ -107,10 +107,14 @@ tasks.register('checkstyleFailOnViolation') {
         def reportFile = file("build/reports/checkstyle/checkstyleMain.xml")
         if (reportFile.exists()) {
             def checkstyleReport = new XmlSlurper().parse(reportFile)
-            def violations = checkstyleReport
+            def violations = checkstyleReport.'**'.findAll { it.name() == 'error' }
             if (violations.size() > 0) {
                 throw new GradleException("Checkstyle violations were found. Please fix them.")
+            } else {
+                println "No Checkstyle violations found."
             }
+        } else {
+            println "Checkstyle report not found."
         }
     }
 }
