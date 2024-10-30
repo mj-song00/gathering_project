@@ -61,6 +61,7 @@ jobs:
       DEV_DB_USER: ${{ secrets.DEV_DB_USER }}
       DEV_DB_PASS: ${{ secrets.DEV_DB_PASS }}
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}
 
       # OAuth2 (Kakao) 설정
       KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}

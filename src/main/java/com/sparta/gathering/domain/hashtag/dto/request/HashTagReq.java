@@ -5,5 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class HashTagReq {
-  private String hashTagName;
+
+    private String hashTagName;
 }

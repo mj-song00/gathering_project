@@ -5,10 +5,8 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.member.dto.response.MemberListResponse;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
-import com.sparta.gathering.domain.user.entity.User;
-
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,9 +62,9 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Void>> approval(
             @PathVariable long memberId,
             @PathVariable long gatherId,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        memberService.approval(memberId, gatherId, user);
+        memberService.approval(memberId, gatherId, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.APPROVAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -76,9 +74,9 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Void>> refusal(
             @PathVariable long memberId,
             @PathVariable long gatherId,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        memberService.refusal(memberId, gatherId, user);
+        memberService.refusal(memberId, gatherId, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.REFUSAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -87,9 +85,9 @@ public class MemberController {
     @PatchMapping("/{memberId}/withdrawal")
     public ResponseEntity<ApiResponse<Void>> withdrawal(
             @PathVariable long memberId,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        memberService.withdrawal(memberId, user);
+        memberService.withdrawal(memberId, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.WITHDRAWAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
