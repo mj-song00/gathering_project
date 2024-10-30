@@ -49,13 +49,15 @@ jobs:
 
       - name: Checkstyle 위반 확인
         run: |
-          violations=$(xmllint --xpath 'count(/checkstyle/file/error)' build/reports/checkstyle/checkstyleMain.xml)
+          violations=$(grep -c '<error ' build/reports/checkstyle/checkstyleMain.xml || true)
+          echo "Found $violations Checkstyle violations."
           if [ "$violations" -gt 0 ]; then
-            echo "Checkstyle violations found: $violations"
-            exit 1
-          else
-            echo "No Checkstyle violations found."
-          fi
+             echo "Checkstyle violations found: $violations"
+             exit 1
+           else
+             echo "No Checkstyle violations found."
+           fi
+
 
 
       - name: 빌드 및 테스트 실행
