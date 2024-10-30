@@ -7,7 +7,7 @@ import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @Tag(name = "Gather", description = "소모임 API")
 @RestController
@@ -31,10 +29,10 @@ public class GatherController {
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
             @RequestBody GatherRequest request,
-            @AuthenticationPrincipal User user,
-            @PathVariable UUID categoryId
+            @AuthenticationPrincipal UserDTO userDto,
+            @PathVariable Long categoryId
     ) {
-        gatherService.createGather(request, user, categoryId);
+        gatherService.createGather(request, userDto, categoryId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -45,9 +43,9 @@ public class GatherController {
     public ResponseEntity<ApiResponse<Void>> modifyGather(
             @RequestBody GatherRequest request,
             @PathVariable Long id,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        gatherService.modifyGather(request, id, user);
+        gatherService.modifyGather(request, id, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -58,9 +56,9 @@ public class GatherController {
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteGather(
             @PathVariable Long id,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        gatherService.deleteGather(id, user);
+        gatherService.deleteGather(id, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_DELETE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -71,7 +69,7 @@ public class GatherController {
     public ApiResponse<GatherListResponse> gathers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @PathVariable UUID categoryId) {
+            @PathVariable Long categoryId) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);

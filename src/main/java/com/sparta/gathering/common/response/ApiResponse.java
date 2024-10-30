@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ApiResponse<T> {
 
-    private int statusCode;
-    private String message;
-    private T data;
+    private final int statusCode;
+    private final String message;
+    private final T data;
 
     // 성공 응답 생성자
     public ApiResponse(T data, ApiResponseEnum messageEnum) {
@@ -36,7 +36,8 @@ public class ApiResponse<T> {
     }
 
     // 에러 응답 메서드 (데이터 있을 때)
-    public static ApiResponse<?> errorWithData(ExceptionEnum exceptionEnum, HttpStatus status, Object data) {
+    public static ApiResponse<?> errorWithData(ExceptionEnum exceptionEnum, HttpStatus status,
+            Object data) {
         return new ApiResponse<>(exceptionEnum, status, data);
     }
 

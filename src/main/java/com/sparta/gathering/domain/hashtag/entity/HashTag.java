@@ -2,7 +2,6 @@ package com.sparta.gathering.domain.hashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.hashtag.dto.request.HashTagReq;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -22,9 +20,8 @@ import java.util.UUID;
 public class HashTag extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String hashTagName;
 
@@ -42,11 +39,8 @@ public class HashTag extends Timestamped {
         this.gather = gather;
     }
 
-    public static HashTag from(HashTagReq hashTagReq,Gather gather) {
-        return new HashTag(hashTagReq.getHashTagName(), gather );
-    }
-    public static HashTag from(String HashTagName, Gather gather){
-        return new HashTag(HashTagName, gather);
+    public static HashTag from(String hashTagName, Gather gather) {
+        return new HashTag(hashTagName, gather);
     }
 
     public static HashTag of(String hashTagName, Gather gather) {
@@ -56,6 +50,5 @@ public class HashTag extends Timestamped {
     public void updateDeleteAt() {
         this.deletedAt = LocalDateTime.now();
     }
-
 
 }

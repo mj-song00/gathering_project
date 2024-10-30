@@ -12,7 +12,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Entity
@@ -23,9 +22,8 @@ import java.util.UUID;
 public class Category extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String categoryName;
 
