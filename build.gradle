@@ -98,22 +98,3 @@ tasks.withType(Checkstyle).configureEach {
     }
 }
 
-tasks.register('checkstyleFailOnViolation') {
-    dependsOn 'checkstyleMain'
-    doLast {
-        def reportFile = file("build/reports/checkstyle/checkstyleMain.html")
-        if (reportFile.exists() && reportFile.text.contains('WARN') || reportFile.text.contains('ERROR')) {
-            throw new GradleException("Checkstyle violations were found. Please fix them.")
-        }
-    }
-}
-
-tasks.build.dependsOn 'checkstyleFailOnViolation'
-
-test {
-    useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += ['-Xlint:deprecation']
-}

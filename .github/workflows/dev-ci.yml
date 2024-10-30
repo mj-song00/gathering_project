@@ -51,7 +51,9 @@ jobs:
 
       - name: 빌드 및 테스트 실행
         run: |
-          ./gradlew build test
+          ./gradlew build test \
+          --no-daemon \
+          --build-cache
 
 
     env:
