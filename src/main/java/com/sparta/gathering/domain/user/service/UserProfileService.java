@@ -5,6 +5,9 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.*;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +30,10 @@ public class UserProfileService {
     private final S3Client s3Client;
     private final UserRepository userRepository;
 
-    @Value("${DEFAULT_PROFILE_IMAGE_URL}")
+    @Value("${default.profile.image.url}")
     private String defaultProfileImageUrl;
 
-    @Value("${S3_BUCKET_NAME}")
+    @Value("${aws.s3.bucket-name}")
     private String bucketName;
 
     // 이미지 수정
