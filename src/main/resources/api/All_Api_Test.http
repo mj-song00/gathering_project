@@ -4,6 +4,8 @@
 
 @category_Id = 1
 
+@kakao_api =
+
 @jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMjg0OTgwYy0xOGEwLTQxZjEtODYyNS0wMTE0ZDg3OWIzODciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMwMjgzNDc3LCJleHAiOjE3MzAyODUyNzd9.AmBXEW5Ac2LGhaY5WohbRrYnJwNg858WujNj5cUYewQ
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
@@ -194,6 +196,15 @@ Authorization: Bearer {{jwt_token}}
 
 {
 }
+
+
+### 지도검색
+GET {{base_url}}/api/kakaoMap/인천 가좌동
+Content-Type: application/json
+
+{
+}
+
 
 
 
