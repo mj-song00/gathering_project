@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment,Long> {
 
-
     List<Comment> findAllByScheduleIdAndDeleteAtIsNullOrderByUpdatedAtDesc(Long boardId);
 
     Optional<Comment> findByScheduleIdAndIdAndDeleteAtIsNull(Long scheduleId, Long commentId);

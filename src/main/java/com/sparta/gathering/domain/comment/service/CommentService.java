@@ -12,7 +12,6 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import com.sparta.gathering.domain.schedule.repository.ScheduleRepository;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
-import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

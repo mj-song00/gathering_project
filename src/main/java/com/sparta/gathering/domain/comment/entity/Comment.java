@@ -29,11 +29,11 @@ public class Comment extends Timestamped {
     private LocalDateTime deleteAt;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id")
+    @JoinColumn(name = "schedule_Id")
     private Schedule schedule;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_Id")
     private Member member;
 
 

@@ -5,7 +5,6 @@ import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
 import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.service.CommentService;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
-import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

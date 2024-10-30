@@ -9,13 +9,13 @@ public class CommentResponse {
 
     private final String nickName;
     private final String comment;
-    private final LocalDateTime creation_Date;
-    private final LocalDateTime modified_Date;
+    private final LocalDateTime creationDate;
+    private final LocalDateTime modifiedDate;
 
     public CommentResponse(Comment comment) {
         this.nickName = comment.getNickName();
         this.comment = comment.getComment();
-        this.creation_Date = comment.getCreatedAt();
-        this.modified_Date = comment.getUpdatedAt();
+        this.creationDate = comment.getCreatedAt();
+        this.modifiedDate = comment.getUpdatedAt();
     }
 }
