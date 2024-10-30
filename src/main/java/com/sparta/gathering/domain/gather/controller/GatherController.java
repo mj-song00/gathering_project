@@ -8,6 +8,7 @@ import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class GatherController {
 
     private final GatherService gatherService;
 
+    @Operation(summary = "소모임 생성", description = "모임을 생성합니다. 생성 즉시 모임의 매니저로 등록됩니다.")
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
             @RequestBody GatherRequest request,
@@ -38,7 +40,7 @@ public class GatherController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //모임 수정
+    @Operation(summary = "소모임 수정", description = "생성시 저장된 title, description, hashtag를 수정할 수 있습니다.")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
             @RequestBody GatherRequest request,
@@ -51,8 +53,7 @@ public class GatherController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
-    //@모임 삭제(soft delete)
+    @Operation(summary = "모임 삭제", description = "soft delete를 지원합니다.")
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteGather(
             @PathVariable Long id,
@@ -64,7 +65,8 @@ public class GatherController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
+    @Operation(summary = "카테고리별 검색", description = "카테고리별로 모임조회사 가능합니다." +
+            "page size는 10입니다.")
     @GetMapping("/{categoryId}")
     public ApiResponse<GatherListResponse> gathers(
             @RequestParam(defaultValue = "1") int page,
@@ -83,7 +85,8 @@ public class GatherController {
         return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
 
-    //title 검색
+    @Operation(summary = "title, hashtag 검색", description = "keyword로 title 혹은 hashtag를 가진 모임을 검색합니다." +
+            "page size는 10입니다.")
     @GetMapping("/search")
     public ApiResponse<SearchResponse> search(
             @RequestParam String keyword,
