@@ -3,15 +3,13 @@ package com.sparta.gathering.domain.category.dto.response;
 import com.sparta.gathering.domain.category.entity.Category;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 
 public class CategoryRes {
-    private final UUID id;
+    private final Long id;
     private final String categoryName;
 
-    private CategoryRes(UUID id, String categoryName) {
+    private CategoryRes(Long id, String categoryName) {
         this.id = id;
         this.categoryName = categoryName;
     }

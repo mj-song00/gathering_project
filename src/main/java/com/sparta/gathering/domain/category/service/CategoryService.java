@@ -11,11 +11,11 @@ import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +29,12 @@ public class CategoryService {
     @Transactional
     public CategoryRes createCategory(UserDTO userDto, CategoryReq categoryReq) {
         // 유저 권한 확인
-        isValidUser(userDto);
+        User user = isValidUser(userDto);
         if (categoryRepository.findByCategoryName(categoryReq.getCategoryName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_CATEGORY);
         }
 
-        Category newCategory = Category.from(categoryReq, userRepository.findById(userDto.getUserId()).get());
+        Category newCategory = Category.from(categoryReq, user);
         Category savedCategory = categoryRepository.save(newCategory);
         return CategoryRes.from(savedCategory);
     }
@@ -49,7 +49,7 @@ public class CategoryService {
 
     // 카테고리 수정
     @Transactional
-    public CategoryRes updateCategory(UserDTO userDto, UUID categoryId, CategoryReq categoryReq) {
+    public CategoryRes updateCategory(UserDTO userDto, Long categoryId, CategoryReq categoryReq) {
         User newuser = isValidUser(userDto);
         Category category = isValidCategory(categoryId);
 
@@ -60,7 +60,7 @@ public class CategoryService {
 
     // 카테고리 삭제
     @Transactional
-    public void deleteCategory(UserDTO user, UUID categoryId) {
+    public void deleteCategory(UserDTO user, Long categoryId) {
         // 유저 권한 확인
         isValidUser(user);
         Category category = isValidCategory(categoryId);
@@ -80,10 +80,9 @@ public class CategoryService {
     }
 
     // 카테고리 아이디 확인
-    public Category isValidCategory(UUID categoryId) throws BaseException {
-        Category newcategory = categoryRepository.findById(categoryId)
+    public Category isValidCategory(Long categoryId) throws BaseException {
+        return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-        return newcategory;
     }
 
 }

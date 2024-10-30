@@ -12,13 +12,12 @@ import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
-import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class HashTagService {
 
     private final HashTagRepository hashTagRepository;
-    private final UserRepository userRepository;
     private final MemberRepository memberRepository;
     private final GatherRepository gatherRepository;
 
@@ -49,9 +47,20 @@ public class HashTagService {
 
     }
 
+
+    // 해시태그 조회
+    public List<HashTagRes> getHashTagList(Gather gather) {
+        Gather newgather = isValidGather(gather);
+        return hashTagRepository.findByGatherId(newgather.getId())
+                .stream()
+                .map(HashTagRes::from)
+                .toList();
+    }
+
+
     // 해시태그 삭제
     @Transactional
-    public void deleteHashTag(UserDTO user, Gather gather, UUID hashtagId) {
+    public void deleteHashTag(UserDTO user, Gather gather, Long hashtagId) {
         isValidGather(gather);
         // 멤버 권한 확인
         isValidMember(user);
@@ -61,15 +70,6 @@ public class HashTagService {
     }
 
 
-    // 해시태그 조회
-    public List<HashTagRes> getHashTagList(UserDTO user, Gather gather) {
-        Gather newgather = isValidGather(gather);
-        return hashTagRepository.findByGatherId(newgather.getId())
-                .stream()
-                .map(HashTagRes::from)
-                .toList();
-    }
-
     // 모임 확인
     public Gather isValidGather(Gather gather) {
         return gatherRepository.findById(gather.getId())
@@ -77,14 +77,13 @@ public class HashTagService {
     }
 
     // Manager 권한 확인
-    public Member isValidMember(UserDTO userDto) throws BaseException {
+    public void isValidMember(UserDTO userDto) throws BaseException {
         Member member = memberRepository.findByUserId(userDto.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         if (!member.getPermission().equals(Permission.MANAGER)) {
             throw new BaseException(ExceptionEnum.NOT_ADMIN_ROLE);
         }
-        return member;
     }
 
 

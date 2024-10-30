@@ -8,20 +8,13 @@ import com.sparta.gathering.domain.category.service.CategoryService;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -57,7 +50,7 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryRes>> updateCategory(
             @AuthenticationPrincipal UserDTO userDto,
-            @PathVariable UUID categoryId,
+            @PathVariable Long categoryId,
             @Valid @RequestBody CategoryReq categoryReq) {
         CategoryRes res = categoryService.updateCategory(userDto, categoryId, categoryReq);
         ApiResponse<CategoryRes> response = ApiResponse.successWithData(res,
@@ -70,7 +63,7 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<?>> deleteCategory(
             @AuthenticationPrincipal UserDTO userDto,
-            @PathVariable UUID categoryId) {
+            @PathVariable Long categoryId) {
         categoryService.deleteCategory(userDto, categoryId);
         ApiResponse<?> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.DELETED_CATEGORY_SUCCESS);

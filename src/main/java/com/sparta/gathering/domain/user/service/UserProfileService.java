@@ -12,14 +12,14 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,8 +37,7 @@ public class UserProfileService {
 
 
     // 이미지 수정
-    public String updateProfileImage(UserDTO userDto, UUID userId, MultipartFile newImage)
-            throws IOException {
+    public String updateProfileImage(UserDTO userDto, UUID userId, MultipartFile newImage) {
         isValidUser(userDto, userId);
         validateFile(newImage);
         ListObjectsV2Request file = findImage(userId);
@@ -66,8 +65,7 @@ public class UserProfileService {
         newuser.setUpdateProfileImage(fileName);
         userRepository.save(newuser);
 
-        String res = s3Client.getUrl(bucketName, fileName).toString();
-        return res;
+        return s3Client.getUrl(bucketName, fileName).toString();
     }
 
     // 이미지 조회 - 누구나 조회 가능
@@ -76,7 +74,7 @@ public class UserProfileService {
         ListObjectsV2Request file = findImage(userId);
         // 사용자에게 이미 등록된 이미지가 있는지 확인
         User user = userRepository.findById(userId).orElse(null);
-        if (user.getProfileImage() == null) {
+        if (user.getProfileImage().equals(defaultProfileImageUrl) || user.getProfileImage().equals("NONE")) {
             return defaultProfileImageUrl; // 기본이미지
         }
         ListObjectsV2Result result = s3Client.listObjectsV2(file);
