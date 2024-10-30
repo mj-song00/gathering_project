@@ -34,7 +34,7 @@ public class User extends Timestamped {
     private String nickName; // 닉네임
 
     @Column
-    private String naAK_SAS_DSe; // 테스트용
+    private String naAK_SAS_DSe; // 테스트
 
     @Column
     private String password; // 일반 로그인 사용자의 비밀번호 (소셜 로그인 사용자는 null 가능)
