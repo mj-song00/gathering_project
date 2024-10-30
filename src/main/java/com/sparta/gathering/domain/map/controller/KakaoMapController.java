@@ -20,7 +20,6 @@ public class KakaoMapController {
      */
     @GetMapping("/api/kakaoMap/{searchMap}")
     public ResponseEntity<String> searchMap(@PathVariable String searchMap) {
-
         return kakaoService.searchMap(searchMap);
     }
 

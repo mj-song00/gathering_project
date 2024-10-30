@@ -29,7 +29,6 @@ public class KakaoService {
         // Set up headers
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         headers.set("Authorization", appKey);
 
         // Create entity with headers
@@ -49,9 +48,8 @@ public class KakaoService {
         ResponseEntity<String> response = restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
         try {
             JsonNode root = objectMapper.readTree(response.getBody());
-            JsonNode documents = root.path("documents");
-            log.info(documents.path("y").toString());
-            Map map = new Map(documents);
+            String adressName = root.get("documents").get(0).get("address_name").asText();
+            Map map = new Map(adressName);
             mapRepository.save(map);
         } catch (Exception e) {
             e.printStackTrace();

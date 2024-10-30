@@ -23,9 +23,9 @@ public class Map {
     @Column
     private double longitude;//경도 x
 
-    public Map(JsonNode node){
-        this.addressName = node.path("address_name").asText();
-        this.latitude = node.path("y").asDouble();
-        this.longitude = node.path("x").asDouble();
+    public Map(String addressName){
+        this.addressName = addressName;
+//        this.latitude = node.path("y").asDouble();
+//        this.longitude = node.path("x").asDouble();
     }
 }
