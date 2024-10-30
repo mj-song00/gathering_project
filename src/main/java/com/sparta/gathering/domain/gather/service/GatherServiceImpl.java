@@ -7,7 +7,6 @@ import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
-import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;

@@ -1,8 +1,6 @@
 package com.sparta.gathering.domain.map.entity;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
