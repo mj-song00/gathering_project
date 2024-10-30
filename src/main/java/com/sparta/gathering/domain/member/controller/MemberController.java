@@ -7,6 +7,9 @@ import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
 import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import java.util.UUID;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Member" , description = "멤버 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
@@ -30,6 +34,8 @@ public class MemberController {
     private final MemberService memberService;
 
     //role - member 유저 생성 - 수락대기
+    @Operation(summary = "소모임  가입 신청", description = "해당 소모임 가입을 신청합니다." +
+            "신청자는 manager가 승인/거절 전까지 pendding상태를 유지합니다.")
     @PostMapping("/user/{userId}/gather/{gatherId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
             @PathVariable UUID userId,
@@ -41,6 +47,7 @@ public class MemberController {
     }
 
     //멤버조회
+    @Operation(summary = "소모임  멤버 조회", description = "해당 소모임의 멤버를 조회합니다.")
     @GetMapping("/{gatherId}")
     public ApiResponse<MemberListResponse> getMembers(
             @PathVariable long gatherId,
@@ -58,7 +65,9 @@ public class MemberController {
     }
 
     //멤버 가입승인 - 소모임 manager만
-    @PatchMapping("/{memberId}/{gatherId}")
+    @Operation(summary = "소모임 가입 승인", description = "해당 소모임 가입을 승인합니다." +
+            "승인은 해당 모임의 manager만 가능합니다. 승인시 pendding 상태에서 guest상태로 변경됩니다.")
+    @PatchMapping("/{memberId}/gather/{gatherId}")
     public ResponseEntity<ApiResponse<Void>> approval(
             @PathVariable long memberId,
             @PathVariable long gatherId,
@@ -70,7 +79,9 @@ public class MemberController {
     }
 
     //멤버 가입거절-소모임 manager만
-    @PatchMapping("/{memberId}/{gatherId}/refusal")
+    @Operation(summary = "소모임 가입 거절", description = "해당 소모임 가입을 거절합니다." +
+            "거절은 해당 모임의 manager만 가능합니다. 거절 시 pendding상태에서 refusal상태로 변경됩니다.")
+    @PatchMapping("/{memberId}/gather/{gatherId}/refusal")
     public ResponseEntity<ApiResponse<Void>> refusal(
             @PathVariable long memberId,
             @PathVariable long gatherId,
@@ -82,6 +93,7 @@ public class MemberController {
     }
 
     //멤버 탈퇴
+    @Operation(summary = "소모임 탈퇴", description = "해당 소모임 탈퇴합니다.")
     @PatchMapping("/{memberId}/withdrawal")
     public ResponseEntity<ApiResponse<Void>> withdrawal(
             @PathVariable long memberId,

@@ -21,5 +21,5 @@ public interface GatherRepository extends JpaRepository<Gather, Long> {
 
 
     @Query("SELECT g FROM Gather g LEFT JOIN FETCH g.hashTagList WHERE g.title LIKE %:keyword%")
-    Page<Gather> findByTitleContaining(@Param("keyword") Pageable pageable, String keyword);
+    Page<Gather> findByKeywordContaining(@Param("keyword") Pageable pageable, String keyword);
 }
