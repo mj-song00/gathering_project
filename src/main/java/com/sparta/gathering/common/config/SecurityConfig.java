@@ -50,7 +50,8 @@ public class SecurityConfig {
           // 인증 없이 접근 가능한 경로 설정
           auth
               .requestMatchers(
-                  "/**"                // 모든 경로
+                  "/**",// 모든 경로"
+                  "/api/kakaoMap"
                   /* "/",                 // 루트 경로
                   "/api/auth/login",  // 일반 로그인 API
                   "/api/users/signup", // 회원가입 API

@@ -70,6 +70,33 @@ CREATE TABLE member
     FOREIGN KEY (gather_id) REFERENCES gather (id),
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
+CREATE TABLE schedule
+(
+    id               BIGINT       NOT NULL AUTO_INCREMENT,
+    created_at       DATETIME(6),
+    updated_at       DATETIME(6),
+    deleted_at       DATETIME(6),
+    schedule_title   VARCHAR(255) NOT NULL,
+    schedule_content VARCHAR(255) NOT NULL,
+    gather_id        BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id)
+);
+
+CREATE TABLE comment
+(
+    id         BIGINT     NOT NULL AUTO_INCREMENT,
+    nickName        varchar(20),
+    comment         varchar(255),
+    created_at      DATETIME(6),
+    updated_at      DATETIME(6),
+    deleted_at      DATETIME(6),
+    schedule_id     BIGINT,
+    member_id       BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (schedule_id) REFERENCES schedule (id),
+    FOREIGN KEY (member_id) REFERENCES member (id)
+);
 
 
 

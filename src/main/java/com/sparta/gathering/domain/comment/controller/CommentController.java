@@ -19,6 +19,7 @@ import java.util.List;
 @Tag(name = "Comment", description = "댓글 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/schedule")
 public class CommentController {
 
     private final CommentService commentService;
@@ -64,7 +65,7 @@ public class CommentController {
      * @param user 유저 ID, 유저 이메일
      */
     @Operation(summary = "댓글 수정", description = "댓글 생성자만 수정 가능합니다.")
-    @PutMapping("/{scheduleId}/comments/{commentId}")
+    @PatchMapping("/{scheduleId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<Void>> updateComment(
             @RequestBody CommentRequest request,
             @PathVariable Long scheduleId,
