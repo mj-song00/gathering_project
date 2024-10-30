@@ -11,7 +11,7 @@ import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ public class HashTagService {
 
     // 해시태그 생성
     @Transactional
-    public List<HashTagRes> createHashTag(User user, Gather gather, HashTagsReq hashTagReq) {
+    public List<HashTagRes> createHashTag(UserDTO userDto, Gather gather, HashTagsReq hashTagReq) {
         isValidGather(gather);
         // 멤버 권한 확인
-        isValidMember(user);
+        isValidMember(userDto);
         if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
         }
@@ -51,7 +51,7 @@ public class HashTagService {
 
     // 해시태그 삭제
     @Transactional
-    public void deleteHashTag(User user, Gather gather, UUID hashtagId) {
+    public void deleteHashTag(UserDTO user, Gather gather, UUID hashtagId) {
         isValidGather(gather);
         // 멤버 권한 확인
         isValidMember(user);
@@ -62,7 +62,7 @@ public class HashTagService {
 
 
     // 해시태그 조회
-    public List<HashTagRes> getHashTagList(User user, Gather gather) {
+    public List<HashTagRes> getHashTagList(UserDTO user, Gather gather) {
         Gather newgather = isValidGather(gather);
         return hashTagRepository.findByGatherId(newgather.getId())
                 .stream()
@@ -77,8 +77,8 @@ public class HashTagService {
     }
 
     // Manager 권한 확인
-    public Member isValidMember(User user) throws BaseException {
-        Member member = memberRepository.findByUserId(user.getId())
+    public Member isValidMember(UserDTO userDto) throws BaseException {
+        Member member = memberRepository.findByUserId(userDto.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         if (!member.getPermission().equals(Permission.MANAGER)) {

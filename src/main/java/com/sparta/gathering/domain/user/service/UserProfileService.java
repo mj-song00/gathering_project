@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import java.io.IOException;
@@ -36,9 +37,9 @@ public class UserProfileService {
 
 
     // 이미지 수정
-    public String updateProfileImage(User user, UUID userId, MultipartFile newImage)
+    public String updateProfileImage(UserDTO userDto, UUID userId, MultipartFile newImage)
             throws IOException {
-        isValidUser(user, userId);
+        isValidUser(userDto, userId);
         validateFile(newImage);
         ListObjectsV2Request file = findImage(userId);
 
@@ -84,8 +85,8 @@ public class UserProfileService {
     }
 
     // 이미지 삭제
-    public void deleteUserProfileImage(User user, UUID userId) {
-        isValidUser(user, userId);
+    public void deleteUserProfileImage(UserDTO userDto, UUID userId) {
+        isValidUser(userDto, userId);
         User newUser = userRepository.findById(userId).orElse(null);
         // 사용자에게 이미 등록된 이미지가 있는지 확인
         ListObjectsV2Request file = findImage(userId);
@@ -123,10 +124,10 @@ public class UserProfileService {
     }
 
     // 유저 아이디와 유저토큰이 맞는지 검증
-    public void isValidUser(User user, UUID userId) throws BaseException {
+    public void isValidUser(UserDTO userDto, UUID userId) throws BaseException {
         userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        if (!user.getId().equals(userId)) {
+        if (!userDto.getUserId().equals(userId)) {
             throw new BaseException(ExceptionEnum.PERMISSION_DENIED_ROLE);
         }
     }

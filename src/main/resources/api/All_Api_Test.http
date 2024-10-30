@@ -1,10 +1,10 @@
 @base_url = http://localhost:8080
 
-@user_Id =
+@user_Id = 4bf3583d-ec14-4d6b-a6ae-83406d8995c5
 
-@category_Id =
+@category_Id = 6cf0df20-1856-4f8b-8a60-8a60bb327d81
 
-@jwt_token =
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ODY3Y2RjYy1hNzA5LTQzMzctYmZlMS04YWUwYjZmNjM2MDAiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzAyNjU4ODQsImV4cCI6MTczMDI2NzY4NH0.iBpNLbSGVgG3_mGaZyKtcRYv3osbPwDv2yYO0RB8Hog
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
@@ -57,7 +57,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "보디빌딩"
+  "categoryName": "사과"
 }
 
 ### 카테고리 조회

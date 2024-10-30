@@ -1,7 +1,7 @@
 package com.sparta.gathering.domain.user.service;
 
-import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import java.util.UUID;
@@ -12,7 +12,7 @@ public interface UserService {
 
     User findById(UUID userId);
 
-    void deleteUser(AuthenticatedUser authenticatedUser);
+    void deleteUser(UserDTO userDto);
 
     User findByEmail(String email);
 

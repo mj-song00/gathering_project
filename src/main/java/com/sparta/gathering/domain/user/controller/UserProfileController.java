@@ -2,7 +2,7 @@ package com.sparta.gathering.domain.user.controller;
 
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.service.UserProfileService;
 import java.io.IOException;
 import java.util.UUID;
@@ -29,11 +29,11 @@ public class UserProfileController {
     // 이미지 수정
     @PutMapping
     public ResponseEntity<ApiResponse<?>> updateProfileImage(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserDTO userDto,
             @PathVariable("userId") UUID userId,
             @RequestParam("file") MultipartFile newImage
     ) throws IOException {
-        String res = userProfileService.updateProfileImage(user, userId, newImage);
+        String res = userProfileService.updateProfileImage(userDto, userId, newImage);
         return ResponseEntity.ok(
                 ApiResponse.successWithData(res, ApiResponseEnum.USER_PROFILE_GET_SUCCESS));
     }
@@ -51,10 +51,10 @@ public class UserProfileController {
     // 이미지 삭제
     @DeleteMapping()
     public ResponseEntity<ApiResponse<?>> deleteUserProfileImage(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserDTO userDto,
             @PathVariable("userId") UUID userId
     ) {
-        userProfileService.deleteUserProfileImage(user, userId);
+        userProfileService.deleteUserProfileImage(userDto, userId);
         return ResponseEntity.ok(
                 ApiResponse.successWithOutData(ApiResponseEnum.USER_PROFILE_DELETE_SUCCESS));
     }

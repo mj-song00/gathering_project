@@ -7,7 +7,7 @@ import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
-import com.sparta.gathering.domain.user.entity.User;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +38,10 @@ public class GatherController {
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
             @RequestBody GatherRequest request,
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserDTO userDto,
             @PathVariable UUID categoryId
     ) {
-        gatherService.createGather(request, user, categoryId);
+        gatherService.createGather(request, userDto, categoryId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -52,9 +52,9 @@ public class GatherController {
     public ResponseEntity<ApiResponse<Void>> modifyGather(
             @RequestBody GatherRequest request,
             @PathVariable Long id,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        gatherService.modifyGather(request, id, user);
+        gatherService.modifyGather(request, id, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -65,9 +65,9 @@ public class GatherController {
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteGather(
             @PathVariable Long id,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal UserDTO userDto
     ) {
-        gatherService.deleteGather(id, user);
+        gatherService.deleteGather(id, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.GATHER_DELETE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);

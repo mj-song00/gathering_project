@@ -1,9 +1,9 @@
 package com.sparta.gathering.domain.user.service;
 
-import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
@@ -50,16 +50,18 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(AuthenticatedUser authenticatedUser) {
+    public void deleteUser(UserDTO userDto) {
         // 유저 조회
-        User user = userRepository.findById(authenticatedUser.getUserId())
+        User user = userRepository.findById(userDto.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
         // 이미 삭제된 사용자일 경우 예외 발생
         if (user.getDeletedAt() != null) {
             throw new BaseException(ExceptionEnum.ALREADY_DELETED);
         }
+
         // 소프트 삭제 처리
-        user.setDeletedAt();  // deletedAt 필드를 현재 시간으로 설정하는 메서드가 User에 정의되어 있다고 가정
+        user.setDeletedAt(); // deletedAt 필드를 현재 시간으로 설정하는 메서드가 User에 정의되어 있다고 가정
         userRepository.save(user);
     }
 
