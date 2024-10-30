@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
@@ -14,12 +15,13 @@ import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,8 @@ public class GatherServiceImpl implements GatherService {
         Member member = new Member(user, gather, Permission.MANAGER);
         gatherRepository.save(gather);
         memberRepository.save(member);
+
+        //redisClient.zadd('',1)
     }
 
     //모임 수정 gather
@@ -51,6 +55,9 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.updateGatherTitle(request.getTitle());
         gatherRepository.save(gather);
+
+//        redis 기존꺼 삭제
+  //              수정되는거 추가
     }
 
     //모임 삭제
@@ -61,6 +68,8 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.delete();
         gatherRepository.save(gather);
+
+    //    기존꺼에서 하나 빼기
     }
 
     //모임 불러오기
@@ -71,7 +80,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     public Page<Gather> findTitle(Pageable pageable, String keyword) {
-        return gatherRepository.findByTitleContaining(pageable, keyword);
+        return gatherRepository.findByKeywordContaining(pageable, keyword);
     }
 
     private void validateManager(Long id, UserDTO userDto) {
