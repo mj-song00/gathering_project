@@ -33,7 +33,7 @@ public class GatherServiceImpl implements GatherService {
 
     // 모임생성
     @Transactional
-    public void createGather(GatherRequest request, UserDTO userDto, UUID categoryId) {
+    public void createGather(GatherRequest request, UserDTO userDto, Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(userDto.getUserId())
@@ -65,7 +65,7 @@ public class GatherServiceImpl implements GatherService {
 
     //모임 불러오기
     @Transactional(readOnly = true)
-    public Page<Gather> gathers(Pageable pageable, UUID categoryId) {
+    public Page<Gather> gathers(Pageable pageable, Long categoryId) {
         return gatherRepository.findByCategoryWithHashTags(pageable, categoryId);
     }
 

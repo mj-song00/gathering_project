@@ -4,22 +4,20 @@ import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 public class HashTagRes {
-//    private final UUID gatheringId;
-    private final UUID hashTagId;
+
+    private final Long hashtagId;
     private final String hashTagName;
 
-    public HashTagRes(UUID hashTagId, String hashTagName) {
-//        this.gatheringId = gatheringId;
-        this.hashTagId = hashTagId;
+    public HashTagRes(Long hashtagId, String hashTagName) {
+        this.hashtagId = hashtagId;
         this.hashTagName = hashTagName;
     }
 
     public static HashTagRes from(HashTag hashTag) {
-        return new HashTagRes(hashTag.getId(),hashTag.getHashTagName());
+        return new HashTagRes(hashTag.getId(), hashTag.getHashTagName());
     }
 
     public static List<HashTagRes> from(List<HashTag> savedHashTag) {
