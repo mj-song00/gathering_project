@@ -80,8 +80,6 @@ dependencies {
     // Spring WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-    // Thymeleaf
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 }
 

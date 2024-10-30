@@ -5,7 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 public class ChatMessage {
-    private String gatheringId;
+    private Long gatheringId;
     private String sender;
     private String content;
     private MessageType type;

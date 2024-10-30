@@ -2,7 +2,7 @@
 
 @user_Id =
 
-@jwt_token =
+@jwt_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwOWIyNTYwNS02ODdhLTRhZWEtYTgzNC03YmZhYTRmYWUyNGUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJleHAiOjE3MzAyMTczNTAsImlhdCI6MTczMDIxMzc1MH0.dMTxWDez9a-bL_yzp5BLm1663WkNEudF_psfbW8PBkE
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
@@ -74,13 +74,28 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 모임 생성
-POST {{base_url}}/api/gathers
+POST {{base_url}}/api/gathers/683c8f7a-86d4-4dd0-91ad-04ba77e73980
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임"
+  "title": "string",
+  "description": "string",
+  "hashtags": [
+    "string"
+  ]
 }
+
+### 스케줄 생성
+POST {{base_url}}/api/gather/1/schedule
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "scheduleTitle": "ㄴㅇㅁ",
+  "scheduleContent": "ㄴㅇ"
+}
+
 
 ### 멤버 생성
 POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
@@ -105,7 +120,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "hashTagName": "풋살2"
+  "hashTagName": ["경기도","전국"]
 }
 
 
@@ -114,16 +129,14 @@ GET {{base_url}}/api/gatherings/1/hashtags
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
-{
-}
+
 
 ### 해시태그 삭제
-PATCH {{base_url}}/api/gatherings/1/hashtags
+PATCH {{base_url}}/api/gatherings/1/hashtags/b22f6c6d-8a9d-4faf-b242-d239c43261c0
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
-{
-}
+
 
 ### 이미지 등록
 POST {{base_url}}/api/users/{{user_Id}}/profile-image

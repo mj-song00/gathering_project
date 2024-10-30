@@ -11,16 +11,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic"); // 구독용 엔드포인트
+        config.setApplicationDestinationPrefixes("/app"); // 메시지 송신용 엔드포인트
     }
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic");  // 메모리 기반의 메시지 브로커를 사용
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // "/ws/chat" 엔드포인트 등록 및 SockJS 지원
+        registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*").withSockJS();
     }
 }
-
-
-
