@@ -49,3 +49,4 @@ public class ScheduleController {
         return ResponseEntity.ok(ApiResponse.successWithData(null, ApiResponseEnum.SCHEDULE_DELETED));
     }
 }
+
