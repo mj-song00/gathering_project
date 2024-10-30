@@ -22,7 +22,7 @@ CREATE TABLE user
 
 CREATE TABLE category
 (
-    id            BINARY(16) NOT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
     created_at    DATETIME(6),
     updated_at    DATETIME(6),
     deleted_at    DATETIME(6),
@@ -38,7 +38,7 @@ CREATE TABLE gather
     created_at  DATETIME(6),
     updated_at  DATETIME(6),
     deleted_at  DATETIME(6),
-    category_id BINARY(16),
+    category_id BIGINT,
     title       VARCHAR(255),
     description VARCHAR(255),
     PRIMARY KEY (id),
