@@ -193,6 +193,14 @@ Content-Type: application/json
 }
 
 
+### 지도저장
+POST {{base_url}}/api/kakaoMap/인천 가좌동
+Content-Type: application/json
+
+{
+}
+
+
 
 
 

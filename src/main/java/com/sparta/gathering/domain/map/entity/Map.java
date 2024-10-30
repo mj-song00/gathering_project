@@ -2,6 +2,7 @@ package com.sparta.gathering.domain.map.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,14 +19,18 @@ public class Map {
     private String addressName;
 
     @Column
-    private double latitude;//위도 y
+    private String latitude;//위도 y
 
     @Column
-    private double longitude;//경도 x
+    private String longitude;//경도 x
+
 
     public Map(String addressName){
         this.addressName = addressName;
-//        this.latitude = node.path("y").asDouble();
-//        this.longitude = node.path("x").asDouble();
+    }
+    public Map(String addressName, String latitude, String longitude){
+        this.addressName = addressName;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
