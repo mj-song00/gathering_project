@@ -74,13 +74,12 @@ jobs:
       KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
 
       # KaKao Map 설정
-      KAKAO_MAP_API_KEY: ${{ secrets.KAKAO_MAP_REST_API }}
+      KAKAO_MAP_REST_API: ${{ secrets.KAKAO_MAP_REST_API }}
 
       # AWS S3 설정
       S3_PLACE: ${{ secrets.S3_PLACE }}
       S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
       S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-      S3_URL: ${{ secrets.S3_URL }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
 
       # 기본 프로필 이미지 URL
