@@ -102,7 +102,7 @@ tasks.register('checkstyleFailOnViolation') {
     dependsOn 'checkstyleMain'
     doLast {
         def reportFile = file("build/reports/checkstyle/checkstyleMain.html")
-        if (reportFile.exists() && reportFile.text.contains('violation')) {
+        if (reportFile.exists() && reportFile.text.contains('WARN') || reportFile.text.contains('ERROR')) {
             throw new GradleException("Checkstyle violations were found. Please fix them.")
         }
     }
