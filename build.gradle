@@ -86,25 +86,31 @@ dependencies {
 checkstyle {
     toolVersion = '10.3.4'
     configFile = file('src/main/resources/checkstyle/checkstyle.xml')
-    ignoreFailures = false
+    ignoreFailures = true
     showViolations = true
 }
 
 tasks.withType(Checkstyle).configureEach {
     reports {
-        xml.required = false
+        xml.required = true
         html.required = true
+        xml.outputLocation = file("build/reports/checkstyle/checkstyleMain.xml")
         html.outputLocation = file("build/reports/checkstyle/checkstyleMain.html")
     }
 }
 
+import groovy.xml.XmlSlurper
+
 tasks.register('checkstyleFailOnViolation') {
     dependsOn 'checkstyleMain'
     doLast {
-        def reportFile = file("build/reports/checkstyle/checkstyleMain.html")
-        if (reportFile.exists() && (reportFile.text.contains('WARN') || reportFile.text.contains('ERROR'))) {
-            tasks.checkstyleMain.reports.html.required = true
-            throw new GradleException("Checkstyle violations were found. Please fix them.")
+        def reportFile = file("build/reports/checkstyle/checkstyleMain.xml")
+        if (reportFile.exists()) {
+            def checkstyleReport = new XmlSlurper().parse(reportFile)
+            def violations = checkstyleReport
+            if (violations.size() > 0) {
+                throw new GradleException("Checkstyle violations were found. Please fix them.")
+            }
         }
     }
 }

@@ -39,7 +39,6 @@ jobs:
 
       - name: Linting 및 코드 품질 검사
         run: ./gradlew clean checkstyleMain --no-build-cache
-        continue-on-error: false
 
       - name: Checkstyle HTML 보고서 저장
         if: always()
@@ -47,6 +46,16 @@ jobs:
         with:
           name: checkstyle-html-report
           path: build/reports/checkstyle/checkstyleMain.html
+
+      - name: Checkstyle 위반 확인
+        run: |
+          violations=$(xmllint --xpath 'count(/checkstyle/file/error)' build/reports/checkstyle/checkstyleMain.xml)
+          if [ "$violations" -gt 0 ]; then
+            echo "Checkstyle violations found: $violations"
+            exit 1
+          else
+            echo "No Checkstyle violations found."
+          fi
 
 
       - name: 빌드 및 테스트 실행
