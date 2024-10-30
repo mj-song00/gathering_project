@@ -20,7 +20,6 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-
     // 이미지 수정
     @Operation(summary = "프로필 이미지 수정", description = "이미지를 변경할 수 있습니다. 사이즈는 5 * 1024 * 1024 보다 커야하며 .jpeg, .png 파일만 허용됩니다 ")
     @PutMapping
@@ -31,7 +30,7 @@ public class UserProfileController {
     ) {
         String res = userProfileService.updateProfileImage(userDto, userId, newImage);
         return ResponseEntity.ok(
-                ApiResponse.successWithData(res, ApiResponseEnum.USER_PROFILE_GET_SUCCESS));
+                ApiResponse.successWithData(res, ApiResponseEnum.USER_PROFILE_UPLOAD_SUCCESS));
     }
 
     // 이미지 조회

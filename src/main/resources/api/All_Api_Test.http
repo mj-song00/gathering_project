@@ -1,43 +1,35 @@
 @base_url = http://localhost:8080
 
-@user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
+@user_Id =
 
-@category_Id = 1
-
-@kakao_api =
-
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMjg0OTgwYy0xOGEwLTQxZjEtODYyNS0wMTE0ZDg3OWIzODciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMwMjgzNDc3LCJleHAiOjE3MzAyODUyNzd9.AmBXEW5Ac2LGhaY5WohbRrYnJwNg858WujNj5cUYewQ
+@jwt_token =
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
-### 회원가입 요청
-POST {{base_url}}/api/users/signup
-Content-Type: application/json
+@memberId =
 
-{
-  "email": "test1@example.com",
-  "nickName": "김철수1",
-  "password": "password123",
-  "identityProvider": "NONE"
-}
+@category_Id =
+
+@gatherId =
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test2@example.com",
-  "nickName": "김철수",
+  "email": "test@example.com",
+  "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
 }
+
 
 ### 일반 로그인 요청
 POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test@example.com",
   "password": "password123"
 }
 
@@ -59,7 +51,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "사과"
+  "categoryName": "공부"
 }
 
 ### 카테고리 조회
@@ -89,11 +81,9 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "풋살",
-  "description": "할래",
-  "hashtags": [
-    "축구할사람"
-  ]
+  "title": "즐거운 풋살모임",
+  "description": "type: string",
+  "hashtags": ["list로","받습니다."]
 }
 
 ### 멤버 생성
@@ -103,10 +93,19 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 멤버 승인
-PATCH {{base_url}}/api/members/2/1
+PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
+### 멤버 가입 거절
+PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}/refusal
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 모임 탈퇴
+PATCH {{base_url}}/api/members/{{memberId}}/withdrawl
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### 해시태그 생성
 POST {{base_url}}/api/gatherings/1/hashtags
@@ -114,9 +113,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "hashTagName": [
-    "축구사랑하는분"
-  ]
+  "hashTagName": "풋살2"
 }
 
 
@@ -137,17 +134,7 @@ Content-Type: multipart/form-data
 Authorization: Bearer {{jwt_token}}
 
 {
-  "file": https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1QoiaHL8SAnH1qLQmbN4Ba06h8RYXZfh8Ow&s"
-}
-
-### 스케쥴 생성
-POST {{base_url}}/api/gather/1/schedule
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "scheduleTitle": "스케쥴 타이틀",
-  "scheduleContent": "스케쥴 컨텐츠"
+"file": https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1QoiaHL8SAnH1qLQmbN4Ba06h8RYXZfh8Ow&s
 }
 
 ### 보드 생성
