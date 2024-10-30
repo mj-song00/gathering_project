@@ -1,10 +1,10 @@
 @base_url = http://localhost:8080
 
-@user_Id = 4bf3583d-ec14-4d6b-a6ae-83406d8995c5
+@user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
 
-@category_Id = 6cf0df20-1856-4f8b-8a60-8a60bb327d81
+@category_Id = 1
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4ODY3Y2RjYy1hNzA5LTQzMzctYmZlMS04YWUwYjZmNjM2MDAiLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzAyNjU4ODQsImV4cCI6MTczMDI2NzY4NH0.iBpNLbSGVgG3_mGaZyKtcRYv3osbPwDv2yYO0RB8Hog
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMjg0OTgwYy0xOGEwLTQxZjEtODYyNS0wMTE0ZDg3OWIzODciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMwMjgzNDc3LCJleHAiOjE3MzAyODUyNzd9.AmBXEW5Ac2LGhaY5WohbRrYnJwNg858WujNj5cUYewQ
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
   "email": "test1@example.com",
-  "nickName": "홍길동",
+  "nickName": "김철수1",
   "password": "password123",
   "identityProvider": "NONE"
 }
@@ -157,6 +157,47 @@ Authorization: Bearer {{jwt_token}}
   "boardTitle": "보드 타이틀",
   "boardContent": "보드 컨텐츠"
 }
+
+### 댓글생성
+POST {{base_url}}/api/schedule/1/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 타이틀3"
+}
+
+### 댓글조회
+GET {{base_url}}/api/schedule/1/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 타이틀3"
+}
+
+
+### 댓글수정
+PATCH {{base_url}}/api/schedule/1/comments/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 수정"
+}
+
+
+### 댓글삭제
+PATCH {{base_url}}/api/schedule/1/comments/3/delete
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+}
+
+
+
+
 
 
 

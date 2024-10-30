@@ -4,6 +4,7 @@ import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
 import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.service.CommentService;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> saveComment(
             @PathVariable Long scheduleId,
             @RequestBody CommentRequest request,
-            @AuthenticationPrincipal User user) {
+            @AuthenticationPrincipal UserDTO user) {
         commentService.createComment(scheduleId, user, request);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATED_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -70,7 +71,7 @@ public class CommentController {
             @RequestBody CommentRequest request,
             @PathVariable Long scheduleId,
             @PathVariable Long commentId,
-            @AuthenticationPrincipal User user) {
+            @AuthenticationPrincipal UserDTO user) {
         commentService.updateComment(request,scheduleId,commentId,user);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.UPDATE_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -86,7 +87,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제", description = "댓글 생성자와 매니저만 삭제 가능합니다.")
     @PatchMapping("/{scheduleId}/comments/{commentId}/delete")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal UserDTO user,
             @PathVariable Long scheduleId,
             @PathVariable Long commentId ) {
         commentService.deleteComment(user, scheduleId, commentId);

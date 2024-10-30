@@ -11,6 +11,7 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import com.sparta.gathering.domain.schedule.repository.ScheduleRepository;
+import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class CommentService {
 
     //댓글 생성
     @Transactional
-    public void createComment(Long scheduleId, User user, CommentRequest request) {
+    public void createComment(Long scheduleId, UserDTO user, CommentRequest request) {
 
         Member member = isValidMember(user);//유저가 모임의 멤버 또는 매니저인지 확인
 
@@ -45,14 +46,14 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public void updateComment(CommentRequest requestDto, Long scheduleId, Long commentId, User user) {
+    public void updateComment(CommentRequest requestDto, Long scheduleId, Long commentId, UserDTO user) {
 
         //댓글 찾기
-        Comment comment = commentRepository.findByScheduleIdAndId(scheduleId, commentId)
+        Comment comment = commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
 
         // 댓글 작성자가 아니라면 예외처리
-        if(! user.getId().equals(comment.getMember().getUser().getId())){
+        if(! user.getUserId().equals(comment.getMember().getUser().getId())){
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
 
@@ -69,13 +70,13 @@ public class CommentService {
 
     /* 댓글 삭제 */
     @Transactional
-    public void deleteComment(User user, Long scheduleId, Long commentId) {
+    public void deleteComment(UserDTO user, Long scheduleId, Long commentId) {
         // 유저 인증
         Member member = isValidMember(user); //멤버가 게스트이거나 매니저가 아닌경우 예외처리
 
         // 댓글 찾기
-        Comment comment = commentRepository.findByScheduleIdAndId(scheduleId, commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물의 해당 댓글을 찾지 못했습니다."));
+        Comment comment = commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
 
         // 댓글 작성자 or 매니저가 아니라면 예외처리
         checkAuth(member, user, comment);
@@ -89,20 +90,17 @@ public class CommentService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.SCHEDULE_NOT_FOUND));
     }
 
-    private void checkAuth(Member member, User user,Comment comment) {
-        if (!user.getId().equals(comment.getMember().getUser().getId()) || member.getPermission().equals(Permission.MANAGER)) {
-            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
-        }
-    }
-
-    public Member isValidMember(User user) throws BaseException {
-
-        Member member = memberRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        if (!(member.getPermission().equals(Permission.GUEST) || member.getPermission().equals(Permission.MANAGER))) {
+    private void checkAuth(Member member, UserDTO user,Comment comment) {
+        if (!(user.getUserId().equals(comment.getMember().getUser().getId()) || member.getPermission().equals(Permission.MANAGER))) {
             throw new BaseException(ExceptionEnum.PERMISSION_DENIED_ROLE);
         }
+        //userId == comment의 member안에 유저의 아이디라면 1 -> 0
 
-        return member;
+    }
+
+    public Member isValidMember(UserDTO user) throws BaseException {
+
+        return memberRepository.findByUserId(user.getUserId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
     }
 }
