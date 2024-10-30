@@ -75,17 +75,16 @@ dependencies {
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
 
     // JUnit 5
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 
     // Spring WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-
 }
 
 checkstyle {
-    toolVersion = "10.3.4"
+    toolVersion = '10.3.4'
     configFile = file('src/main/resources/checkstyle/checkstyle.xml')
     ignoreFailures = true
     showViolations = true
@@ -96,4 +95,24 @@ tasks.withType(Checkstyle).configureEach {
         xml.required = false
         html.required = true
     }
+}
+
+tasks.register('checkstyleFailOnViolation') {
+    dependsOn 'checkstyleMain'
+    doLast {
+        def reportFile = file("build/reports/checkstyle/checkstyle.html")
+        if (reportFile.exists() && reportFile.text.contains('violation')) {
+            throw new GradleException("Checkstyle violations were found. Please fix them.")
+        }
+    }
+}
+
+tasks.build.dependsOn 'checkstyleFailOnViolation'
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:deprecation']
 }
