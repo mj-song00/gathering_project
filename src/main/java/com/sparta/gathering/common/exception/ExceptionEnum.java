@@ -65,6 +65,8 @@ public enum ExceptionEnum {
     // 보드 관련
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD_NOT_FOUND", "해당 보드를 찾을 수 없습니다."),
 
+    //댓글 관련
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMENT_NOT_FOUND","댓글 내용을 찾을 수 없습니다."),
     // 스케쥴 관련
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
 

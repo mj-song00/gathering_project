@@ -137,6 +137,65 @@ Authorization: Bearer {{jwt_token}}
 "file": https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1QoiaHL8SAnH1qLQmbN4Ba06h8RYXZfh8Ow&s
 }
 
+### 보드 생성
+POST {{base_url}}/api/gather/1/boards
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "boardTitle": "보드 타이틀",
+  "boardContent": "보드 컨텐츠"
+}
+
+### 댓글생성
+POST {{base_url}}/api/schedule/1/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 타이틀3"
+}
+
+### 댓글조회
+GET {{base_url}}/api/schedule/1/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 타이틀3"
+}
+
+
+### 댓글수정
+PATCH {{base_url}}/api/schedule/1/comments/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "보드 수정"
+}
+
+
+### 댓글삭제
+PATCH {{base_url}}/api/schedule/1/comments/3/delete
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+}
+
+
+### 지도검색
+GET {{base_url}}/api/kakaoMap/인천 가좌동
+Content-Type: application/json
+
+{
+}
+
+
+
+
+
 
 
 
