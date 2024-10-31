@@ -17,12 +17,29 @@
     로그아웃
   </button>
 
-  <!-- 채팅방 이동 버튼 -->
-  <button id = "chatButton"
-          onclick="window.location.href='/chat.html?gatheringId=1'"
-          class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-    채팅방으로 이동
-  </button>
+    <!-- gatheringId 입력 상자 -->
+    <div class="mb-4">
+        <input type="text" id="gatheringIdInput" placeholder="모임 ID를 입력하세요" required
+               class="w-full px-3 py-2 border rounded">
+    </div>
+
+    <!-- 채팅방 이동 버튼 -->
+    <button id="chatButton" onclick="goToChatRoom()"
+            class="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+        채팅방으로 이동
+    </button>
 </div>
+
+<script>
+    // gatheringId를 사용해 채팅방으로 이동하는 함수
+    function goToChatRoom() {
+        const gatheringId = document.getElementById("gatheringIdInput").value;
+        if (gatheringId) {
+            window.location.href = `/chat.html?gatheringId=${gatheringId}`;
+        } else {
+            alert("모임 ID를 입력해주세요.");
+        }
+    }
+</script>
 </body>
 </html>

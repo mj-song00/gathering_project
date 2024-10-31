@@ -18,8 +18,9 @@ async function login(event) {
     });
 
     if (response.ok) {
-      const token = response.headers.get("Authorization"); // Authorization 헤더에서 Bearer 토큰 추출
-      if (token) {
+      let token = response.headers.get("Authorization"); // Authorization 헤더에서 Bearer 토큰 추출
+      if (token && token.startsWith("Bearer ")) {
+        token = token.substring(7); // "Bearer " 부분을 제거하여 순수한 토큰만 남김
         localStorage.setItem("token", token); // JWT 토큰을 로컬 스토리지에 저장
         window.location.href = "/home.html";  // 로그인 성공 후 홈 페이지로 이동
       }

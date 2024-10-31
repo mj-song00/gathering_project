@@ -41,7 +41,7 @@ public class CategoryService {
 
     // 카테고리 조회
     public List<CategoryRes> getCategoryList() {
-        return categoryRepository.findAll()
+        return categoryRepository.findByDeletedAtIsNull()
                 .stream()
                 .map(CategoryRes::from)
                 .toList();
