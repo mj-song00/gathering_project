@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.hashtag.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -11,13 +12,11 @@ import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +29,10 @@ public class HashTagService {
 
     // 해시태그 생성
     @Transactional
-    public List<HashTagRes> createHashTag(UserDTO userDto, Gather gather, HashTagsReq hashTagReq) {
+    public List<HashTagRes> createHashTag(AuthenticatedUser authenticatedUser, Gather gather, HashTagsReq hashTagReq) {
         isValidGather(gather);
         // 멤버 권한 확인
-        isValidMember(userDto);
+        isValidMember(authenticatedUser);
         if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
         }
@@ -60,10 +59,10 @@ public class HashTagService {
 
     // 해시태그 삭제
     @Transactional
-    public void deleteHashTag(UserDTO user, Gather gather, Long hashtagId) {
+    public void deleteHashTag(AuthenticatedUser authenticatedUser, Gather gather, Long hashtagId) {
         isValidGather(gather);
         // 멤버 권한 확인
-        isValidMember(user);
+        isValidMember(authenticatedUser);
         HashTag hashTag = hashTagRepository.findById(hashtagId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_HASHTAG));
         hashTag.updateDeleteAt();
@@ -77,8 +76,8 @@ public class HashTagService {
     }
 
     // Manager 권한 확인
-    public void isValidMember(UserDTO userDto) throws BaseException {
-        Member member = memberRepository.findByUserId(userDto.getUserId())
+    public void isValidMember(AuthenticatedUser authenticatedUser) throws BaseException {
+        Member member = memberRepository.findByUserId(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         if (!member.getPermission().equals(Permission.MANAGER)) {

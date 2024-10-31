@@ -1,9 +1,9 @@
 package com.sparta.gathering.domain.user.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         // 비밀번호 인코딩
         String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
         // User 객체 생성
-        User user = User.createWithAutoUUID(
+        User user = User.createUser(
                 signupRequest.getEmail(),
                 signupRequest.getNickName(),
                 encodedPassword,
@@ -50,9 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(UserDTO userDto) {
+    public void deleteUser(AuthenticatedUser authenticatedUser) {
         // 유저 조회
-        User user = userRepository.findById(userDto.getUserId())
+        User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         // 이미 삭제된 사용자일 경우 예외 발생

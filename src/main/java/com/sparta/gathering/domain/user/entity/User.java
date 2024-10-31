@@ -34,9 +34,6 @@ public class User extends Timestamped {
     private String nickName; // 닉네임
 
     @Column
-    private boolean isAgree; // 개인정보 이용 동의 여부
-
-    @Column
     private String password; // 일반 로그인 사용자의 비밀번호 (소셜 로그인 사용자는 null 가능)
 
     @Enumerated(EnumType.STRING)
@@ -54,10 +51,10 @@ public class User extends Timestamped {
     private IdentityProvider identityProvider; // 소셜 로그인 제공자 (KAKAO, NONE)
 
     @Column
-    private String profileImage; // 사용자 프로필 이미지 URL (null일 경우 디폴트 이미지)
+    private String profileImage; // 사용자 프로필 이미지 URL (null 경우 디폴트 이미지)
 
-    // UUID 자동 생성
-    public static User createWithAutoUUID(String email, String nickName, String password,
+    // 일반 로그인 사용자를 위한 생성 메서드
+    public static User createUser(String email, String nickName, String password,
             UserRole userRole, IdentityProvider identityProvider, String profileImage) {
         User user = new User();
         user.id = UUID.randomUUID();
