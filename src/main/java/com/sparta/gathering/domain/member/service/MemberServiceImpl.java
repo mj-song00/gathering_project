@@ -11,13 +11,12 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -86,8 +85,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 사용자가 특정 모임에 속해 있는지 확인하는 메서드
-    public boolean isUserInGathering(Long gatheringId, UserDTO userDto) {
-        Member member = memberRepository.findByUserId(userDto.getUserId()).orElse(null);
+    public boolean isUserInGathering(Long gatheringId, AuthenticatedUser authenticatedUser) {
+        Member member = memberRepository.findByUserId(authenticatedUser.getUserId()).orElse(null);
 
         // 사용자가 멤버가 아니거나 모임 ID가 일치하지 않는 경우 false 반환
         if (member == null || !member.getGather().getId().equals(gatheringId)) {

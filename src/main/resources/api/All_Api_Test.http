@@ -114,7 +114,8 @@ Authorization: Bearer {{jwt_token}}
 
 {
   "hashTagName": [
-    "풋살"
+    "풋살",
+    "운동"
   ]
 }
 
