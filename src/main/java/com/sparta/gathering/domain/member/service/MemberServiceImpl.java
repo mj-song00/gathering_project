@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.member.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -7,17 +8,15 @@ import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +40,8 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findByGatherIdAndDeletedAtIsNull(pageable, gatherId);
     }
 
-    public void approval(long memberId, long gatherId, UserDTO userDto) {
-        validateManager(gatherId, userDto);
+    public void approval(long memberId, long gatherId, AuthenticatedUser authenticatedUser) {
+        validateManager(gatherId, authenticatedUser);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.GUEST);
@@ -50,8 +49,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public void refusal(long memberId, long gatherId, UserDTO userDto) {
-        validateManager(gatherId, userDto);
+    public void refusal(long memberId, long gatherId, AuthenticatedUser authenticatedUser) {
+        validateManager(gatherId, authenticatedUser);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.REFUSAL);
@@ -60,10 +59,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
-    public void withdrawal(long memberId, UserDTO userDto) {
+    public void withdrawal(long memberId, AuthenticatedUser authenticatedUser) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
-        if (!member.getUser().getId().equals(userDto.getUserId())) {
+        if (!member.getUser().getId().equals(authenticatedUser.getUserId())) {
             throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
         }
         if (member.getDeletedAt() != null) {
@@ -74,18 +73,20 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
     }
 
-    private void validateManager(long gatherId, UserDTO userDto) {
+    private void validateManager(long gatherId, AuthenticatedUser authenticatedUser) {
         UUID managerId = memberRepository.findManagerIdByGatherId(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
 
-        if (!managerId.equals(userDto.getUserId()) && userDto.getUserRole() != UserRole.ROLE_ADMIN) {
+        if (!managerId.equals(authenticatedUser.getUserId()) && authenticatedUser.getAuthorities().stream()
+                .noneMatch(authority ->
+                        authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
     }
 
     // 사용자가 특정 모임에 속해 있는지 확인하는 메서드
-    public boolean isUserInGathering(Long gatheringId, UserDTO userDto) {
-        Member member = memberRepository.findByUserId(userDto.getUserId()).orElse(null);
+    public boolean isUserInGathering(Long gatheringId, AuthenticatedUser authenticatedUser) {
+        Member member = memberRepository.findByUserId(authenticatedUser.getUserId()).orElse(null);
 
         // 사용자가 멤버가 아니거나 모임 ID가 일치하지 않는 경우 false 반환
         if (member == null || !member.getGather().getId().equals(gatheringId)) {

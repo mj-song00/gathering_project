@@ -1,21 +1,20 @@
 package com.sparta.gathering.domain.category.service;
 
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.dto.request.CategoryReq;
 import com.sparta.gathering.domain.category.dto.response.CategoryRes;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +26,9 @@ public class CategoryService {
 
     // 카테고리 생성
     @Transactional
-    public CategoryRes createCategory(UserDTO userDto, CategoryReq categoryReq) {
+    public CategoryRes createCategory(AuthenticatedUser authenticatedUser, CategoryReq categoryReq) {
         // 유저 권한 확인
-        User user = isValidUser(userDto);
+        User user = isValidUser(authenticatedUser);
         if (categoryRepository.findByCategoryName(categoryReq.getCategoryName()).isPresent()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_CATEGORY);
         }
@@ -49,8 +48,8 @@ public class CategoryService {
 
     // 카테고리 수정
     @Transactional
-    public CategoryRes updateCategory(UserDTO userDto, Long categoryId, CategoryReq categoryReq) {
-        User newuser = isValidUser(userDto);
+    public CategoryRes updateCategory(AuthenticatedUser authenticatedUser, Long categoryId, CategoryReq categoryReq) {
+        User newuser = isValidUser(authenticatedUser);
         Category category = isValidCategory(categoryId);
 
         category.updateCategory(categoryReq.getCategoryName(), newuser);
@@ -60,17 +59,17 @@ public class CategoryService {
 
     // 카테고리 삭제
     @Transactional
-    public void deleteCategory(UserDTO user, Long categoryId) {
+    public void deleteCategory(AuthenticatedUser authenticatedUser, Long categoryId) {
         // 유저 권한 확인
-        isValidUser(user);
+        isValidUser(authenticatedUser);
         Category category = isValidCategory(categoryId);
         category.updateDeleteAt();
     }
 
 
     // userRole ADMIN 확인
-    public User isValidUser(UserDTO userDto) throws BaseException {
-        User newuser = userRepository.findById(userDto.getUserId())
+    public User isValidUser(AuthenticatedUser authenticatedUser) throws BaseException {
+        User newuser = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
         if (!newuser.getUserRole().equals(UserRole.ROLE_ADMIN)) {

@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.gather.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
@@ -10,7 +11,6 @@ import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
@@ -33,10 +33,10 @@ public class GatherServiceImpl implements GatherService {
 
     // 모임생성
     @Transactional
-    public void createGather(GatherRequest request, UserDTO userDto, Long categoryId) {
+    public void createGather(GatherRequest request, AuthenticatedUser authenticatedUser, Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-        User user = userRepository.findById(userDto.getUserId())
+        User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
@@ -47,8 +47,8 @@ public class GatherServiceImpl implements GatherService {
     }
 
     //모임 수정 gather
-    public void modifyGather(GatherRequest request, Long id, UserDTO userDto) {
-        validateManager(id, userDto);
+    public void modifyGather(GatherRequest request, Long id, AuthenticatedUser authenticatedUser) {
+        validateManager(id, authenticatedUser);
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.updateGatherTitle(request.getTitle());
@@ -60,8 +60,8 @@ public class GatherServiceImpl implements GatherService {
 
     //모임 삭제
     @Transactional
-    public void deleteGather(Long id, UserDTO userDto) {
-        validateManager(id, userDto);
+    public void deleteGather(Long id, AuthenticatedUser authenticatedUser) {
+        validateManager(id, authenticatedUser);
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         gather.delete();
@@ -81,11 +81,13 @@ public class GatherServiceImpl implements GatherService {
         return gatherRepository.findByKeywordContaining(pageable, keyword);
     }
 
-    private void validateManager(Long id, UserDTO userDto) {
+    private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
         UUID managerId = memberRepository.findManagerIdByGatherId(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
 
-        if (!managerId.equals(userDto.getUserId()) && userDto.getUserRole() != UserRole.ROLE_ADMIN) {
+        if (!managerId.equals(authenticatedUser.getUserId()) && authenticatedUser.getAuthorities().stream()
+                .noneMatch(authority ->
+                        authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
     }
