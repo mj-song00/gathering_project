@@ -49,7 +49,7 @@ public class GatherController {
     ) {
         gatherService.modifyGather(request, id, userDto);
         ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.GATHER_CREATE_SUCCESS);
+                ApiResponseEnum.GATHER_UPDATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
