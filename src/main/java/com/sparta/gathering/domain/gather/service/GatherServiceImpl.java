@@ -38,7 +38,7 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(userDto.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags(), request.getMap());
         Member member = new Member(user, gather, Permission.MANAGER);
         gatherRepository.save(gather);
         memberRepository.save(member);
