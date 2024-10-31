@@ -28,13 +28,16 @@ public enum ExceptionEnum {
 
     // 유저 관련
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", "사용자를 찾을 수 없습니다."),
-    ALREADY_DELETED(HttpStatus.BAD_REQUEST, "ALREADY_DELETED", "이미 탈퇴된 사용자입니다."),
+    ALREADY_DELETED(HttpStatus.BAD_REQUEST, "ALREADY_DELETED", "탈퇴된 사용자입니다."),
     USER_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "USER_ALREADY_EXISTS", "이미 존재하는 사용자입니다."),
     EMAIL_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "EMAIL_PASSWORD_MISMATCH",
             "이메일 혹은 비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "EMAIL_NOT_FOUND", "이메일을 찾을 수 없습니다."),
     KAKAO_DATA_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "KAKAO_DATA_PROCESSING_ERROR",
             "카카오 데이터 처리 중 문제가 발생했습니다."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "PASSWORD_MISMATCH", "비밀번호가 일치하지 않습니다."),
+    PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "PASSWORD_SAME_AS_OLD", "새 비밀번호가 기존 비밀번호와 동일합니다."),
+    NICKNAME_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "NICKNAME_SAME_AS_OLD", "새 닉네임이 기존 닉네임과 동일합니다."),
 
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),

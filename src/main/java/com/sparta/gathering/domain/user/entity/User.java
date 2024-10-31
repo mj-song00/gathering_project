@@ -30,7 +30,7 @@ public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID id; // UUID를 BINARY(16)으로 저장
+    private UUID id; // UUID BINARY(16)으로 저장
 
     @Column(nullable = false, unique = true)
     private String email; // 이메일 (불변 필드로 유지)
@@ -38,6 +38,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickName; // 닉네임
 
+    @Column
     private String password; // 일반 로그인 사용자의 비밀번호 (소셜 로그인 사용자는 null 가능)
 
     @Enumerated(EnumType.STRING)
@@ -56,6 +57,16 @@ public class User extends Timestamped {
 
     @Column
     private String profileImage; // 사용자 프로필 이미지 URL (null 경우 디폴트 이미지)
+
+    // 비밀번호 변경
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // 닉네임 변경
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     // 회원 탈퇴
     public void setDeletedAt() {
