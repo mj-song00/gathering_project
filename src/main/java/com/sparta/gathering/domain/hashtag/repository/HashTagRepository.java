@@ -8,7 +8,8 @@ import java.util.Optional;
 
 public interface HashTagRepository extends JpaRepository<HashTag, Long> {
 
-    List<HashTag> findByGatherId(Long gatherId);
+    List<HashTag> findByGatherIdAndDeletedAtIsNull(Long gatherId);
 
     Optional<HashTag> findByHashTagNameIn(List<String> hashTagName);
+
 }

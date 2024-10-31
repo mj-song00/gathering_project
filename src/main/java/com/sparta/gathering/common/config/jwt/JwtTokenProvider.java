@@ -27,10 +27,10 @@ public class JwtTokenProvider {
     private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256; // 서명 알고리즘
     private static final int MIN_SECRET_KEY_LENGTH = 32; // 시크릿 키 최소 길이 (256비트)
 
-    @Value("${JWT_EXPIRATION_TIME}")
+    @Value("${jwt.expiration}")
     private long expirationTime;
 
-    @Value("${JWT_SECRET_KEY}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     private Key key; // 암호화에 사용할 Key 객체

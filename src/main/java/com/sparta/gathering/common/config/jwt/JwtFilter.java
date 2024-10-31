@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 sendErrorResponse(response, ExceptionEnum.EXPIRED_JWT_TOKEN, e);
                 return;
             } catch (Exception e) {
-                // 기타 토큰 검증 실패 시
+                // 기타 토큰 검증 실패 시 (보강 예정)
                 sendErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN, e);
                 return;
             }

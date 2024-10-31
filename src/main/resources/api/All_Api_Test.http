@@ -1,23 +1,23 @@
 @base_url = http://localhost:8080
 
-@user_Id =
+@user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
 
-@jwt_token =
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3YzQ3ODUxNi1hZGQ0LTRlMmYtYTQzMy05NTlkZmRhNTY1MjMiLCJlbWFpbCI6InRlc3QyMkBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjkxMjM2LCJleHAiOjE3MzAyOTMwMzZ9._NlHaABKwXRTXWlwvQg2JFr2IRMIhwjhg79Mnh_u6GI
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2ODllMWY3Mi1hNTM2LTQ4ZjgtYTllNC0wZWQ0OTg2YmYyYjIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJuaWNrTmFtZSI6Iu2Zjeq4uOuPmSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzI5Njg5ODcyLCJpYXQiOjE3Mjk2ODYyNzJ9.g9lz3Ou3XcJ9leE0iuw9ohoHftskYFwLrSFyL1VIysY
+@expired_jwt =
 
-@memberId =
+@memberId = 2
 
-@category_Id =
+@category_Id = 1
 
-@gatherId =
+@gatherId = 2
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test22@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -29,7 +29,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test22@example.com",
   "password": "password123"
 }
 
@@ -186,10 +186,20 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 지도검색
-GET {{base_url}}/api/kakaoMap/인천 가좌동
+GET {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
+  "address": "인천 석남1동"
+}
+
+
+### 지도저장
+POST {{base_url}}/api/kakaoMap
+Content-Type: application/json
+
+{
+  "address" : "인천 석남동"
 }
 
 

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Table(name = "hashtag")
-@Where(clause = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE `hashtag` SET deleted_at = NOW() WHERE id = ?")
 public class HashTag extends Timestamped {
 
