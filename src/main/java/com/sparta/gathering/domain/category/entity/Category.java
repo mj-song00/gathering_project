@@ -4,27 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.category.dto.request.CategoryReq;
 import com.sparta.gathering.domain.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "category")
-@Filter(name = "deleted", condition = "deleted_at IS NULL")
 @SQLDelete(sql = "UPDATE category SET deleted_at = NOW() WHERE id = ?")
 public class Category extends Timestamped {
 
