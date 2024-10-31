@@ -67,6 +67,10 @@ public enum ExceptionEnum {
 
     //댓글 관련
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMENT_NOT_FOUND","댓글 내용을 찾을 수 없습니다."),
+    //카카오 맵 관련
+    NOT_JSON_TYPE_STRING(HttpStatus.FORBIDDEN,"NOT_JSON_TYPE_STRING","json 타입의 문자열이 아닙니다."),
+    JSON_TYPE_MISMATCH(HttpStatus.BAD_REQUEST,"JSON_TYPE_MISMATCH","json 타입의 형식이 다릅니다."),
+
     // 스케쥴 관련
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
 

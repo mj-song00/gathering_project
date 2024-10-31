@@ -46,6 +46,9 @@ public enum ApiResponseEnum {
     UPDATE_COMMENT_SUCCESS("댓글이 성공적으로 수정되었습니다."),
     GET_COMMENT_SUCCESS("댓글이 성공적으로 조회되었습니다."),
 
+    //카카오맵 관련
+    SAVED_MAP_SUCCESS("위치가 성공적으로 저장 되었습니다."),
+
     //멤버 관련
     CREATE_SUCCESS("멤버 생성에 성공하였습니다."),
     APPROVAL_SUCCESS("승인이 완료되었습니다."),
