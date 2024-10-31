@@ -58,6 +58,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileResponse getUserProfile(AuthenticatedUser authenticatedUser) {
 
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
+
         // 인증된 사용자의 ID로 사용자 조회
         User user = userValidation.findUserById(authenticatedUser.getUserId());
 
@@ -77,6 +80,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void changePassword(AuthenticatedUser authenticatedUser, String oldPassword, String newPassword) {
+
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
 
         // 인증된 사용자의 ID로 사용자 조회
         User user = userValidation.findUserById(authenticatedUser.getUserId());
@@ -103,6 +109,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeNickName(AuthenticatedUser authenticatedUser, String newNickName) {
 
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
+
         // 인증된 사용자의 ID로 사용자 조회
         User user = userValidation.findUserById(authenticatedUser.getUserId());
 
@@ -122,6 +131,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUser(AuthenticatedUser authenticatedUser) {
+
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
 
         // 인증된 사용자의 ID로 사용자 조회
         User user = userValidation.findUserById(authenticatedUser.getUserId());

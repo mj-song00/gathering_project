@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.user.validation;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.entity.User;
@@ -13,6 +14,12 @@ import org.springframework.stereotype.Component;
 public class UserValidation {
 
     private final UserRepository userRepository;
+
+    public void validateAuthenticatedUser(AuthenticatedUser authenticatedUser) {
+        if (authenticatedUser == null) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_USER);
+        }
+    }
 
     // id로 사용자 조회
     public User findUserById(UUID userId) {

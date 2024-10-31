@@ -17,6 +17,7 @@ public enum ExceptionEnum {
     UNAUTHORIZED_ACTION(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_ACTION", "권한이 없습니다."),
     INVALID_USER_ID(HttpStatus.BAD_REQUEST, "INVALID_USER_ID", "유저 ID가 올바르지 않습니다."),
     API_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "API_TIMEOUT", "API 요청 시간이 초과되었습니다."),
+    UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_USER", "인증되지 않은 사용자입니다."),
 
     // 토큰 관련
     JWT_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT_TOKEN_NOT_FOUND", "JWT 토큰이 존재하지 않습니다."),
