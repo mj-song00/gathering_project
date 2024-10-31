@@ -14,13 +14,12 @@ import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +55,7 @@ public class GatherServiceImpl implements GatherService {
         gatherRepository.save(gather);
 
 //        redis 기존꺼 삭제
-  //              수정되는거 추가
+        //              수정되는거 추가
     }
 
     //모임 삭제
@@ -68,7 +67,7 @@ public class GatherServiceImpl implements GatherService {
         gather.delete();
         gatherRepository.save(gather);
 
-    //    기존꺼에서 하나 빼기
+        //    기존꺼에서 하나 빼기
     }
 
     //모임 불러오기
