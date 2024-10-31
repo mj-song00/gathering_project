@@ -21,4 +21,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // "/ws/chat" 엔드포인트 등록 및 SockJS 지원
         registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*").withSockJS();
     }
+
 }

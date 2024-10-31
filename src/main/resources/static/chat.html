@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Chat Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        let stompClient = null;
+        let username = null;
+
+        function connect() {
+            username = document.getElementById("username").value.trim();
+            if (!username) {
+                alert("사용자 이름을 입력하세요.");
+                return;
+            }
+
+            const socket = new SockJS('/ws/chat');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+
+                // 특정 gatheringId의 토픽을 구독 (예: gatheringId = 1)
+                stompClient.subscribe('/topic/gathering/1', function (message) {
+                    showMessage(JSON.parse(message.body).content);
+                });
+
+                // 사용자 입장 메시지 전송
+                addUser();
+            });
+        }
+
+        function sendMessage() {
+            const content = document.getElementById("message").value.trim();
+            if (content && stompClient) {
+                stompClient.send("/app/chat.sendMessage/1", {}, JSON.stringify({ sender: username, content: content, type: "CHAT" }));
+                document.getElementById("message").value = "";
+            }
+        }
+
+        function addUser() {
+            if (stompClient) {
+                stompClient.send("/app/chat.addUser/1", {}, JSON.stringify({ sender: username, type: "JOIN" }));
+            }
+        }
+
+        function leaveUser() {
+            if (stompClient) {
+                stompClient.send("/app/chat.leaveUser/1", {}, JSON.stringify({ sender: username, type: "LEAVE" }));
+                stompClient.disconnect();
+            }
+        }
+
+        function showMessage(message) {
+            const response = document.getElementById("response");
+            const p = document.createElement("p");
+            p.textContent = message;
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body>
+<h2>WebSocket Chat Test</h2>
+<div>
+    <input type="text" id="username" placeholder="Enter your name" />
+    <button onclick="connect()">Connect</button>
+</div>
+<div>
+    <input type="text" id="message" placeholder="Message">
+    <button onclick="sendMessage()">Send Message</button>
+    <button onclick="leaveUser()">Leave Chat</button>
+</div>
+<div id="response"></div>
+</body>
+</html>

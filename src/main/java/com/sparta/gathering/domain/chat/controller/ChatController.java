@@ -34,4 +34,5 @@ public class ChatController {
         chatMessage.setType(ChatMessage.MessageType.LEAVE);
         return chatMessage;  // 퇴장 메시지를 같은 모임의 모든 클라이언트에게 전송
     }
+
 }
