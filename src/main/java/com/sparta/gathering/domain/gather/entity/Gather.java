@@ -5,17 +5,9 @@ import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
+import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,12 +49,15 @@ public class Gather extends Timestamped {
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HashTag> hashTagList = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "map_id", unique= true)
+    private Map map;
 
     public Gather(String title) {
         this.title = title;
     }
 
-    public Gather(String title, String description, Category category, List<String> hashtags) {
+    public Gather(String title, String description, Category category, List<String> hashtags, Map map) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -70,6 +65,7 @@ public class Gather extends Timestamped {
         for (String hashTagName : hashtags) {
             this.hashTagList.add(HashTag.of(hashTagName, this));
         }
+        this.map = map;
     }
 
     public void updateGatherTitle(String title) {
