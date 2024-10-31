@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 public enum ExceptionEnum {
 
     // 공통
+    NOT_INSTANTIABLE_CLASS(HttpStatus.INTERNAL_SERVER_ERROR, "NOT_INSTANTIABLE_CLASS",
+            "인스턴스화할 수 없습니다."),
     DATA_INTEGRITY_VIOLATION(HttpStatus.BAD_REQUEST, "DATA_INTEGRITY_VIOLATION",
             "데이터 처리 중 문제가 발생했습니다. 요청을 확인하고 다시 시도해주세요"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR",
@@ -66,10 +68,10 @@ public enum ExceptionEnum {
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD_NOT_FOUND", "해당 보드를 찾을 수 없습니다."),
 
     //댓글 관련
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"COMMENT_NOT_FOUND","댓글 내용을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND", "댓글 내용을 찾을 수 없습니다."),
     //카카오 맵 관련
-    NOT_JSON_TYPE_STRING(HttpStatus.FORBIDDEN,"NOT_JSON_TYPE_STRING","json 타입의 문자열이 아닙니다."),
-    JSON_TYPE_MISMATCH(HttpStatus.BAD_REQUEST,"JSON_TYPE_MISMATCH","json 타입의 형식이 다릅니다."),
+    NOT_JSON_TYPE_STRING(HttpStatus.FORBIDDEN, "NOT_JSON_TYPE_STRING", "json 타입의 문자열이 아닙니다."),
+    JSON_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "JSON_TYPE_MISMATCH", "json 타입의 형식이 다릅니다."),
 
     // 스케쥴 관련
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
