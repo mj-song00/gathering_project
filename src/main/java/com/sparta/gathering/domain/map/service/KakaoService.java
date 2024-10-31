@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
+import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class KakaoService {
     @Value("${kakao.map.api-key}")
     private String appKey;
 
-    public ResponseEntity<String> searchMap(String searchMap) {
+    public ResponseEntity<String> searchMap(MapRequest searchMap) {
 
         // Set up headers
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -38,7 +39,7 @@ public class KakaoService {
 
         // Create entity with headers
         HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
-        String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + searchMap;
+        String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + searchMap.getAddress();
 
         return restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
     }
@@ -47,14 +48,15 @@ public class KakaoService {
      * 주소와 위경도 저장 api
      * @param saveMap 저장할 주소 입력
      */
+
     @Transactional
-    public void saveMap(String saveMap) {
+    public void saveMap(MapRequest saveMap) {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", appKey);
 
         HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
-        String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + saveMap;
+        String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + saveMap.getAddress();
         ResponseEntity<String> response = restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
         try {
             JsonNode mapData = objectMapper.readTree(response.getBody()); //String 을 json형태로 변환
