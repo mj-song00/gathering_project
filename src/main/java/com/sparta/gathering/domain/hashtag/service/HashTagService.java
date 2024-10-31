@@ -50,7 +50,7 @@ public class HashTagService {
     // 해시태그 조회
     public List<HashTagRes> getHashTagList(Gather gather) {
         Gather newgather = isValidGather(gather);
-        return hashTagRepository.findByGatherId(newgather.getId())
+        return hashTagRepository.findByGatherIdAndDeletedAtIsNull(newgather.getId())
                 .stream()
                 .map(HashTagRes::from)
                 .toList();
