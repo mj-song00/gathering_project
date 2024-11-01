@@ -1,8 +1,8 @@
 package com.sparta.gathering.domain.chat.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.chat.dto.ChatMessage;
 import com.sparta.gathering.domain.member.service.MemberServiceImpl;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,9 +21,10 @@ public class ChatController {
 
     @GetMapping("/api/checkMembership")
     @ResponseBody
-    public boolean checkMembership(@RequestParam Long gatheringId, @AuthenticationPrincipal UserDTO userDto) {
+    public boolean checkMembership(@RequestParam Long gatheringId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         // 사용자와 모임 ID를 통해 멤버십 확인
-        return memberService.isUserInGathering(gatheringId, userDto);
+        return memberService.isUserInGathering(gatheringId, authenticatedUser);
     }
 
     @MessageMapping("/chat.sendMessage/{gatheringId}")

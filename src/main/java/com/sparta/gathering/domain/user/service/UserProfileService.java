@@ -1,8 +1,8 @@
 package com.sparta.gathering.domain.user.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
 import java.io.IOException;
@@ -37,8 +37,8 @@ public class UserProfileService {
     private String bucketName;
 
     // 이미지 수정
-    public String updateProfileImage(UserDTO userDto, UUID userId, MultipartFile newImage) {
-        isValidUser(userDto, userId);
+    public String updateProfileImage(AuthenticatedUser authenticatedUser, UUID userId, MultipartFile newImage) {
+        isValidUser(authenticatedUser, userId);
         validateFile(newImage);
 
         // 기존 이미지 삭제
@@ -97,8 +97,8 @@ public class UserProfileService {
     }
 
     // 이미지 삭제
-    public void deleteUserProfileImage(UserDTO userDto, UUID userId) {
-        isValidUser(userDto, userId);
+    public void deleteUserProfileImage(AuthenticatedUser authenticatedUser, UUID userId) {
+        isValidUser(authenticatedUser, userId);
 
         ListObjectsV2Request listRequest = findImage(userId);
         ListObjectsV2Response listResponse = s3Client.listObjectsV2(listRequest);
@@ -139,10 +139,10 @@ public class UserProfileService {
     }
 
     // 유저 아이디와 유저 토큰이 맞는지 검증
-    public void isValidUser(UserDTO userDto, UUID userId) {
+    public void isValidUser(AuthenticatedUser authenticatedUser, UUID userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        if (!userDto.getUserId().equals(userId)) {
+        if (!authenticatedUser.getUserId().equals(userId)) {
             throw new BaseException(ExceptionEnum.PERMISSION_DENIED_ROLE);
         }
     }
