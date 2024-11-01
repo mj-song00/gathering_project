@@ -11,12 +11,13 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,13 @@ public class MemberServiceImpl implements MemberService {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+
+        //매니저 확인
+        Member manager = memberRepository.findByUserId(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
+        if (userId == manager.getUser().getId()) {
+            throw new BaseException(ExceptionEnum.MEMBER_NOT_ALLOWED);
+        }
 
         Member member = new Member(user, gather, Permission.PENDDING);
         memberRepository.save(member);

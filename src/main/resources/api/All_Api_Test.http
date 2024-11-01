@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token =
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDUyMGM4ZC1hYzFmLTRhNDAtOGJjMC03MGU0Mjg1NGE1MzIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzYxMTUsImV4cCI6MTczMDM3NzkxNX0.Wa6fEpdg9skeLnenvnki2m6UwHYVjItpb_Yu5jUC2r0
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -22,7 +22,6 @@ Content-Type: application/json
   "password": "password123A!",
   "identityProvider": "NONE"
 }
-
 
 ### 일반 로그인 요청
 POST {{base_url}}/api/auth/login
@@ -106,12 +105,45 @@ Authorization: Bearer {{jwt_token}}
 
 {
   "title": "즐거운 풋살모임",
-  "description": "type: string",
-  "hashtags": [
-    "list로",
-    "받습니다."
-  ]
+  "description": "같이 공차실분",
+  "hashtags": ["futsal","실내"],
+  "map": {
+    "addressName": "서울 동작구 노량진로 156",
+    "latitude": "126.943292835393",
+    "longitude": "37.5134034035131"
+  }
 }
+
+### 모임 수정
+PUT {{base_url}}/api/gathers/{{gatherId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "농구하실분",
+  "description": "여의도 공원 농구 모임",
+  "hashtags": ["여의도공원", "저녁", "실외"],
+  "map": {
+    "addressName": "서울 영등포구 여의도동 여의공원로 68",
+    "latitude": "126.922284053463",
+    "longitude": "37.5268088229325"
+  }
+}
+
+### 모임 삭제
+PATCH  {{base_url}}/api/gathers/{{gatherId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 카테고리별 모임 검색
+GET {{base_url}}/api/gathers/{{category_Id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### title 또는 hashTag 검색
+GET {{base_url}}/api/gathers/search?keyword=futsal
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### 멤버 생성
 POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
