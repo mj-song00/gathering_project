@@ -12,11 +12,12 @@ import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +34,15 @@ public class HashTagService {
         isValidGather(gather);
         // 멤버 권한 확인
         isValidMember(authenticatedUser);
-        if (hashTagRepository.findByHashTagNameIn(hashTagReq.getHashTagName()).isPresent()) {
+
+        // 모임별 해시태그 확인
+        if (!hashTagRepository.findByGatherIdAndHashTagNameIn(gather.getId(), hashTagReq.getHashTagName()).isEmpty()) {
             throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
         }
 
         List<HashTag> hashTag = new ArrayList<>();
         for (String hashTagName : hashTagReq.getHashTagName()) {
-            hashTag.add(HashTag.from(hashTagName, gather));
+            hashTag.add(HashTag.of(hashTagName, gather));
         }
         List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
         return HashTagRes.from(savedHashTag);
