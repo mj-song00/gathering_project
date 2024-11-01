@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDUyMGM4ZC1hYzFmLTRhNDAtOGJjMC03MGU0Mjg1NGE1MzIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzYxMTUsImV4cCI6MTczMDM3NzkxNX0.Wa6fEpdg9skeLnenvnki2m6UwHYVjItpb_Yu5jUC2r0
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzYjcwNjgxZi1kMWMwLTRiNjgtYjc3Ni1iY2U1ZGEzYmE5NjAiLCJlbWFpbCI6InRlc3QxQGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwNDc3MzE0LCJleHAiOjE3MzA0NzkxMTR9.u3W93tc4gTP8GF15hxBEDBxtbeAekf18Nzy-nIAKqUk
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -142,6 +142,11 @@ Authorization: Bearer {{jwt_token}}
 
 ### title 또는 hashTag 검색
 GET {{base_url}}/api/gathers/search?keyword=futsal
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 최신 모임 5개 조회
+GET {{base_url}}/api/gathers/newGather
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

@@ -5,6 +5,7 @@ import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
@@ -18,15 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Gather", description = "소모임 API")
 @RestController
@@ -39,7 +34,7 @@ public class GatherController {
     @Operation(summary = "소모임 생성", description = "모임을 생성합니다. 생성 즉시 모임의 매니저로 등록됩니다.")
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
-            @Valid  @RequestBody GatherRequest request,
+            @Valid @RequestBody GatherRequest request,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @PathVariable Long categoryId
     ) {
@@ -52,7 +47,7 @@ public class GatherController {
     @Operation(summary = "소모임 수정", description = "생성시 저장된 title, description, hashtag를 수정할 수 있습니다.")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
-            @Valid  @RequestBody GatherRequest request,
+            @Valid @RequestBody GatherRequest request,
             @PathVariable Long id,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
@@ -111,5 +106,13 @@ public class GatherController {
                 searchList.getTotalElements() // 총 요소 수
         );
         return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+    }
+
+    @Operation(summary = "새로 생긴 모임 조회", description = "최근에 새로 생긴 모임 목록 5개 조회 됩니다.")
+    @GetMapping("/newGather")
+    public ResponseEntity<ApiResponse<List<NewGatherResponse>>> newCreatedGatherList() {
+        List<NewGatherResponse> list = gatherService.newCreatedGatherList();
+        return ResponseEntity.ok(ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS));
     }
 }

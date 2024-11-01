@@ -6,6 +6,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
@@ -21,7 +22,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -95,6 +98,17 @@ public class GatherServiceImpl implements GatherService {
     public Page<Gather> findTitle(Pageable pageable, String keyword) {
         return gatherRepository.findByKeywordContaining(pageable, keyword);
     }
+
+    // 새로운 모임 5개 조회
+    @Transactional(readOnly = true)
+    public List<NewGatherResponse> newCreatedGatherList() {
+        List<Gather> gatherList = gatherRepository.findTop5ByOrderByCreatedAtDesc();
+
+        return gatherList.stream()
+                .map(NewGatherResponse::from)
+                .collect(Collectors.toList());
+    }
+
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
         UUID managerId = memberRepository.findManagerIdByGatherId(id)
