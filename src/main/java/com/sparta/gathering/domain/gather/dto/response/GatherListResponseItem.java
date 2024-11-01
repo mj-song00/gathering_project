@@ -17,9 +17,7 @@ public class GatherListResponseItem {
     //    private final List<String> schedule;
 //    private final List<String> board;
     private final String category;
-    private final String addressName;
-    private final String latitude;
-    private final String longitude;
+
 
     public GatherListResponseItem(Gather gather) {
         this.id = gather.getId(); // Gather ID
@@ -31,8 +29,5 @@ public class GatherListResponseItem {
 //        this.schedule = gather.getScheduleList().stream().map(Schedule::getScheduleTitle).collect(Collectors.toList());
 //        this.board = gather.getBoardList().stream().map(Board::getBoardTitle).collect(Collectors.toList());
         this.category = gather.getCategory().getCategoryName();
-        this.addressName = gather.getMap().getAddressName();
-        this.latitude = gather.getMap().getLatitude();
-        this.longitude = gather.getMap().getLongitude();
     }
 }

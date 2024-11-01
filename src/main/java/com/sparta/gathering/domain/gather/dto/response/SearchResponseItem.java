@@ -13,9 +13,6 @@ public class SearchResponseItem {
     private final String title; // Gather 제목
     private final String description;
     private final List<String> hashtags;
-    private final String addressName;
-    private final String latitude;
-    private final String longitude;
 
     public SearchResponseItem(Gather gather) {
         this.id = gather.getId();
@@ -24,8 +21,5 @@ public class SearchResponseItem {
         this.hashtags = gather.getHashTagList().stream()
                 .map(HashTag::getHashTagName)
                 .collect(Collectors.toList());
-        this.addressName = gather.getMap().getAddressName();
-        this.latitude = gather.getMap().getLatitude();
-        this.longitude = gather.getMap().getLongitude();
     }
 }
