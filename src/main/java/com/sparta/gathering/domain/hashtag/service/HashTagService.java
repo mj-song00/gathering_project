@@ -42,7 +42,7 @@ public class HashTagService {
 
         List<HashTag> hashTag = new ArrayList<>();
         for (String hashTagName : hashTagReq.getHashTagName()) {
-            hashTag.add(HashTag.from(hashTagName, gather));
+            hashTag.add(HashTag.of(hashTagName, gather));
         }
         List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
         return HashTagRes.from(savedHashTag);
