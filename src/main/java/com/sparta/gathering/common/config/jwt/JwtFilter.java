@@ -6,6 +6,9 @@ import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,13 +48,23 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 Claims claims = jwtTokenProvider.extractClaims(jwtTokenProvider.substringToken(bearerToken));
                 setAuthentication(claims);
+            } catch (SecurityException | NullPointerException e) {
+                sendErrorResponse(response, ExceptionEnum.JWT_TOKEN_NOT_FOUND, e);
+                return;
+            } catch (SignatureException | MalformedJwtException e) {
+                sendErrorResponse(response, ExceptionEnum.INVALID_JWT_SIGNATURE, e);
+                return;
             } catch (ExpiredJwtException e) {
-                // 토큰 만료 시
                 sendErrorResponse(response, ExceptionEnum.EXPIRED_JWT_TOKEN, e);
                 return;
-            } catch (Exception e) {
-                // 기타 토큰 검증 실패 시 (보강 예정)
+            } catch (UnsupportedJwtException e) {
+                sendErrorResponse(response, ExceptionEnum.UNSUPPORTED_JWT_TOKEN, e);
+                return;
+            } catch (IllegalArgumentException e) {
                 sendErrorResponse(response, ExceptionEnum.INVALID_JWT_TOKEN, e);
+                return;
+            } catch (Exception e) {
+                sendErrorResponse(response, ExceptionEnum.INTERNAL_SERVER_ERROR, e);
                 return;
             }
         }
