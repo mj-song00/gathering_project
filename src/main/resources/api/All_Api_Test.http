@@ -19,10 +19,7 @@ Content-Type: application/json
 {
   "email": "test@example.com",
   "nickName": "홍길동",
-  "password": "password123",
-  "email": "test@example.com",
-  "nickName": "홍길동",
-  "password": "password123A!",
+  "password": "Asdf1234!",
   "identityProvider": "NONE"
 }
 
@@ -32,8 +29,6 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "password": "password123",
   "email": "test@example.com",
   "password": "password123A!"
 }
