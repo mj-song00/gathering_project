@@ -2,15 +2,15 @@
 
 @user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3YzQ3ODUxNi1hZGQ0LTRlMmYtYTQzMy05NTlkZmRhNTY1MjMiLCJlbWFpbCI6InRlc3QyMkBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjkxMjM2LCJleHAiOjE3MzAyOTMwMzZ9._NlHaABKwXRTXWlwvQg2JFr2IRMIhwjhg79Mnh_u6GI
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMjk5MDkyNS03NWQ4LTQ0YzctYmYzYS0zNTQ4M2JiNWI5OGEiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDMzOTczOSwiZXhwIjoxNzMwMzQxNTM5fQ.HeI8A_c99702hpFfXQi2eSAWC7tHXSmzvW6DiRpqrVA
 
-@expired_jwt =
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMjk5MDkyNS03NWQ4LTQ0YzctYmYzYS0zNTQ4M2JiNWI5OGEiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDMzNzY5MSwiZXhwIjoxNzMwMzM5NDkxfQ.BTr7-Wq2ZmWzCXmomkQpbG3zfDVZ8N5qM3FwZVzznUs
 
 @memberId = 2
 
-@category_Id = 1
+@category_Id = 2
 
-@gatherId = 2
+@gatherId = 1
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
