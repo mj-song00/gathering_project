@@ -2,12 +2,11 @@ package com.sparta.gathering.domain.gather.dto.request;
 
 import com.sparta.gathering.domain.map.entity.Map;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor

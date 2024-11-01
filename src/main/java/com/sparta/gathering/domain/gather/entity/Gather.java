@@ -68,8 +68,13 @@ public class Gather extends Timestamped {
         this.map = map;
     }
 
-    public void updateGatherTitle(String title) {
+    public void updateGather(String title, String description, List<String> hashtags, Map map) {
         this.title = title;
+        this.description = description;
+        for (String hashTagName : hashtags) {
+            this.hashTagList.add(HashTag.of(hashTagName, this));
+        }
+        this.map = map;
     }
 
     public void delete() {
