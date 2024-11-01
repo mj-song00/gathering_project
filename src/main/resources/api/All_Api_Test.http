@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token =
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDUyMGM4ZC1hYzFmLTRhNDAtOGJjMC03MGU0Mjg1NGE1MzIiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzA0MjM2ODAsImV4cCI6MTczMDQyNTQ4MH0.WRAs2vfZZfDmz73z8Kooeh8u8P8Epv5cp1Cd1h1Ihh0
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -16,12 +16,7 @@
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
-{
-  "email": "test@example.com",
-  "nickName": "홍길동",
-  "password": "password123A!",
-  "identityProvider": "NONE"
-}
+
 
 
 ### 일반 로그인 요청
@@ -40,7 +35,7 @@ Authorization: Bearer {{jwt_token}}
 
 {
   "oldPassword": "password123A!",
-  "newPassword": "password123A!"
+  "newPassword": "password123A!@"
 }
 
 ### 닉네임 변경
