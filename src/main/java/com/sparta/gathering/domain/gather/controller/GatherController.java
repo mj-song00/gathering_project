@@ -37,10 +37,9 @@ public class GatherController {
     private final GatherService gatherService;
 
     @Operation(summary = "소모임 생성", description = "모임을 생성합니다. 생성 즉시 모임의 매니저로 등록됩니다.")
-    @Valid
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
-            @RequestBody GatherRequest request,
+            @Valid  @RequestBody GatherRequest request,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @PathVariable Long categoryId
     ) {
@@ -51,10 +50,9 @@ public class GatherController {
     }
 
     @Operation(summary = "소모임 수정", description = "생성시 저장된 title, description, hashtag를 수정할 수 있습니다.")
-    @Valid
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
-            @RequestBody GatherRequest request,
+            @Valid  @RequestBody GatherRequest request,
             @PathVariable Long id,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
