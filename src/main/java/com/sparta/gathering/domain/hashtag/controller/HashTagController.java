@@ -62,7 +62,7 @@ public class HashTagController {
         hashTagService.deleteHashTag(authenticatedUser, gatherId, hashtagId);
         ApiResponse<?> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.DELETED_HASHTAG_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 
 }

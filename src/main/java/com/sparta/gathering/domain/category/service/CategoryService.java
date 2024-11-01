@@ -53,8 +53,7 @@ public class CategoryService {
         Category category = isValidCategory(categoryId);
 
         category.updateCategory(categoryReq.getCategoryName(), newuser);
-        Category savedCategory = categoryRepository.save(category);
-        return CategoryRes.from(savedCategory);
+        return CategoryRes.from(category);
     }
 
     // 카테고리 삭제

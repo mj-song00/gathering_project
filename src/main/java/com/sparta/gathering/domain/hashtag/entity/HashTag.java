@@ -37,10 +37,6 @@ public class HashTag extends Timestamped {
         this.gather = gather;
     }
 
-    public static HashTag from(String hashTagName, Gather gather) {
-        return new HashTag(hashTagName, gather);
-    }
-
     public static HashTag of(String hashTagName, Gather gather) {
         return new HashTag(hashTagName, gather);
     }

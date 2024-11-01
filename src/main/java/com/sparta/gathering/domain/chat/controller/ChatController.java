@@ -8,21 +8,19 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class ChatController {
 
     private final MemberServiceImpl memberService;
 
     @GetMapping("/api/checkMembership")
-    @ResponseBody
     public boolean checkMembership(@RequestParam Long gatheringId,
-            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+                                   @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         // 사용자와 모임 ID를 통해 멤버십 확인
         return memberService.isUserInGathering(gatheringId, authenticatedUser);
     }
@@ -30,9 +28,6 @@ public class ChatController {
     @MessageMapping("/chat.sendMessage/{gatheringId}")
     @SendTo("/topic/gathering/{gatheringId}")
     public ChatMessage sendMessage(@DestinationVariable Long gatheringId, ChatMessage chatMessage) {
-        if (gatheringId == null) {
-            gatheringId = 1L;  // 기본값 설정
-        }
         chatMessage.setGatheringId(gatheringId);
         return chatMessage;
     }

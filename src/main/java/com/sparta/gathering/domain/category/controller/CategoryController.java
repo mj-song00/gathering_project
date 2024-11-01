@@ -73,6 +73,6 @@ public class CategoryController {
         categoryService.deleteCategory(authenticatedUser, categoryId);
         ApiResponse<?> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.DELETED_CATEGORY_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
 }

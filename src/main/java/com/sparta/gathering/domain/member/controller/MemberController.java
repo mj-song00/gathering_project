@@ -36,7 +36,7 @@ public class MemberController {
     @Operation(summary = "소모임  가입 신청", description = "해당 소모임 가입을 신청합니다." +
             "신청자는 manager가 승인/거절 전까지 pendding상태를 유지합니다.")
     @PostMapping("/user/{userId}/gather/{gatherId}")
-    public ResponseEntity<ApiResponse<Void>> createGather(
+    public ResponseEntity<ApiResponse<Void>> createMember(
             @PathVariable UUID userId,
             @PathVariable long gatherId
     ) {

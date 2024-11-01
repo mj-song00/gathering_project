@@ -1,4 +1,4 @@
-package com.sparta.gathering.domain.chat.config;
+package com.sparta.gathering.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
