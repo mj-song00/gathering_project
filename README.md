@@ -4,18 +4,18 @@
 ​
 ---
 ## 📑 목차
--   [개요](#%EA%B0%9C%EC%9A%94)
--   [배경](#%EB%B0%B0%EA%B2%BD)
--   [SWAGGER 사용법](#%EB%B0%B0%EA%B2%BD)
--   [API명세서](#%EB%B0%B0%EA%B2%BD)
--   [ERD](#%EB%B0%B0%EA%B2%BD)
--   [인프라설계도](#%EB%B0%B0%EA%B2%BD)
--   [와이어프레임](#%EB%B0%B0%EA%B2%BD)
--   [핵심 기능](#%ED%95%B5%EC%8B%AC-%EA%B8%B0%EB%8A%A5)
--   [추가 기능](#%EC%B6%94%EA%B0%80-%EA%B8%B0%EB%8A%A5)
--   [기술 사양](#%EA%B8%B0%EC%88%A0-%EC%82%AC%EC%96%91)
--   [적용 기술](#%EC%A0%81%EC%9A%A9%EA%B8%B0%EC%88%A0)
--   [트러블 슈팅](#%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85)
+-   [개요]
+-   [배경]
+-   [SWAGGER 사용법]
+-   [API 명세서]
+-   [ERD]
+-   [인프라설계도]
+-   [와이어프레임]
+-   [핵심 기능]
+-   [추가 기능]
+-   [기술 사양]
+-   [적용 기술]
+-   [트러블 슈팅]
     ​
 ---
 ### 🔍 개요
@@ -59,7 +59,7 @@
         ​
 ---
 ### 🚀 추가 기능
--   **💬 모임 내 단체 채팅**: WebSocket/STOMP을 통한 실시간 단체 채팅
+-   **💬 모임 내 단체 채팅**: WebSocket/STOMP 을 통한 실시간 단체 채팅
 -   **📎 이미지 첨부**: AWS S3를 통해 이미지 업로드
 -   **❤️ 모임 랭킹**: 캐시 기반 랭킹 시스템
 -   **🗺️ 지도 확인**: 지도로 해당 일정의 장소 확인
@@ -70,111 +70,111 @@
 
 ### 유저
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/users/signup` | 회원가입 | None | `{ "email": "test@example.com", "nickName": "홍길동", "password": "password123!A", "identityProvider": "NONE" }` | `{ "statusCode": 200, "message": "회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.", "data": null }` |
-| POST   | `/api/auth/login` | 로그인 | None | `{ "email": "test@example.com", "password": "password123!A" }` | `Authorization: Bearer <Token>` |
-| PATCH  | `/api/users/me/delete` | 회원 탈퇴 | Bearer Token | None | `{ "statusCode": 200, "message": "회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.", "data": null }` |
-| PATCH  | `/api/users/me/password` | 비밀번호 변경 | Bearer Token | `{ "oldPassword": "password123!A", "newPassword": "password456@B" }` | `{ "statusCode": 200, "message": "비밀번호 변경이 성공적으로 완료되었습니다.", "data": null }` |
-| PATCH  | `/api/users/me/nickname` | 닉네임 변경 | Bearer Token | `{ "newNickName": "김길동" }` | `{ "statusCode": 200, "message": "닉네임 변경이 성공적으로 완료되었습니다.", "data": null }` |
-| GET    | `/api/users/me/profile` | 본인 프로필 조회 | Bearer Token | None | `{ "statusCode": 200, "message": "프로필 조회가 성공적으로 완료되었습니다.", "data": { "id": "10520c8d-ac1f-4a40-8bc0-70e42854a532", "email": "test@example.com", "nickName": "홍길동", "profileImage": "https://…주소" } }` |
+| Method | Endpoint                 | Description | Authorization | Request Body                                                                                                  | Response                                                                                                                                                                                              |
+|--------|--------------------------|-------------|---------------|---------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| POST   | `/api/users/signup`      | 회원가입        | None          | `{ "email": "test@example.com", "nickName": "홍길동", "password": "password123!A", "identityProvider": "NONE" }` | `{ "statusCode": 200, "message": "회원가입이 완료되었습니다. 로그인 화면으로 이동합니다.", "data": null }`                                                                                                                    |
+| POST   | `/api/auth/login`        | 로그인         | None          | `{ "email": "test@example.com", "password": "password123!A" }`                                                | `Authorization: Bearer <Token>`                                                                                                                                                                       |
+| PATCH  | `/api/users/me/delete`   | 회원 탈퇴       | Bearer Token  | None                                                                                                          | `{ "statusCode": 200, "message": "회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.", "data": null }`                                                                                                                    |
+| PATCH  | `/api/users/me/password` | 비밀번호 변경     | Bearer Token  | `{ "oldPassword": "password123!A", "newPassword": "password456@B" }`                                          | `{ "statusCode": 200, "message": "비밀번호 변경이 성공적으로 완료되었습니다.", "data": null }`                                                                                                                           |
+| PATCH  | `/api/users/me/nickname` | 닉네임 변경      | Bearer Token  | `{ "newNickName": "김길동" }`                                                                                    | `{ "statusCode": 200, "message": "닉네임 변경이 성공적으로 완료되었습니다.", "data": null }`                                                                                                                            |
+| GET    | `/api/users/me/profile`  | 본인 프로필 조회   | Bearer Token  | None                                                                                                          | `{ "statusCode": 200, "message": "프로필 조회가 성공적으로 완료되었습니다.", "data": { "id": "10520c8d-ac1f-4a40-8bc0-70e42854a532", "email": "test@example.com", "nickName": "홍길동", "profileImage": "https://…주소" } }` |
 
 ---
 
 ### 댓글
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/schedule/{scheduleId}/comments` | 댓글 생성 | Bearer Token | `{ "comment": "댓글 내용" }` | - |
-| PATCH  | `/api/comments/{commentId}` | 댓글 수정 | Bearer Token | `{ "comment": "댓글 내용" }` | - |
-| DELETE | `/api/comments/{commentId}` | 댓글 삭제 | Bearer Token | None | - |
-| GET    | `/api/comment/` | 댓글 조회 | None | None | - |
+| Method | Endpoint                              | Description | Authorization | Request Body             | Response |
+|--------|---------------------------------------|-------------|---------------|--------------------------|----------|
+| POST   | `/api/schedule/{scheduleId}/comments` | 댓글 생성       | Bearer Token  | `{ "comment": "댓글 내용" }` | -        |
+| PATCH  | `/api/comments/{commentId}`           | 댓글 수정       | Bearer Token  | `{ "comment": "댓글 내용" }` | -        |
+| DELETE | `/api/comments/{commentId}`           | 댓글 삭제       | Bearer Token  | None                     | -        |
+| GET    | `/api/comment/`                       | 댓글 조회       | None          | None                     | -        |
 
 ---
 
 ### 공지(게시판)
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/{gatheringsId}/boards` | 보드 생성 | Bearer Token | `{ "title": "제목", "contents": "내용" }` | - |
-| PATCH  | `/api/{gatheringsId}/boards/{boardsId}` | 보드 수정 | Bearer Token | `{ "boardsId": "id", "title": "제목", "contents": "내용" }` | - |
-| DELETE | `/api/{gatheringsId}/boards/{boardsId}` | 보드 삭제 | Bearer Token | `{ "boardsId": "id", "isDeleted": true }` | - |
+| Method | Endpoint                                | Description | Authorization | Request Body                                            | Response |
+|--------|-----------------------------------------|-------------|---------------|---------------------------------------------------------|----------|
+| POST   | `/api/{gatheringsId}/boards`            | 보드 생성       | Bearer Token  | `{ "title": "제목", "contents": "내용" }`                   | -        |
+| PATCH  | `/api/{gatheringsId}/boards/{boardsId}` | 보드 수정       | Bearer Token  | `{ "boardsId": "id", "title": "제목", "contents": "내용" }` | -        |
+| DELETE | `/api/{gatheringsId}/boards/{boardsId}` | 보드 삭제       | Bearer Token  | `{ "boardsId": "id", "isDeleted": true }`               | -        |
 
 ---
 
 ### 일정
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/{gatheringsId}/schedules` | 일정 생성 | Bearer Token | `{ "title": "제목", "contents": "내용" }` | - |
-| PATCH  | `/api/{gatheringsId}/schedules/{schedulesId}` | 일정 수정 | Bearer Token | `{ "schedulesId": "id", "title": "제목", "contents": "내용" }` | - |
-| DELETE | `/api/{gatheringsId}/schedules/{schedulesId}` | 일정 삭제 | Bearer Token | `{ "schedulesId": "id", "isDeleted": true }` | - |
+| Method | Endpoint                                      | Description | Authorization | Request Body                                               | Response |
+|--------|-----------------------------------------------|-------------|---------------|------------------------------------------------------------|----------|
+| POST   | `/api/{gatheringsId}/schedules`               | 일정 생성       | Bearer Token  | `{ "title": "제목", "contents": "내용" }`                      | -        |
+| PATCH  | `/api/{gatheringsId}/schedules/{schedulesId}` | 일정 수정       | Bearer Token  | `{ "schedulesId": "id", "title": "제목", "contents": "내용" }` | -        |
+| DELETE | `/api/{gatheringsId}/schedules/{schedulesId}` | 일정 삭제       | Bearer Token  | `{ "schedulesId": "id", "isDeleted": true }`               | -        |
 
 ---
 
 ### 모임
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/gathers` | 모임 생성 | Bearer Token | `{ "title": "모임1" }` | - |
-| GET    | `/api/gathers` | 모임 보기 | Bearer Token | None | `[ { "title": "모임1" }, { "title": "모임2" }, ... ]` |
-| PATCH  | `/api/gathers/{gatherId}` | 모임 내용 수정 | Bearer Token | `{ "title": "모임1 수정" }` | - |
-| DELETE | `/api/gathers/{gatherId}` | 모임 삭제 | Bearer Token | None | - |
+| Method | Endpoint                  | Description | Authorization | Request Body            | Response                                          |
+|--------|---------------------------|-------------|---------------|-------------------------|---------------------------------------------------|
+| POST   | `/api/gathers`            | 모임 생성       | Bearer Token  | `{ "title": "모임1" }`    | -                                                 |
+| GET    | `/api/gathers`            | 모임 보기       | Bearer Token  | None                    | `[ { "title": "모임1" }, { "title": "모임2" }, ... ]` |
+| PATCH  | `/api/gathers/{gatherId}` | 모임 내용 수정    | Bearer Token  | `{ "title": "모임1 수정" }` | -                                                 |
+| DELETE | `/api/gathers/{gatherId}` | 모임 삭제       | Bearer Token  | None                    | -                                                 |
 
 ---
 
 ### 멤버
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| GET    | `/api/members/{gatherId}` | 멤버 조회 | Bearer Token | None | - |
-| POST   | `/api/member/{userId}/{gatherId}` | 멤버 가입 신청 | Bearer Token | None | - |
-| PATCH  | `/api/member/{memberId}/{gatherId}` | 멤버 가입 승인 | Bearer Token | None | - |
-| PATCH  | `/api/members/{memberId}/{gatherId}` | 멤버 가입 거절 | Bearer Token | None | - |
-| DELETE | `/api/members/{memberId}` | 멤버 탈퇴 | Bearer Token | None | - |
+| Method | Endpoint                             | Description | Authorization | Request Body | Response |
+|--------|--------------------------------------|-------------|---------------|--------------|----------|
+| GET    | `/api/members/{gatherId}`            | 멤버 조회       | Bearer Token  | None         | -        |
+| POST   | `/api/member/{userId}/{gatherId}`    | 멤버 가입 신청    | Bearer Token  | None         | -        |
+| PATCH  | `/api/member/{memberId}/{gatherId}`  | 멤버 가입 승인    | Bearer Token  | None         | -        |
+| PATCH  | `/api/members/{memberId}/{gatherId}` | 멤버 가입 거절    | Bearer Token  | None         | -        |
+| DELETE | `/api/members/{memberId}`            | 멤버 탈퇴       | Bearer Token  | None         | -        |
 
 ---
 
 ### 카테고리
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/categories` | 카테고리 생성 | Bearer Token | `{ "categoryName": "운동" }` | - |
-| GET    | `/api/categories` | 카테고리 조회 | None | None | `[ { "categoryId": "", "categoryName": "" }, { "categoryId": "", "categoryName": "" } ]` |
-| PATCH  | `/api/categories/{categoryId}` | 카테고리 수정 | Bearer Token | `{ "categoryName": "운동" }` | - |
-| DELETE | `/api/categories/{categoryId}` | 카테고리 삭제 | Bearer Token | None | - |
+| Method | Endpoint                       | Description | Authorization | Request Body               | Response                                                                                 |
+|--------|--------------------------------|-------------|---------------|----------------------------|------------------------------------------------------------------------------------------|
+| POST   | `/api/categories`              | 카테고리 생성     | Bearer Token  | `{ "categoryName": "운동" }` | -                                                                                        |
+| GET    | `/api/categories`              | 카테고리 조회     | None          | None                       | `[ { "categoryId": "", "categoryName": "" }, { "categoryId": "", "categoryName": "" } ]` |
+| PATCH  | `/api/categories/{categoryId}` | 카테고리 수정     | Bearer Token  | `{ "categoryName": "운동" }` | -                                                                                        |
+| DELETE | `/api/categories/{categoryId}` | 카테고리 삭제     | Bearer Token  | None                       | -                                                                                        |
 
 ---
 
 ### 해시태그
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| POST   | `/api/gatherings/{gatheringId}/hashtags` | 해시태그 생성 | Bearer Token | `{ "hashTagName": "풋살" }` | - |
-| GET    | `/api/gathering/{gatheringId}/hashtags` | 해시태그 조회 | Bearer Token | None | `{ "gatherId": "", "hashTag": [ { "hashTagId": "", "hashTagName": "" }, { "hashTagId": "", "hashTagName": "" } ] }` |
-| DELETE | `/api/gathering/{gatheringId}/hashtags/{hashtagId}` | 해시태그 삭제 | Bearer Token | None | - |
+| Method | Endpoint                                            | Description | Authorization | Request Body              | Response                                                                                                            |
+|--------|-----------------------------------------------------|-------------|---------------|---------------------------|---------------------------------------------------------------------------------------------------------------------|
+| POST   | `/api/gatherings/{gatheringId}/hashtags`            | 해시태그 생성     | Bearer Token  | `{ "hashTagName": "풋살" }` | -                                                                                                                   |
+| GET    | `/api/gathering/{gatheringId}/hashtags`             | 해시태그 조회     | Bearer Token  | None                      | `{ "gatherId": "", "hashTag": [ { "hashTagId": "", "hashTagName": "" }, { "hashTagId": "", "hashTagName": "" } ] }` |
+| DELETE | `/api/gathering/{gatheringId}/hashtags/{hashtagId}` | 해시태그 삭제     | Bearer Token  | None                      | -                                                                                                                   |
 
 ---
 
 ### 프로필 이미지 
 
-| Method | Endpoint | Description | Authorization | Request Body | Response |
-|--------|----------|-------------|---------------|--------------|----------|
-| PATCH  | `/api/user/{userId}/profile-image` | 이미지 수정 | Bearer Token | file | - |
-| GET    | `/api/user/{userId}/profile-image` | 이미지 조회 | Bearer Token | None | - |
-| DELETE | `/api/user/{userId}/profile-image` | 이미지 삭제 | Bearer Token | None | - |
+| Method | Endpoint                           | Description | Authorization | Request Body | Response |
+|--------|------------------------------------|-------------|---------------|--------------|----------|
+| PATCH  | `/api/user/{userId}/profile-image` | 이미지 수정      | Bearer Token  | file         | -        |
+| GET    | `/api/user/{userId}/profile-image` | 이미지 조회      | Bearer Token  | None         | -        |
+| DELETE | `/api/user/{userId}/profile-image` | 이미지 삭제      | Bearer Token  | None         | -        |
 
 ---
 ### [ERD](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
-<img src="./image/gathering_ERD.webp" width="500" height="300"/>
+<img src="./image/gathering_ERD.webp" width="1024" height="547" alt=""/>
 
 ---
 ### [인프라 설계도](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
-<img src="./image/gathering_architecture.png" width="500" height="300"/>
+<img src="./image/gathering_architecture.png" width="898" height="502" alt=""/>
 
 ---
 ### [와이어프레임](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
-<img src="./image/final_project.png" width="500" height="500"/>
+<img src="./image/final_project.png" width="900" height="500" alt=""/>
 
 ---
 
