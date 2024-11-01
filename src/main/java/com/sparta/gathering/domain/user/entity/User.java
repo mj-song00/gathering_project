@@ -13,19 +13,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "User")
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED) // 외부 직접 호출을 막기 위해 protected 설정
 public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)", nullable = false)
-    private UUID id; // UUID를 BINARY(16)으로 저장
+    private UUID id; // UUID BINARY(16)으로 저장
 
     @Column(nullable = false, unique = true)
     private String email; // 이메일 (불변 필드로 유지)
@@ -33,6 +38,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String nickName; // 닉네임
 
+    @Column
     private String password; // 일반 로그인 사용자의 비밀번호 (소셜 로그인 사용자는 null 가능)
 
     @Enumerated(EnumType.STRING)
@@ -52,32 +58,14 @@ public class User extends Timestamped {
     @Column
     private String profileImage; // 사용자 프로필 이미지 URL (null 경우 디폴트 이미지)
 
-    // 일반 로그인 사용자를 위한 생성 메서드
-    public static User createUser(String email, String nickName, String password,
-            UserRole userRole, IdentityProvider identityProvider, String profileImage) {
-        User user = new User();
-        user.id = UUID.randomUUID();
-        user.email = email;
-        user.nickName = nickName;
-        user.password = password;
-        user.userRole = userRole;
-        user.identityProvider = identityProvider;
-        user.profileImage = profileImage;
-        return user;
+    // 비밀번호 변경
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    // 소셜 로그인 사용자를 위한 생성 메서드
-    public static User createSocialUser(String email, String nickName, UserRole userRole,
-            IdentityProvider identityProvider, String providerId, String profileImage) {
-        User user = new User();
-        user.id = UUID.randomUUID();
-        user.email = email;
-        user.nickName = nickName;
-        user.userRole = userRole;
-        user.identityProvider = identityProvider;
-        user.providerId = providerId;
-        user.profileImage = profileImage;
-        return user;
+    // 닉네임 변경
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     // 회원 탈퇴

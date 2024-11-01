@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Auth", description = "인증 API")
+@Tag(name = "Auth", description = "인증 API / 이정현")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     // 카카오 소셜 로그인 성공
-    @Operation(summary = "카카오 소셜 로그인 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 화면으로 리디렉트합니다.")
+    @Operation(summary = "카카오 소셜 로그인 / 성공", description = "카카오 소셜 로그인 성공 후 JWT 토큰을 발급하고 홈 화면으로 리디렉트합니다.")
     @GetMapping("/social-login/kakao/success")
     public void kakaoSocialLoginSuccess(
             @AuthenticationPrincipal OAuth2User oauth2user,
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     // 소셜 로그인 실패
-    @Operation(summary = "소셜 로그인 실패", description = "소셜 로그인 실패 시 처리")
+    @Operation(summary = "소셜 로그인 / 실패", description = "소셜 로그인 실패 시 처리")
     @GetMapping("/social-login/failure")
     public void socialLoginFailure(HttpServletResponse response) throws IOException {
         response.sendRedirect("/login.html?error=true");
