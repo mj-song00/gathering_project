@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class RankResponse {
     private double score;
-    private String value;
+    private String adress;
 
     public RankResponse(double score, String value) {
         this.score = score;
-        this.value = value;
+        this.adress = value;
     }
 }
