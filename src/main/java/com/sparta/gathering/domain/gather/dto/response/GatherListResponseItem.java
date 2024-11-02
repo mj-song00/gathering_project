@@ -14,7 +14,7 @@ public class GatherListResponseItem {
     private final String title; // Gather 제목
     private final String description;
     private final List<String> hashtags;
-    //    private final List<String> schedule;
+//    private final List<String> schedule;
 //    private final List<String> board;
     private final String category;
 
