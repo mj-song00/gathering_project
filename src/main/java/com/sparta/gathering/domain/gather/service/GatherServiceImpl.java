@@ -6,6 +6,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponseItem;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
@@ -112,7 +113,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    @Scheduled(cron = "*/10 * * * * *" )
+    @Scheduled(cron = "*/10 * * * * *")
     public List<RankResponse> ranks() {
         Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 5);
 
@@ -121,16 +122,16 @@ public class GatherServiceImpl implements GatherService {
                 .collect(Collectors.toList());
         // 콘솔에 출력
         rankResponses.forEach(rankResponse ->
-                System.out.println("Score: " + rankResponse.getScore() + ", Value: " + rankResponse.getValue())
+                System.out.println("Score: " + rankResponse.getScore() + ", Adress: " + rankResponse.getAdress())
         );
 
         return rankResponses;
     }
-    @Scheduled(cron ="*/10 * * * * *")
-    public void schedule(){
-        System.out.println("?? 저거 왜댐.. 콘솔로 찍어서 그런감");
-    }
 
+    @Transactional(readOnly = true)
+    public GatherListResponseItem getDetails(Long gatherId) {
+        return gatherRepository.findByIdWithBoardAndSchedule(gatherId);
+    }
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
         UUID managerId = memberRepository.findManagerIdByGatherId(id)

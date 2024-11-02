@@ -5,6 +5,7 @@ import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponseItem;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -34,7 +35,7 @@ public class GatherController {
     @Operation(summary = "소모임 생성", description = "모임을 생성합니다. 생성 즉시 모임의 매니저로 등록됩니다.")
     @PostMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<Void>> createGather(
-            @Valid  @RequestBody GatherRequest request,
+            @Valid @RequestBody GatherRequest request,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @PathVariable Long categoryId
     ) {
@@ -47,7 +48,7 @@ public class GatherController {
     @Operation(summary = "소모임 수정", description = "생성시 저장된 title, description, hashtag를 수정할 수 있습니다.")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> modifyGather(
-            @Valid  @RequestBody GatherRequest request,
+            @Valid @RequestBody GatherRequest request,
             @PathVariable Long id,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
@@ -110,7 +111,16 @@ public class GatherController {
 
     //랭킹 조회
     @GetMapping("/rank")
-    public  List<RankResponse>  zSetOperations (){
+    public List<RankResponse> zSetOperations() {
         return gatherService.ranks();
+    }
+
+    //gather 상세조회
+    @GetMapping("/{gatherId}/detail") // 상세페이지
+    public ResponseEntity<ApiResponse<GatherListResponseItem>> detailGather(
+            @PathVariable Long gatherId
+    ) {
+        GatherListResponseItem responseItem = gatherService.getDetails(gatherId);
+        return ResponseEntity.ok(ApiResponse.successWithData(responseItem, ApiResponseEnum.GET_SUCCESS));
     }
 }

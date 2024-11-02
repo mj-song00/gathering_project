@@ -1,7 +1,9 @@
 package com.sparta.gathering.domain.gather.dto.response;
 
+import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
+import com.sparta.gathering.domain.schedule.entity.Schedule;
 import lombok.Getter;
 
 import java.util.List;
@@ -14,9 +16,10 @@ public class GatherListResponseItem {
     private final String title; // Gather 제목
     private final String description;
     private final List<String> hashtags;
-//    private final List<String> schedule;
-//    private final List<String> board;
+    private final List<String> schedule;
+    private final List<String> board;
     private final String category;
+    private final String address;
 
 
     public GatherListResponseItem(Gather gather) {
@@ -26,8 +29,11 @@ public class GatherListResponseItem {
         this.hashtags = gather.getHashTagList().stream()
                 .map(HashTag::getHashTagName)
                 .collect(Collectors.toList());
-//        this.schedule = gather.getScheduleList().stream().map(Schedule::getScheduleTitle).collect(Collectors.toList());
-//        this.board = gather.getBoardList().stream().map(Board::getBoardTitle).collect(Collectors.toList());
+        this.schedule = gather.getScheduleList().stream()
+                .map(Schedule::getScheduleTitle).collect(Collectors.toList());
+        this.board = gather.getBoardList().stream()
+                .map(Board::getBoardTitle).collect(Collectors.toList());
         this.category = gather.getCategory().getCategoryName();
+        this.address = gather.getMap().getAddressName();
     }
 }
