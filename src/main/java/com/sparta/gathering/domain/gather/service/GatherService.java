@@ -2,9 +2,12 @@ package com.sparta.gathering.domain.gather.service;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface GatherService {
 
@@ -18,4 +21,5 @@ public interface GatherService {
 
     Page<Gather> findTitle(Pageable pageable, String keyword);
 
+    List<RankResponse> ranks();
 }
