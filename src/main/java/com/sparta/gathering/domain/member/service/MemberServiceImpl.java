@@ -28,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
     private final GatherRepository gatherRepository;
 
     @Transactional
+    @Override
     public void createMember(UUID userId, long gatherId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = gatherRepository.findById(gatherId)
@@ -57,6 +58,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
+    @Override
     public void refusal(long memberId, long gatherId, AuthenticatedUser authenticatedUser) {
         validateManager(gatherId, authenticatedUser);
         Member member = memberRepository.findById(memberId)
@@ -67,6 +69,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Transactional
+    @Override
     public void withdrawal(long memberId, AuthenticatedUser authenticatedUser) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
