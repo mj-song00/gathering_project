@@ -17,6 +17,8 @@ public class GatherRequest {
     private String title;
     @NotNull(message = "설명을 입력해 주세요")
     private String description;
+    @NotNull(message = "설명을 입력해 주세요")
     private List<String> hashtags;
+    @NotNull(message ="위치를 확인해주세요")
     private Map map;
 }
