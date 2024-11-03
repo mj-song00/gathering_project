@@ -4,10 +4,7 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponseItem;
-import com.sparta.gathering.domain.gather.dto.response.RankResponse;
-import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
+import com.sparta.gathering.domain.gather.dto.response.*;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,14 +70,14 @@ public class GatherController {
     @Operation(summary = "카테고리별 검색", description = "카테고리별로 모임조회사 가능합니다." +
             "page size는 10입니다.")
     @GetMapping("/{categoryId}")
-    public ApiResponse<GatherListResponse> gathers(
+    public ApiResponse<CategoryListResponse> gathers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @PathVariable Long categoryId) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
         Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);
-        GatherListResponse response = new GatherListResponse(
+        CategoryListResponse response = new CategoryListResponse(
                 gatherList.getContent(), // Gather 리스트
                 gatherList.getNumber(), // 현재 페이지 번호
                 gatherList.getTotalPages(), // 총 페이지 수
@@ -110,17 +107,20 @@ public class GatherController {
     }
 
     //랭킹 조회
+    @Operation(summary = "모임 랭킹 조회", description = "어제까지 모임이 많이 생성된 지역입니다." +
+            "매일 0시 0분 0초에 갱신될 예정입니다.")
     @GetMapping("/rank")
     public List<RankResponse> zSetOperations() {
         return gatherService.ranks();
     }
 
     //gather 상세조회
+    @Operation(summary = "모임 상세조회", description = "모임 상세조회 페이지 입니다")
     @GetMapping("/{gatherId}/detail") // 상세페이지
-    public ResponseEntity<ApiResponse<GatherListResponseItem>> detailGather(
+    public ResponseEntity<ApiResponse<GatherResponse>> detailGather(
             @PathVariable Long gatherId
     ) {
-        GatherListResponseItem responseItem = gatherService.getDetails(gatherId);
+        GatherResponse responseItem = gatherService.getDetails(gatherId);
         return ResponseEntity.ok(ApiResponse.successWithData(responseItem, ApiResponseEnum.GET_SUCCESS));
     }
 }

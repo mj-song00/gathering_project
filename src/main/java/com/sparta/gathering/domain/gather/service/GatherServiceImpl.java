@@ -6,7 +6,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponseItem;
+import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,7 +112,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    @Scheduled(cron = "*/10 * * * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     public List<RankResponse> ranks() {
         Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 5);
 
@@ -129,7 +128,8 @@ public class GatherServiceImpl implements GatherService {
     }
 
     @Transactional(readOnly = true)
-    public GatherListResponseItem getDetails(Long gatherId) {
+    @Override
+    public GatherResponse getDetails(Long gatherId) {
         return gatherRepository.findByIdWithBoardAndSchedule(gatherId);
     }
 

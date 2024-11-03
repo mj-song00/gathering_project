@@ -2,13 +2,13 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZTM2MjY1My0xZjk1LTRjNzktOTNiMC01MmFhMjY4MjYzM2MiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDU0Nzk1NiwiZXhwIjoxNzMwNTQ5NzU2fQ.op15zY5F0a1iIH70fHLYuzIiDrgADy4K8kl5A9Fp6zg
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZTM2MjY1My0xZjk1LTRjNzktOTNiMC01MmFhMjY4MjYzM2MiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDYzMzE0NiwiZXhwIjoxNzMwNjM0OTQ2fQ.v1T3e9FASE4Ev4YJkrcVa3YfiJnQ1gmOEwKk5MFNFKk
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
 @memberId = 2
 
-@category_Id = 1
+@category_Id = 2
 
 @gatherId = 1
 
@@ -74,7 +74,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "운동"
+  "categoryName": "영화"
 }
 
 ### 카테고리 조회
@@ -104,13 +104,13 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임",
-  "description": "같이 공차실분",
-  "hashtags": ["futsal","실내"],
+  "title": "즐거운 독립영화 모임",
+  "description": "흔하지 않은 독립영화 같이봐요",
+  "hashtags": ["독립영화","CGV", "영화"],
   "map": {
     "addressName": "서울 동작구 노량진로 156",
-    "latitude": "126.943292835393",
-    "longitude": "37.5134034035131"
+    "latitude": "37.529455",
+    "longitude": "126.963921"
   }
 }
 
@@ -141,7 +141,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 또는 hashTag 검색
-GET {{base_url}}/api/gathers/search?keyword=futsal
+GET {{base_url}}/api/gathers/search?keyword=즐거운
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -215,8 +215,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "boardTitle": "보드1",
-  "boardContent": "보드1 컨텐츠"
+  "boardTitle": "보드2",
+  "boardContent": "보드2 컨텐츠"
 }
 
 ### 스케쥴 생성
@@ -225,8 +225,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "scheduleTitle": "스케쥴1",
-  "scheduleContent": "스케쥴1 컨텐츠"
+  "scheduleTitle": "스케쥴2",
+  "scheduleContent": "스케쥴2 컨텐츠"
 }
 
 

@@ -2,7 +2,7 @@ package com.sparta.gathering.domain.gather.service;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponseItem;
+import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import org.springframework.data.domain.Page;
@@ -24,5 +24,5 @@ public interface GatherService {
 
     List<RankResponse> ranks();
 
-    GatherListResponseItem getDetails(Long gatherId);
+    GatherResponse getDetails(Long gatherId);
 }
