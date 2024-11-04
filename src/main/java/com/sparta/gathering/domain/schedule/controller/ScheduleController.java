@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController // @Controller에서 @RestController로 변경
 @RequiredArgsConstructor
-@RequestMapping("/api/gather/{gatherId}/schedule")
+@RequestMapping("/api/gathers/{gatherId}/schedules")
 @Tag(name = "Schedule API", description = "스케줄 API")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    @Operation(summary = "Create Schedule", description = "스케줄 생성")
+    @Operation(summary = "스케쥴 생성", description = "스케줄 생성")
     public ResponseEntity<ApiResponse<ScheduleResponseDto>> createSchedule(
             @PathVariable(name = "gatherId") Long gatherId,
             @RequestBody ScheduleRequestDto scheduleRequestDto)
@@ -29,7 +29,7 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    @Operation(summary = "Update Schedule", description = "스케줄 수정")
+    @Operation(summary = "스케쥴 수정", description = "스케줄 수정")
     public ResponseEntity<ApiResponse<ScheduleResponseDto>> updateSchedule(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "scheduleId") Long scheduleId,
@@ -39,8 +39,8 @@ public class ScheduleController {
         return ResponseEntity.ok(ApiResponse.successWithData(updatedSchedule, ApiResponseEnum.SCHEDULE_UPDATED));
     }
 
-    @DeleteMapping("/{scheduleId}")
-    @Operation(summary = "Delete Schedule", description = "스케줄 삭제")
+    @PatchMapping("/{scheduleId}")
+    @Operation(summary = "스케쥴 삭제", description = "스케줄 삭제")
     public ResponseEntity<ApiResponse<Void>> deleteSchedule(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "scheduleId") Long scheduleId)
