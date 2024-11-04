@@ -2,7 +2,7 @@
 
 @user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3YzQ3ODUxNi1hZGQ0LTRlMmYtYTQzMy05NTlkZmRhNTY1MjMiLCJlbWFpbCI6InRlc3QyMkBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjkxMjM2LCJleHAiOjE3MzAyOTMwMzZ9._NlHaABKwXRTXWlwvQg2JFr2IRMIhwjhg79Mnh_u6GI
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjZjhlOWI4NS02OGI1LTQzZWQtODgwYS1mOTM4MGEwM2NjYTUiLCJlbWFpbCI6InRlc3QyM0BleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwNDQ2NjYxLCJleHAiOjE3MzA0NDg0NjF9.pWg7EHpfIbaOEAyvMagS8ELGQVdYz0qiknhswpfa0ik
 
 @expired_jwt =
 
@@ -17,7 +17,7 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test22@example.com",
+  "email": "test24@example.com",
   "nickName": "홍길동",
   "password": "password123",
   "identityProvider": "NONE"
@@ -29,7 +29,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test22@example.com",
+  "email": "test23@example.com",
   "password": "password123"
 }
 
@@ -81,7 +81,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임",
+  "title": "즐거운 풋살모임2",
   "description": "type: string",
   "hashtags": ["list로","받습니다."]
 }
@@ -157,7 +157,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 댓글조회
-GET {{base_url}}/api/schedule/1/comments
+GET {{base_url}}/api/schedule/2/comments
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -195,14 +195,22 @@ Content-Type: application/json
 
 
 ### 지도저장
-POST {{base_url}}/api/kakaoMap
+POST {{base_url}}/api/kakaoMap/2
 Content-Type: application/json
 
 {
-  "address" : "인천 석남동"
+  "address" : "인천 가좌동"
 }
 
 
+### 지도추천
+GET {{base_url}}//api/kakaoMap/search
+Content-Type: application/json
+
+{
+  "latitude" : 37.5110804950594,
+  "longitude" : 126.674801640164
+}
 
 
 

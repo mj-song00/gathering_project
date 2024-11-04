@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.map.entity;
 
+import com.sparta.gathering.domain.gather.entity.Gather;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +18,21 @@ public class Map {
     private String addressName;
 
     @Column
-    private String latitude;//위도 y
+    private Double latitude;//위도 y
 
     @Column
-    private String longitude;//경도 x
+    private Double longitude;//경도 x
+
+    @OneToOne
+    @JoinColumn(name = "gather_id")
+    private Gather gather;
 
 
-    public Map(String addressName){
-        this.addressName = addressName;
-    }
-    public Map(String addressName, String latitude, String longitude){
+    public Map(String addressName, Double latitude, Double longitude,Gather gather) {
         this.addressName = addressName;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.gather = gather;
     }
+
 }
