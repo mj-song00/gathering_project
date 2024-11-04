@@ -1,16 +1,17 @@
 package com.sparta.gathering.domain.user.dto.response;
 
-import com.sparta.gathering.domain.user.enums.UserRole;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class UserDTO {
+@Builder
+public class UserProfileResponse {
 
-    private UUID userId;
+    private UUID id;
     private String email;
-    private UserRole userRole;
-
+    private String nickName;
+    private String profileImage;
 }

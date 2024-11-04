@@ -1,37 +1,60 @@
 @base_url = http://localhost:8080
 
-@user_Id = f2b34763-75e2-45d7-894e-58e51db9f900
+@user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3YzQ3ODUxNi1hZGQ0LTRlMmYtYTQzMy05NTlkZmRhNTY1MjMiLCJlbWFpbCI6InRlc3QyMkBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMwMjkxMjM2LCJleHAiOjE3MzAyOTMwMzZ9._NlHaABKwXRTXWlwvQg2JFr2IRMIhwjhg79Mnh_u6GI
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZTM2MjY1My0xZjk1LTRjNzktOTNiMC01MmFhMjY4MjYzM2MiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDY5MzI3MywiZXhwIjoxNzMwNjk1MDczfQ.n4NVCSGLQpwxeYCbohLdx8xpWQMt65wx9iZIKCYZlwE
 
-@expired_jwt =
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
 @memberId = 2
 
-@category_Id = 1
+@category_Id = 2
 
-@gatherId = 2
+@gatherId = 1
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test22@example.com",
+  "email": "test@example.com",
   "nickName": "홍길동",
-  "password": "password123",
+  "password": "password123A!",
   "identityProvider": "NONE"
 }
-
 
 ### 일반 로그인 요청
 POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test22@example.com",
-  "password": "password123"
+  "email": "test@example.com",
+  "password": "password123A!"
 }
+
+### 비밀번호 변경
+PATCH {{base_url}}/api/users/me/password
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "oldPassword": "password123A!",
+  "newPassword": "password123A!"
+}
+
+### 닉네임 변경
+PATCH {{base_url}}/api/users/me/nickname
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "newNickName": "홍길동"
+}
+
+### 내 프로필 조회
+GET {{base_url}}/api/users/me/profile
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### 회원탈퇴 요청
 PATCH {{base_url}}/api/users/me/delete
@@ -51,7 +74,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "공부"
+  "categoryName": "영화"
 }
 
 ### 카테고리 조회
@@ -61,7 +84,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 카테고리 수정
-PUT {{base_url}}/api/categories/{{user_Id}}
+PUT {{base_url}}/api/categories/{{category_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -71,7 +94,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 카테고리 삭제
-PATCH {{base_url}}/api/categories/{{user_Id}}
+PATCH {{base_url}}/api/categories/{{category_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -81,10 +104,56 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임",
-  "description": "type: string",
-  "hashtags": ["list로","받습니다."]
+  "title": "영화 모임",
+  "description": "영화 같이봐요",
+  "hashtags": [],
+  "map": {
+    "addressName": "서울 동작구 노량진로 156",
+    "latitude": "37.529455",
+    "longitude": "126.963921"
+  }
 }
+
+### 모임 수정
+PUT {{base_url}}/api/gathers/{{gatherId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "농구하실분",
+  "description": "여의도 공원 농구 모임",
+  "hashtags": ["여의도공원", "저녁", "실외"],
+  "map": {
+    "addressName": "서울 영등포구 여의도동 여의공원로 68",
+    "latitude": "126.922284053463",
+    "longitude": "37.5268088229325"
+  }
+}
+
+### 모임 삭제
+PATCH  {{base_url}}/api/gathers/{{gatherId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 카테고리별 모임 검색
+GET {{base_url}}/api/gathers/{{category_Id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### title 또는 hashTag 검색
+GET {{base_url}}/api/gathers/search?keyword=즐거운
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 동네 조회
+GET {{base_url}}/api/gathers/rank
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 모임 상세페이지
+GET {{base_url}}/api/gathers/{{gatherId}}/detail
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### 멤버 생성
 POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
@@ -108,12 +177,14 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 해시태그 생성
-POST {{base_url}}/api/gatherings/1/hashtags
+POST {{base_url}}/api/gatherings/3/hashtags
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "hashTagName": "풋살2"
+  "hashTagName": [
+    "영화 모임"
+  ]
 }
 
 
@@ -143,47 +214,20 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "boardTitle": "보드 타이틀",
-  "boardContent": "보드 컨텐츠"
+  "boardTitle": "보드2",
+  "boardContent": "보드2 컨텐츠"
 }
-
-### 보드 수정
-PUT {{base_url}}/api/gathers/1/boards/1
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "boardTitle": "수정된 보드 타이틀",
-  "boardContent": "수정된 보드 컨텐츠"
-}
-
-### 보드 삭제
-DELETE {{base_url}}/api/gathers/1/boards/1
-Authorization: Bearer {{jwt_token}}
 
 ### 스케쥴 생성
-POST {{base_url}}/api/gathers/1/schedules
+POST {{base_url}}/api/gather/1/schedule
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "scheduleTitle": "스케줄 타이틀",
-  "scheduleContent": "스케줄 내용"
+  "scheduleTitle": "스케쥴2",
+  "scheduleContent": "스케쥴2 컨텐츠"
 }
 
-### 스케쥴 수정
-PUT {{base_url}}/api/gathers/1/schedules/1
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "scheduleTitle": "수정된 스케줄 타이틀",
-  "scheduleContent": "수정된 스케줄 내용"
-}
-
-### 스케쥴 삭제
-PATCH {{base_url}}/api/gathers/1/schedules/1
-Authorization: Bearer {{jwt_token}}
 
 
 ### 댓글생성
@@ -238,7 +282,7 @@ POST {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
-  "address" : "인천 석남동"
+  "address": "인천 석남동"
 }
 
 

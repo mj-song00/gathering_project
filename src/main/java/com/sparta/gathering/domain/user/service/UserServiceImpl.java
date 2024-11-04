@@ -1,20 +1,21 @@
 package com.sparta.gathering.domain.user.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
+import com.sparta.gathering.domain.user.dto.response.UserProfileResponse;
 import com.sparta.gathering.domain.user.entity.User;
-import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import java.util.UUID;
+import com.sparta.gathering.domain.user.service.factory.UserFactory;
+import com.sparta.gathering.domain.user.validation.UserValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -23,21 +24,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserValidation userValidation;
 
     @Value("${default.profile.image.url}")
     private String defaultProfileImageUrl;
 
+
     @Transactional
     @Override
-    public User createUser(SignupRequest signupRequest) {
-        // 이메일 중복 확인
+    public void createUser(SignupRequest signupRequest) {
+
+        // 이미 가입된 이메일인지 확인
         if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
             throw new BaseException(ExceptionEnum.USER_ALREADY_EXISTS);
         }
-        // 비밀번호 인코딩
+
+        // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-        // User 객체 생성
-        User user = User.createWithAutoUUID(
+
+        // 사용자 생성
+        User user = UserFactory.of(
                 signupRequest.getEmail(),
                 signupRequest.getNickName(),
                 encodedPassword,
@@ -45,52 +51,99 @@ public class UserServiceImpl implements UserService {
                 signupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
                 defaultProfileImageUrl
         );
-        return userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserProfileResponse getUserProfile(AuthenticatedUser authenticatedUser) {
+
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
+
+        // 인증된 사용자의 ID로 사용자 조회
+        User user = userValidation.findUserById(authenticatedUser.getUserId());
+
+        // 사용자 탈퇴 여부 확인
+        userValidation.validateUserNotDeleted(user);
+
+        // 사용자 정보 반환
+        return UserProfileResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickName(user.getNickName())
+                .profileImage(user.getProfileImage())
+                .build();
+
     }
 
     @Transactional
     @Override
-    public void deleteUser(UserDTO userDto) {
-        // 유저 조회
-        User user = userRepository.findById(userDto.getUserId())
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+    public void changePassword(AuthenticatedUser authenticatedUser, String oldPassword, String newPassword) {
 
-        // 이미 삭제된 사용자일 경우 예외 발생
-        if (user.getDeletedAt() != null) {
-            throw new BaseException(ExceptionEnum.ALREADY_DELETED);
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
+
+        // 인증된 사용자의 ID로 사용자 조회
+        User user = userValidation.findUserById(authenticatedUser.getUserId());
+
+        // 사용자 탈퇴 여부 확인
+        userValidation.validateUserNotDeleted(user);
+
+        // 현재 비밀번호 확인
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new BaseException(ExceptionEnum.PASSWORD_MISMATCH);
         }
 
-        // 소프트 삭제 처리
-        user.setDeletedAt(); // deletedAt 필드를 현재 시간으로 설정하는 메서드가 User에 정의되어 있다고 가정
+        // 새 비밀번호가 기존 비밀번호와 동일한지 확인
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
+            throw new BaseException(ExceptionEnum.PASSWORD_SAME_AS_OLD);
+        }
+
+        // 새 비밀번호로 업데이트
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
-    public User findById(UUID userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-    }
+    public void changeNickName(AuthenticatedUser authenticatedUser, String newNickName) {
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-    }
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
 
-    @Override
-    public User findByProviderIdAndIdentityProvider(String providerId,
-            IdentityProvider identityProvider) {
-        return userRepository.findByProviderIdAndIdentityProvider(providerId, identityProvider)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-    }
+        // 인증된 사용자의 ID로 사용자 조회
+        User user = userValidation.findUserById(authenticatedUser.getUserId());
 
-    // 로그인 시 인증 처리
-    public User authenticateUser(String email, String rawPassword) {
-        User user = findByEmail(email);
-        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new BaseException(ExceptionEnum.EMAIL_PASSWORD_MISMATCH);
+        // 사용자 탈퇴 여부 확인
+        userValidation.validateUserNotDeleted(user);
+
+        // 새로운 닉네임이 기존 닉네임과 동일한지 확인
+        if (user.getNickName().equals(newNickName)) {
+            throw new BaseException(ExceptionEnum.NICKNAME_SAME_AS_OLD);
         }
-        return user;
+
+        // 닉네임 업데이트
+        user.setNickName(newNickName);
+        userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(AuthenticatedUser authenticatedUser) {
+
+        // 인증된 사용자 확인
+        userValidation.validateAuthenticatedUser(authenticatedUser);
+
+        // 인증된 사용자의 ID로 사용자 조회
+        User user = userValidation.findUserById(authenticatedUser.getUserId());
+
+        // 사용자 탈퇴 여부 확인
+        userValidation.validateUserNotDeleted(user);
+
+        // 소프트 삭제 처리
+        user.setDeletedAt();
+        userRepository.save(user);
     }
 
 }

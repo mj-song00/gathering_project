@@ -1,15 +1,14 @@
 package com.sparta.gathering.domain.member.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.member.dto.response.MemberListResponse;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.service.MemberService;
-import com.sparta.gathering.domain.user.dto.response.UserDTO;
-import java.util.UUID;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Member" , description = "멤버 API")
+@Tag(name = "Member", description = "멤버 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
@@ -37,7 +36,7 @@ public class MemberController {
     @Operation(summary = "소모임  가입 신청", description = "해당 소모임 가입을 신청합니다." +
             "신청자는 manager가 승인/거절 전까지 pendding상태를 유지합니다.")
     @PostMapping("/user/{userId}/gather/{gatherId}")
-    public ResponseEntity<ApiResponse<Void>> createGather(
+    public ResponseEntity<ApiResponse<Void>> createMember(
             @PathVariable UUID userId,
             @PathVariable long gatherId
     ) {
@@ -71,9 +70,9 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Void>> approval(
             @PathVariable long memberId,
             @PathVariable long gatherId,
-            @AuthenticationPrincipal UserDTO userDto
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
-        memberService.approval(memberId, gatherId, userDto);
+        memberService.approval(memberId, gatherId, authenticatedUser);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.APPROVAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -85,9 +84,9 @@ public class MemberController {
     public ResponseEntity<ApiResponse<Void>> refusal(
             @PathVariable long memberId,
             @PathVariable long gatherId,
-            @AuthenticationPrincipal UserDTO userDto
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
-        memberService.refusal(memberId, gatherId, userDto);
+        memberService.refusal(memberId, gatherId, authenticatedUser);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.REFUSAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -97,9 +96,9 @@ public class MemberController {
     @PatchMapping("/{memberId}/withdrawal")
     public ResponseEntity<ApiResponse<Void>> withdrawal(
             @PathVariable long memberId,
-            @AuthenticationPrincipal UserDTO userDto
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
-        memberService.withdrawal(memberId, userDto);
+        memberService.withdrawal(memberId, authenticatedUser);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.WITHDRAWAL_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

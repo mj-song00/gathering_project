@@ -1,12 +1,12 @@
 package com.sparta.gathering.domain.gather.dto.request;
 
+import com.sparta.gathering.domain.map.entity.Map;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -17,5 +17,8 @@ public class GatherRequest {
     private String title;
     @NotNull(message = "설명을 입력해 주세요")
     private String description;
+    @NotNull(message = "설명을 입력해 주세요")
     private List<String> hashtags;
+    @NotNull(message ="위치를 확인해주세요")
+    private Map map;
 }

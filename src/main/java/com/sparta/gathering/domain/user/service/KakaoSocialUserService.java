@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.KakaoAttributes;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import com.sparta.gathering.domain.user.service.factory.UserFactory;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoSocialAuthService {
+public class KakaoSocialUserService {
 
     private final UserRepository userRepository;
 
@@ -85,15 +86,15 @@ public class KakaoSocialAuthService {
 
     // 카카오 소셜 로그인 사용자 생성
     private User createUser(String email, String providerId, String nickName, String profileImage) {
-        return userRepository.save(
-                User.createSocialUser(
-                        email,
-                        nickName,
-                        UserRole.ROLE_USER,
-                        IdentityProvider.KAKAO,
-                        providerId,
-                        profileImage
-                ));
+        User user = UserFactory.ofSocial(
+                email,
+                nickName,
+                UserRole.ROLE_USER,
+                IdentityProvider.KAKAO,
+                providerId,
+                profileImage
+        );
+        return userRepository.save(user);
     }
 
 }
