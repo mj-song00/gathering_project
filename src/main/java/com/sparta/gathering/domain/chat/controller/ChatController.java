@@ -1,6 +1,5 @@
 package com.sparta.gathering.domain.chat.controller;
 
-import com.sparta.gathering.common.config.Redis.RedisPublisher;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.chat.entity.ChatMessage;
 import com.sparta.gathering.domain.chat.service.ChatService;

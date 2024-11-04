@@ -1,6 +1,6 @@
 package com.sparta.gathering.domain.chat.service;
 
-import com.sparta.gathering.common.config.Redis.RedisPublisher;
+import com.sparta.gathering.common.config.Redis.WebSocketRedisPublisher;
 import com.sparta.gathering.domain.chat.entity.ChatMessage;
 import com.sparta.gathering.domain.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
-    private final RedisPublisher redisPublisher;
+    private final WebSocketRedisPublisher webSocketRedisPublisher;
 
     public ChatMessage saveAndPublishMessage(ChatMessage message, ChannelTopic topic) {
         chatMessageRepository.save(message);  // 메시지를 DB에 저장
-        redisPublisher.publish(topic, message);  // 메시지를 Redis에 퍼블리시
+        webSocketRedisPublisher.publish(topic, message);  // 메시지를 Redis에 퍼블리시
         return message;
     }
 

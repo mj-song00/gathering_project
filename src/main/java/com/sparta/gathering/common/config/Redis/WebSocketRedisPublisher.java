@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class RedisPublisher {
+public class WebSocketRedisPublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChatMessageRepository chatMessageRepository;
