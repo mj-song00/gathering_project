@@ -6,17 +6,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface GatherRepository extends JpaRepository<Gather, Long> {
 
-    @Query("SELECT DISTINCT g FROM Gather g " +
+public interface GatherRepository extends JpaRepository<Gather, Long>, GatherCustomRepository {
+
+    @Query("SELECT g FROM Gather g " +
             "JOIN FETCH g.category c " +
-            "JOIN FETCH g.map m" +
             "LEFT JOIN FETCH g.hashTagList h " +
-            "WHERE g.deletedAt IS NULL " +
-            "AND g.category.id = :categoryId " +
+            "WHERE g.category.id = :categoryId " +
+            "AND g.deletedAt IS NULL " +
             "ORDER BY g.createdAt DESC")
     Page<Gather> findByCategoryWithHashTags(@Param("categoryId") Pageable pageable, Long categoryId);
 

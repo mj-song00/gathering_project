@@ -38,18 +38,16 @@ public class Gather extends Timestamped {
 
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonIgnore
     private List<Board> boardList = new ArrayList<>();
 
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JsonIgnore
     private List<Schedule> scheduleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HashTag> hashTagList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "map_id", unique= true)
     private Map map;
 
