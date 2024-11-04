@@ -11,19 +11,19 @@ public interface MapRepository extends JpaRepository<Map, Long> {
 
 
     @Query("SELECT l FROM Map l WHERE " +
-            "(6371 * acos(cos(radians(37.5110804950594))\n" +
-            "                     * cos(radians(latitude))\n" +
-            "                     * cos(radians(longitude)\n" +
-            "            - radians(126.674801640164))\n" +
-            "        + sin(radians(37.5110804950594))\n" +
-            "                     * sin(radians(latitude)))) < 2" +
+            "(6371 * acos(cos(radians(:latitude))\n" +
+            "                     * cos(radians(l.latitude))\n" +
+            "                     * cos(radians(l.longitude)\n" +
+            "            - radians(:longitude))\n" +
+            "        + sin(radians(:latitude))\n" +
+            "                     * sin(radians(l.latitude)))) < 2" +
             " ORDER BY " +
-            " (6371 * acos(cos(radians(37.5110804950594))\n" +
-            "                     * cos(radians(latitude))\n" +
-            "                     * cos(radians(longitude)\n" +
-            "            - radians(126.674801640164))\n" +
-            "        + sin(radians(37.5110804950594))\n" +
-            "                     * sin(radians(latitude))))")
+            " (6371 * acos(cos(radians(:latitude))\n" +
+            "                     * cos(radians(l.latitude))\n" +
+            "                     * cos(radians(l.longitude)\n" +
+            "            - radians(:longitude))\n" +
+            "        + sin(radians(:latitude))\n" +
+            "                     * sin(radians(l.latitude))))")
     List<Map> findWithinBounds(@Param("longitude") double longitude,//x
                                @Param("latitude") double latitude); //y
 }
