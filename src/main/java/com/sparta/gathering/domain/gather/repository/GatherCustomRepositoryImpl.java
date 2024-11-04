@@ -16,7 +16,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public GatherResponse findByIdWithBoardAndSchedule(Long gatherId) {
         Gather result = q.selectFrom(gather)
-                .leftJoin(gather.hashTagList).fetchJoin() // HashTag 리스트 가져오기
+                .leftJoin(gather.scheduleList).fetchJoin() // schedule 리스트 가져오기
                 .where(gather.id.eq(gatherId))
                 .fetchOne();
         return new GatherResponse(result);
