@@ -33,7 +33,7 @@ public class UserProfileService {
     @Value("${default.profile.image.url}")
     private String defaultProfileImageUrl;
 
-    @Value("${cloud.aws.s3.bucket-name}")
+    @Value("${aws.s3.bucket-name}")
     private String bucketName;
 
     // 이미지 수정
