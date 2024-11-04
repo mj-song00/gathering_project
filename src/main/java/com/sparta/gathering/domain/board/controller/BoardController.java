@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/gather/{gatherId}/boards")
+@RequestMapping("/api/gathers/{gatherId}/boards")
 @Tag(name = "Board API", description = "보드 API")
 public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    @Operation(summary = "Create Board", description = "Board 생성")
+    @Operation(summary = "보드 생성", description = "Board 생성")
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @RequestBody BoardRequestDto boardRequestDto)
@@ -30,7 +30,7 @@ public class BoardController {
     }
 
     @PutMapping("/{boardsId}")
-    @Operation(summary = "Update Board", description = "Board 수정")
+    @Operation(summary = "보드 수정", description = "Board 수정")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId,
@@ -40,8 +40,8 @@ public class BoardController {
         return ResponseEntity.ok(ApiResponse.successWithData(updatedBoard, ApiResponseEnum.BOARD_UPDATED));
     }
 
-    @DeleteMapping("/{boardsId}")
-    @Operation(summary = "Delete Board", description = "Board 삭제")
+    @PatchMapping("/{boardsId}")
+    @Operation(summary = "보드 삭제", description = "Board 삭제")
     public ResponseEntity<ApiResponse<Void>> deleteBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId)
