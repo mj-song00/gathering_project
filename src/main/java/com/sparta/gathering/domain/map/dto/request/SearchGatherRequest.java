@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class SearchGatherRequest {
 
-     private Double latitude;
-     private Double longitude;
+    private Double latitude;
+    private Double longitude;
 
 }

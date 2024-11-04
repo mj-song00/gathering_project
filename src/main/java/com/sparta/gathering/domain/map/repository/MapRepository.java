@@ -25,5 +25,5 @@ public interface MapRepository extends JpaRepository<Map, Long> {
             "        + sin(radians(37.5110804950594))\n" +
             "                     * sin(radians(latitude))))")
     List<Map> findWithinBounds(@Param("longitude") double longitude,//x
-                                    @Param("latitude") double latitude); //y
+                               @Param("latitude") double latitude); //y
 }

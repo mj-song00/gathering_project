@@ -18,9 +18,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 
 @Service
@@ -45,7 +45,7 @@ public class KakaoService {
         headers.set("Authorization", appKey);
 
         // Create entity with headers
-        HttpEntity<String> entity = new HttpEntity<>("parameters",headers);
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
         String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + searchMap.getAddress();
 
         return restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
@@ -53,7 +53,7 @@ public class KakaoService {
 
 
     @Transactional
-    public void saveMap(MapRequest saveMap,Long gatherId) {
+    public void saveMap(MapRequest saveMap, Long gatherId) {
 
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", appKey);
@@ -72,7 +72,7 @@ public class KakaoService {
             Double longitude = mapData.get("documents").get(0).get("x").asDouble();
 
             //entity에 저장
-            Map map = new Map(addressName,latitude,longitude,gather);
+            Map map = new Map(addressName, latitude, longitude, gather);
             mapRepository.save(map);
 
         } catch (JsonMappingException e) {
@@ -85,10 +85,10 @@ public class KakaoService {
 
     @Transactional
     public List<AroundPlaceResponse> listMyMap(Double x, Double y) {//경도 x lon,위도 y lat
-      List<Map> maps = mapRepository.findWithinBounds(x,y);
+        List<Map> maps = mapRepository.findWithinBounds(x, y);
 
         return maps.stream()
-                .map(map -> new AroundPlaceResponse(map.getAddressName(),map.getLatitude(), map.getLongitude()))
+                .map(map -> new AroundPlaceResponse(map.getAddressName(), map.getLatitude(), map.getLongitude()))
                 .collect(Collectors.toList());
     }
 }
