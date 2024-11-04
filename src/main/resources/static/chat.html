@@ -8,9 +8,12 @@
     <script>
         let stompClient = null;
         let username = null;
+        let gatheringId = 1; // 기본 gatheringId
 
         function connect() {
             username = document.getElementById("username").value.trim();
+            gatheringId = document.getElementById("gatheringId").value.trim() || gatheringId;
+
             if (!username) {
                 alert("사용자 이름을 입력하세요.");
                 return;
@@ -22,33 +25,34 @@
             stompClient.connect({}, function (frame) {
                 console.log('Connected: ' + frame);
 
-                // 특정 gatheringId의 토픽을 구독 (예: gatheringId = 1)
-                stompClient.subscribe('/topic/gathering/1', function (message) {
-                    showMessage(JSON.parse(message.body).content);
+                stompClient.subscribe(`/topic/gathering/${gatheringId}`, function (message) {
+                    const chatMessage = JSON.parse(message.body);
+                    showMessage(chatMessage); // JSON 파싱 후 표시
                 });
 
-                // 사용자 입장 메시지 전송
                 addUser();
+            }, function (error) {
+                console.error('WebSocket error: ', error);
             });
         }
 
         function sendMessage() {
             const content = document.getElementById("message").value.trim();
             if (content && stompClient) {
-                stompClient.send("/app/chat.sendMessage/1", {}, JSON.stringify({ sender: username, content: content, type: "CHAT" }));
+                stompClient.send(`/app/chat.sendMessage/${gatheringId}`, {}, JSON.stringify({ sender: username, content: content, type: "CHAT" }));
                 document.getElementById("message").value = "";
             }
         }
 
         function addUser() {
             if (stompClient) {
-                stompClient.send("/app/chat.addUser/1", {}, JSON.stringify({ sender: username, type: "JOIN" }));
+                stompClient.send(`/app/chat.addUser/${gatheringId}`, {}, JSON.stringify({ sender: username, type: "JOIN" }));
             }
         }
 
         function leaveUser() {
             if (stompClient) {
-                stompClient.send("/app/chat.leaveUser/1", {}, JSON.stringify({ sender: username, type: "LEAVE" }));
+                stompClient.send(`/app/chat.leaveUser/${gatheringId}`, {}, JSON.stringify({ sender: username, type: "LEAVE" }));
                 stompClient.disconnect();
             }
         }
@@ -56,7 +60,7 @@
         function showMessage(message) {
             const response = document.getElementById("response");
             const p = document.createElement("p");
-            p.textContent = message;
+            p.textContent = `${message.sender}: ${message.content}`; // 보낸 사람과 내용을 표시
             response.appendChild(p);
         }
     </script>
@@ -65,6 +69,7 @@
 <h2>WebSocket Chat Test</h2>
 <div>
     <input type="text" id="username" placeholder="Enter your name" />
+    <input type="text" id="gatheringId" placeholder="Gathering ID (default: 1)" />
     <button onclick="connect()">Connect</button>
 </div>
 <div>

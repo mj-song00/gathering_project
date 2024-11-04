@@ -147,6 +147,45 @@ Authorization: Bearer {{jwt_token}}
   "boardContent": "보드 컨텐츠"
 }
 
+### 보드 수정
+PUT {{base_url}}/api/gathers/1/boards/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "boardTitle": "수정된 보드 타이틀",
+  "boardContent": "수정된 보드 컨텐츠"
+}
+
+### 보드 삭제
+DELETE {{base_url}}/api/gathers/1/boards/1
+Authorization: Bearer {{jwt_token}}
+
+### 스케쥴 생성
+POST {{base_url}}/api/gathers/1/schedules
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "scheduleTitle": "스케줄 타이틀",
+  "scheduleContent": "스케줄 내용"
+}
+
+### 스케쥴 수정
+PUT {{base_url}}/api/gathers/1/schedules/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "scheduleTitle": "수정된 스케줄 타이틀",
+  "scheduleContent": "수정된 스케줄 내용"
+}
+
+### 스케쥴 삭제
+PATCH {{base_url}}/api/gathers/1/schedules/1
+Authorization: Bearer {{jwt_token}}
+
+
 ### 댓글생성
 POST {{base_url}}/api/schedule/1/comments
 Content-Type: application/json

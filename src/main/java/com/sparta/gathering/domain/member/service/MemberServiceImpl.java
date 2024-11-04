@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.member.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -84,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 사용자가 특정 모임에 속해 있는지 확인하는 메서드
-    public boolean isUserInGathering(Long gatheringId, UserDTO userDto) {
+    public boolean isUserInGathering(Long gatheringId, AuthenticatedUser userDto) {
         Member member = memberRepository.findByUserId(userDto.getUserId()).orElse(null);
 
         // 사용자가 멤버가 아니거나 모임 ID가 일치하지 않는 경우 false 반환
