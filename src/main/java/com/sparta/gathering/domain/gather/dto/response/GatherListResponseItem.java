@@ -18,6 +18,7 @@ public class GatherListResponseItem {
 //    private final List<String> board;
     private final String category;
 
+
     public GatherListResponseItem(Gather gather) {
         this.id = gather.getId(); // Gather ID
         this.title = gather.getTitle(); // Gather 제목
