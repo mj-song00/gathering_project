@@ -1,6 +1,7 @@
 package com.sparta.gathering.domain.member.repository;
 
 import com.sparta.gathering.domain.member.entity.Member;
+import com.sparta.gathering.domain.member.enums.Permission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
     Optional<Member> findByUserId(UUID id);
+
+    Optional<Object> findByGatherIdAndPermission(long gatherId, Permission permission);
 }
