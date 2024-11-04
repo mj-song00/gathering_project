@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZTM2MjY1My0xZjk1LTRjNzktOTNiMC01MmFhMjY4MjYzM2MiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDYzMzE0NiwiZXhwIjoxNzMwNjM0OTQ2fQ.v1T3e9FASE4Ev4YJkrcVa3YfiJnQ1gmOEwKk5MFNFKk
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkZTM2MjY1My0xZjk1LTRjNzktOTNiMC01MmFhMjY4MjYzM2MiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDY5MzI3MywiZXhwIjoxNzMwNjk1MDczfQ.n4NVCSGLQpwxeYCbohLdx8xpWQMt65wx9iZIKCYZlwE
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -104,9 +104,9 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 독립영화 모임",
-  "description": "흔하지 않은 독립영화 같이봐요",
-  "hashtags": ["독립영화","CGV", "영화"],
+  "title": "영화 모임",
+  "description": "영화 같이봐요",
+  "hashtags": [],
   "map": {
     "addressName": "서울 동작구 노량진로 156",
     "latitude": "37.529455",
@@ -177,14 +177,13 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 해시태그 생성
-POST {{base_url}}/api/gatherings/1/hashtags
+POST {{base_url}}/api/gatherings/3/hashtags
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
   "hashTagName": [
-    "풋살",
-    "운동"
+    "영화 모임"
   ]
 }
 
