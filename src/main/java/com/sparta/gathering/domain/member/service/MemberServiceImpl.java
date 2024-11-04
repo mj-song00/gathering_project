@@ -35,8 +35,10 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
 
         //매니저 확인
-        Member manager = memberRepository.findByUserId(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+        Member manager = memberRepository.findByGatherIdAndPermission(gatherId, Permission.MANAGER)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
 
+        //본인 초대 금지
         if (userId == manager.getUser().getId()) {
             throw new BaseException(ExceptionEnum.MEMBER_NOT_ALLOWED);
         }
