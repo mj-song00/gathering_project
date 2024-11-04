@@ -1,9 +1,7 @@
 package com.sparta.gathering.domain.gather.dto.response;
 
-import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
-import com.sparta.gathering.domain.schedule.entity.Schedule;
 import lombok.Getter;
 
 import java.util.Comparator;
