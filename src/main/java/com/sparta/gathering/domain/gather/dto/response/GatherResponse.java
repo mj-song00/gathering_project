@@ -17,35 +17,50 @@ public class GatherResponse {
     private final String title; // Gather 제목
     private final String description;
     private final List<String> hashtags;
-    private final List<Long> scheduleIds;
-    private final List<String> schedule;
-    private final List<Long> boardIds;
-    private final List<String> board;
     private final String category;
     private final String address;
 
+    @Getter
+    public static class BoardInfo {
+        private final Long id;
+        private final String title;
+        private final String boardContents;
+
+        public BoardInfo(Long id, String title, String boardContents) {
+            this.id = id;
+            this.title = title;
+            this.boardContents = boardContents;
+        }
+    }
+
+    public final List<BoardInfo> boardInfos;
+
+    @Getter
+    public static class ScheduleInfo {
+        private final Long id;
+        private final String title;
+        private final String scheduleContents;
+
+        public ScheduleInfo(Long id, String title, String scheduleContents) {
+            this.id = id;
+            this.title = title;
+            this.scheduleContents = scheduleContents;
+        }
+    }
+
+    public final List<ScheduleInfo> scheduleInfos;
 
     public GatherResponse(Gather gather) {
         this.id = gather.getId(); // Gather ID
         this.title = gather.getTitle(); // Gather 제목
         this.description = gather.getDescription();
-        this.hashtags = gather.getHashTagList().stream()
-                .map(HashTag::getHashTagName)
+        this.hashtags = gather.getHashTagList().stream().map(HashTag::getHashTagName).collect(Collectors.toList());
+        this.scheduleInfos = gather.getScheduleList().isEmpty() ? null :
+                gather.getScheduleList().stream()
+                        .map(schedule -> new ScheduleInfo(schedule.getId(), schedule.getScheduleTitle(), schedule.getScheduleContent())).sorted(Comparator.comparing(ScheduleInfo::getId).reversed()) // ID 기준 내림차순 정렬
+                        .collect(Collectors.toList());
+        this.boardInfos = gather.getBoardList().isEmpty() ? null : gather.getBoardList().stream().map(board -> new BoardInfo(board.getId(), board.getBoardTitle(), board.getBoardContent())).sorted(Comparator.comparing(BoardInfo::getId).reversed()) // ID 기준 내림차순 정렬
                 .collect(Collectors.toList());
-        this.scheduleIds = gather.getScheduleList().isEmpty() ? null
-                : gather.getScheduleList().stream()
-                .map(Schedule::getId)
-                .sorted(Comparator.reverseOrder())
-                .collect(Collectors.toList());
-        this.schedule = gather.getScheduleList().stream()
-                .map(Schedule::getScheduleTitle).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-        this.boardIds = gather.getBoardList().isEmpty() ? null
-                : gather.getBoardList().stream()
-                .map(Board::getId)
-                .sorted(Comparator.reverseOrder())
-                .collect(Collectors.toList());
-        this.board = gather.getBoardList().stream()
-                .map(Board::getBoardTitle).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
         this.category = gather.getCategory().getCategoryName();
         this.address = gather.getMap().getAddressName();
     }
