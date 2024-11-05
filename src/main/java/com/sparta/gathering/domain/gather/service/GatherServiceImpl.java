@@ -10,6 +10,8 @@ import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.map.entity.Map;
+import com.sparta.gathering.domain.map.repository.MapRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
@@ -42,6 +44,7 @@ public class GatherServiceImpl implements GatherService {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
+    private final MapRepository mapRepository;
 
 
     // 모임생성
@@ -52,9 +55,11 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags(), request.getMap());
+        Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
-
+        gather.saveMap(newMap);
+        gatherRepository.save(gather);
         //레디스에서 값 찾아오기
         Object result = redisTemplate.opsForZSet().score("city", gather.getMap().getAddressName());
         if (result != null) {
@@ -63,7 +68,6 @@ public class GatherServiceImpl implements GatherService {
             redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
         }
 
-        gatherRepository.save(gather);
         memberRepository.save(member);
     }
 
@@ -75,9 +79,10 @@ public class GatherServiceImpl implements GatherService {
 
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        Map map = mapRepository.findByGatherId(id).orElseThrow(() -> new RuntimeException("dddd"));
         // redis 기존 score -1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
-        gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), request.getMap());
+        gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
         // redis 수정된 주소 score +1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), 1);
 
