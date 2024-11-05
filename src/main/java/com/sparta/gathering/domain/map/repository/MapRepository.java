@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MapRepository extends JpaRepository<Map, Long> {
 
@@ -26,4 +27,6 @@ public interface MapRepository extends JpaRepository<Map, Long> {
             "                     * sin(radians(l.latitude))))")
     List<Map> findWithinBounds(@Param("longitude") double longitude,//x
                                @Param("latitude") double latitude); //y
+
+    Optional<Map> findByGatherId(Long id);
 }

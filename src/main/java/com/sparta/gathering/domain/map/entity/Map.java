@@ -28,11 +28,10 @@ public class Map {
     private Gather gather;
 
 
-    public Map(String addressName, Double latitude, Double longitude, Gather gather) {
+    public Map(String addressName, Double latitude, Double longitude) {
         this.addressName = addressName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.gather = gather;
     }
 
 }

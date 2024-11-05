@@ -2,7 +2,7 @@
 
 @user_Id = 9bab0120-cc11-4ff0-8eed-f8e932da860f
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OTJlNjVhNC1jZmQwLTRhNTktYTM5ZC03ZWY5OTNmOWIxOWMiLCJlbWFpbCI6InRlc3QyNUBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczMDcyMDA2NCwiZXhwIjoxNzMwNzIxODY0fQ.fBaSolM4sjx8bkActRayBoysZeCe8aIMS2RG5GxEDSo
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OTJlNjVhNC1jZmQwLTRhNTktYTM5ZC03ZWY5OTNmOWIxOWMiLCJlbWFpbCI6InRlc3QyNUBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczMDcyNTI5OCwiZXhwIjoxNzMwNzI3MDk4fQ.wlZIlW2ESCfyviPBNPj2WmwlH59GqoTKMieZUHSk4nM
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -104,14 +104,12 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "영화 모임",
+  "title": "영화 테스트",
   "description": "영화 같이봐요",
   "hashtags": [],
-  "map": {
-    "addressName": "서울 동작구 노량진로 156",
-    "latitude": "37.529455",
-    "longitude": "126.963921"
-  }
+  "addressName": "서울 동작구 노량진로 156",
+  "latitude": "37.529455",
+  "longitude": "126.963921"
 }
 
 ### 모임 수정
@@ -123,11 +121,10 @@ Authorization: Bearer {{jwt_token}}
   "title": "농구하실분",
   "description": "여의도 공원 농구 모임",
   "hashtags": ["여의도공원", "저녁", "실외"],
-  "map": {
-    "addressName": "서울 영등포구 여의도동 여의공원로 68",
-    "latitude": "37.5134034035131",
-    "longitude": "126.943292835393"
-  }
+  "addressName": "서울 영등포구 여의도동 여의공원로 68",
+  "latitude": "37.5134034035131",
+  "longitude": "126.943292835393"
+
 }
 
 ### 모임 삭제

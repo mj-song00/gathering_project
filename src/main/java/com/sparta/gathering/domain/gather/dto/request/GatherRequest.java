@@ -20,5 +20,9 @@ public class GatherRequest {
     @NotNull(message = "설명을 입력해 주세요")
     private List<String> hashtags;
     @NotNull(message ="위치를 확인해주세요")
-    private Map map;
+    private String addressName;
+    @NotNull(message ="위치를 확인해주세요")
+    private Double latitude;//위도 y
+    @NotNull(message ="위치를 확인해주세요")
+    private Double longitude;//경도 x
 }

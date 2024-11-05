@@ -72,7 +72,7 @@ public class KakaoService {
             Double longitude = mapData.get("documents").get(0).get("x").asDouble();
 
             //entity에 저장
-            Map map = new Map(addressName, latitude, longitude, gather);
+            Map map = new Map(addressName, latitude, longitude);
             mapRepository.save(map);
 
         } catch (JsonMappingException e) {
