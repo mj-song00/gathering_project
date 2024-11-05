@@ -55,7 +55,8 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags(), request.getMap());
+        Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
         gather.saveMap(newMap);
         gatherRepository.save(gather);
@@ -67,7 +68,6 @@ public class GatherServiceImpl implements GatherService {
             redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
         }
 
-        gatherRepository.save(gather);
         memberRepository.save(member);
     }
 

@@ -34,4 +34,10 @@ public class Map {
         this.longitude = longitude;
     }
 
+    public void saveGather(Gather gather) {
+        this.gather = gather;
+        if (gather.getMap() != this) {
+            gather.saveMap(this); // 양방향 관계 설정
+        }
+    }
 }
