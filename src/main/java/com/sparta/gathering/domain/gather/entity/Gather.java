@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -49,7 +48,7 @@ public class Gather extends Timestamped {
     private List<HashTag> hashTagList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "map_id", unique= true)
+    @JoinColumn(name = "map_id", unique = true)
     private Map map;
 
     public Gather(String title) {

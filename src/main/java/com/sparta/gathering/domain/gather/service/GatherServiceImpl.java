@@ -79,7 +79,7 @@ public class GatherServiceImpl implements GatherService {
 
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        Map map = mapRepository.findByGatherId(id).orElseThrow(()-> new RuntimeException("dddd"));
+        Map map = mapRepository.findByGatherId(id).orElseThrow(() -> new RuntimeException("dddd"));
         // redis 기존 score -1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
