@@ -136,7 +136,10 @@ public class GatherServiceImpl implements GatherService {
     @Transactional(readOnly = true)
     @Override
     public GatherResponse getDetails(Long gatherId) {
-        return gatherRepository.findByIdWithBoardAndSchedule(gatherId);
+        Gather gather = gatherRepository.findByIdWithBoardAndSchedule(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+
+        return new GatherResponse(gather);
     }
 
     // 새로운 모임 5개 조회

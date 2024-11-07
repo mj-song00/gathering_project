@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.sparta.gathering.domain.gather.entity.QGather.gather;
 import static com.sparta.gathering.domain.hashtag.entity.QHashTag.hashTag;
@@ -21,12 +22,12 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     private final JPAQueryFactory q;
 
     @Override
-    public GatherResponse findByIdWithBoardAndSchedule(Long gatherId) {
+    public Optional<Gather>  findByIdWithBoardAndSchedule(Long gatherId) {
         Gather result = q.selectFrom(gather)
                 .leftJoin(gather.scheduleList).fetchJoin() // schedule 리스트 가져오기
                 .where(gather.id.eq(gatherId))
-                .fetchOne();
-        return new GatherResponse(result);
+                .fetchOne(); //
+        return Optional.ofNullable(result);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         // count 쿼리
         Long count = q.select(gather.count())
                 .from(gather)
-                .where(gather.hashTagList.any().hashTagName.in(hashTagName))  // 동일한 메서드로 적용
+                .where(gather.hashTagList.any().hashTagName.in(hashTagName))  // hashtag list 전체 에서 해시태그name안에 HashTagName이 있는지 확인
                 .fetchOne();
 
 
