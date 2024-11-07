@@ -87,16 +87,16 @@ public class GatherController {
         return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
 
-    @Operation(summary = "title, hashtag 검색", description = "keyword로 title 혹은 hashtag를 가진 모임을 검색합니다." +
+    @Operation(summary = "hashtag 검색", description = "2개 이상의 keyword로 hashtag를 가진 모임을 검색합니다." +
             "page size는 10입니다.")
     @GetMapping("/search")
     public ApiResponse<SearchResponse> search(
-            @RequestParam String keyword,
+            @RequestParam(value = "hashTagName", required = false)List<String> hashTagName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> searchList = gatherService.findTitle(pageable, keyword);
+        Page<Gather> searchList = gatherService.findTitle(pageable, hashTagName);
         SearchResponse response = new SearchResponse(
                 searchList.getContent(), // Gather 리스트
                 searchList.getNumber(), // 현재 페이지 번호
@@ -122,5 +122,14 @@ public class GatherController {
     ) {
         GatherResponse responseItem = gatherService.getDetails(gatherId);
         return ResponseEntity.ok(ApiResponse.successWithData(responseItem, ApiResponseEnum.GET_SUCCESS));
+    }
+
+
+    @Operation(summary = "새로 생긴 모임 조회", description = "최근에 새로 생긴 모임 목록 5개 조회 됩니다.")
+    @GetMapping("/newGather")
+    public ResponseEntity<ApiResponse<List<NewGatherResponse>>> newCreatedGatherList() {
+        List<NewGatherResponse> list = gatherService.newCreatedGatherList();
+        return ResponseEntity.ok(ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS));
     }
 }

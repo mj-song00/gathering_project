@@ -8,13 +8,12 @@ import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
@@ -48,14 +47,14 @@ public class Gather extends Timestamped {
     private List<HashTag> hashTagList = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "map_id", unique= true)
+    @JoinColumn(name = "map_id", unique = true)
     private Map map;
 
     public Gather(String title) {
         this.title = title;
     }
 
-    public Gather(String title, String description, Category category, List<String> hashtags, Map map) {
+    public Gather(String title, String description, Category category, List<String> hashtags) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -63,7 +62,6 @@ public class Gather extends Timestamped {
         for (String hashTagName : hashtags) {
             this.hashTagList.add(HashTag.of(hashTagName, this));
         }
-        this.map = map;
     }
 
     public void updateGather(String title, String description, List<String> hashtags, Map map) {
@@ -79,4 +77,10 @@ public class Gather extends Timestamped {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void saveMap(Map map) {
+        this.map = map;
+        if (map.getGather() != this) {
+            map.saveGather(this);
+        }
+    }
 }

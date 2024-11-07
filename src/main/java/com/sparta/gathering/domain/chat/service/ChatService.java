@@ -1,6 +1,6 @@
 package com.sparta.gathering.domain.chat.service;
 
-import com.sparta.gathering.common.config.Redis.WebSocketRedisPublisher;
+import com.sparta.gathering.common.config.redis.WebSocketRedisPublisher;
 import com.sparta.gathering.domain.chat.entity.ChatMessage;
 import com.sparta.gathering.domain.chat.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
