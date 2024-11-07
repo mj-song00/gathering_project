@@ -41,6 +41,9 @@ public enum ExceptionEnum {
     NICKNAME_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "NICKNAME_SAME_AS_OLD", "새 닉네임이 기존 닉네임과 동일합니다."),
     INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "INVALID_VERIFICATION_CODE", "인증 코드가 일치하지 않습니다."),
 
+    // 약관 관련
+    AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "AGREEMENT_NOT_FOUND", "해당 약관을 찾을 수 없습니다."),
+
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FILE_NOT_FOUND", "해당 파일이 존재하지 않습니다."),
