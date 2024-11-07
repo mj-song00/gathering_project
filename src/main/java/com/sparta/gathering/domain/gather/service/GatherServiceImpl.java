@@ -28,6 +28,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -122,14 +123,18 @@ public class GatherServiceImpl implements GatherService {
     public List<RankResponse> ranks() {
         Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 4);
 
-        List<RankResponse> rankResponses = rankingWithMembers.stream()
-                .map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
+        List<RankResponse> rankResponses = rankingWithMembers == null ? Collections.emptyList()
+                : rankingWithMembers.stream().map(tuple -> {
+                    Double score = tuple.getScore();
+                    String value = tuple.getValue() == null ? null : tuple.getValue().toString();
+
+                    return new RankResponse(score, value);
+                })
                 .collect(Collectors.toList());
         // 콘솔에 출력
         rankResponses.forEach(rankResponse ->
                 System.out.println("Score: " + rankResponse.getScore() + ", Adress: " + rankResponse.getAdress())
         );
-
         return rankResponses;
     }
 

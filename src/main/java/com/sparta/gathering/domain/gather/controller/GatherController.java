@@ -91,7 +91,7 @@ public class GatherController {
             "page size는 10입니다.")
     @GetMapping("/search")
     public ApiResponse<SearchResponse> search(
-            @RequestParam (value = "hashTagName", required = false)List<String> hashTagName,
+            @RequestParam(value = "hashTagName", required = false)List<String> hashTagName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {

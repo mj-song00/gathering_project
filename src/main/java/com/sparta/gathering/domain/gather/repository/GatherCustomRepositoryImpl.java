@@ -2,7 +2,6 @@ package com.sparta.gathering.domain.gather.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,16 +21,16 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     private final JPAQueryFactory q;
 
     @Override
-    public Optional<Gather>  findByIdWithBoardAndSchedule(Long gatherId) {
+    public Optional<Gather> findByIdWithBoardAndSchedule(Long gatherId) {
         Gather result = q.selectFrom(gather)
                 .leftJoin(gather.scheduleList).fetchJoin() // schedule 리스트 가져오기
                 .where(gather.id.eq(gatherId))
-                .fetchOne(); //
+                .fetchOne();
         return Optional.ofNullable(result);
     }
 
     @Override
-    public Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName){
+    public Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName) {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .where(hashtagCondition(hashTagName)) // 동일한 메서드로 적용
@@ -46,10 +45,11 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
                 .fetchOne();
 
 
-        if (count== null) count = 0L;
+        if (count == null) count = 0L;
 
         return new PageImpl<>(result, pageable, count);
     }
+
     private BooleanExpression hashtagCondition(List<String> hashTagNames) {
         return hashTagNames == null ? null : hashTag.hashTagName.in(hashTagNames);
     }

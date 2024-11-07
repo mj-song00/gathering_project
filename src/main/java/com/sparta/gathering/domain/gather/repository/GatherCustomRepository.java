@@ -1,6 +1,5 @@
 package com.sparta.gathering.domain.gather.repository;
 
-import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
