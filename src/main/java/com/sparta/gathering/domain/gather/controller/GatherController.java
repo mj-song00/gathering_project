@@ -4,10 +4,7 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.CategoryListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
-import com.sparta.gathering.domain.gather.dto.response.RankResponse;
-import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
+import com.sparta.gathering.domain.gather.dto.response.*;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -125,5 +122,14 @@ public class GatherController {
     ) {
         GatherResponse responseItem = gatherService.getDetails(gatherId);
         return ResponseEntity.ok(ApiResponse.successWithData(responseItem, ApiResponseEnum.GET_SUCCESS));
+    }
+
+
+    @Operation(summary = "새로 생긴 모임 조회", description = "최근에 새로 생긴 모임 목록 5개 조회 됩니다.")
+    @GetMapping("/newGather")
+    public ResponseEntity<ApiResponse<List<NewGatherResponse>>> newCreatedGatherList() {
+        List<NewGatherResponse> list = gatherService.newCreatedGatherList();
+        return ResponseEntity.ok(ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS));
     }
 }

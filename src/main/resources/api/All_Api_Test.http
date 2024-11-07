@@ -1,6 +1,6 @@
 @base_url = http://localhost:8080
 
-@user_Id = 9bab0120-cc11-4ff0-8eed-f8e932da860f
+@user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
 @jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDk2MDk5MCwiZXhwIjoxNzMwOTYyNzkwfQ.6sOoaxa_DlX6DUWcI_JucXZF_DxkVMIPVGMziF89lE8
 
@@ -17,8 +17,8 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test3@example.com",
-  "nickName": "test3",
+  "email": "test4@example.com",
+  "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE"
 }
@@ -74,7 +74,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "인문학/책"
+  "categoryName": "영화"
 }
 
 ### 카테고리 조회
@@ -104,12 +104,14 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "운동 테스트8",
-  "description": "운동 테스트8",
-  "hashtags": ["30대", "건강", "기장군"],
-  "addressName": "부산 기장군 기장읍 읍내로 91 1,2층",
-  "latitude": "37.26437202744227",
-  "longitude": "126.99690538778474"
+  "title": "즐거운 풋살모임",
+  "description": "같이 공차실분",
+  "hashtags": ["futsal","실내"],
+  "map": {
+    "addressName": "서울 동작구 노량진로 156",
+    "latitude": "126.943292835393",
+    "longitude": "37.5134034035131"
+  }
 }
 
 ### 모임 수정
@@ -175,7 +177,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 해시태그 생성
-POST {{base_url}}/api/gatherings/3/hashtags
+POST {{base_url}}/api/gatherings/1/hashtags
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

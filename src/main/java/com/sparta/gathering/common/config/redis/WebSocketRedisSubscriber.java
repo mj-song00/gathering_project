@@ -1,4 +1,4 @@
-package com.sparta.gathering.common.config.Redis;
+package com.sparta.gathering.common.config.redis;
 
 
 import com.sparta.gathering.domain.chat.entity.ChatMessage;
