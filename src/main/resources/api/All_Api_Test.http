@@ -2,7 +2,7 @@
 
 @user_Id = 9bab0120-cc11-4ff0-8eed-f8e932da860f
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OTJlNjVhNC1jZmQwLTRhNTktYTM5ZC03ZWY5OTNmOWIxOWMiLCJlbWFpbCI6InRlc3QyNUBleGFtcGxlLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczMDcyNTI5OCwiZXhwIjoxNzMwNzI3MDk4fQ.wlZIlW2ESCfyviPBNPj2WmwlH59GqoTKMieZUHSk4nM
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDk2MDk5MCwiZXhwIjoxNzMwOTYyNzkwfQ.6sOoaxa_DlX6DUWcI_JucXZF_DxkVMIPVGMziF89lE8
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -17,8 +17,8 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
-  "nickName": "홍길동",
+  "email": "test3@example.com",
+  "nickName": "test3",
   "password": "password123A!",
   "identityProvider": "NONE"
 }
@@ -28,7 +28,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test25@example.com",
+  "email": "test@example.com",
   "password": "password123A!"
 }
 
@@ -74,7 +74,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "영화"
+  "categoryName": "인문학/책"
 }
 
 ### 카테고리 조회
@@ -104,12 +104,12 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "영화 테스트",
-  "description": "영화 같이봐요",
-  "hashtags": [],
-  "addressName": "서울 동작구 노량진로 156",
-  "latitude": "37.529455",
-  "longitude": "126.963921"
+  "title": "운동 테스트8",
+  "description": "운동 테스트8",
+  "hashtags": ["30대", "건강", "기장군"],
+  "addressName": "부산 기장군 기장읍 읍내로 91 1,2층",
+  "latitude": "37.26437202744227",
+  "longitude": "126.99690538778474"
 }
 
 ### 모임 수정
@@ -137,10 +137,11 @@ GET {{base_url}}/api/gathers/{{category_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
-### title 또는 hashTag 검색
-GET {{base_url}}/api/gathers/search?keyword=즐거운
+### hashTag 검색
+GET {{base_url}}/api/gathers/search?hashTagName=20대&hashTagName=건강&page=2
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
 
 ### 동네 조회
 GET {{base_url}}/api/gathers/rank

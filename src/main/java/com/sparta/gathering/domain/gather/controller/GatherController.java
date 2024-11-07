@@ -4,7 +4,10 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.*;
+import com.sparta.gathering.domain.gather.dto.response.CategoryListResponse;
+import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.RankResponse;
+import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,16 +90,16 @@ public class GatherController {
         return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
 
-    @Operation(summary = "title, hashtag 검색", description = "keyword로 title 혹은 hashtag를 가진 모임을 검색합니다." +
+    @Operation(summary = "hashtag 검색", description = "2개 이상의 keyword로 hashtag를 가진 모임을 검색합니다." +
             "page size는 10입니다.")
     @GetMapping("/search")
     public ApiResponse<SearchResponse> search(
-            @RequestParam String keyword,
+            @RequestParam (value = "hashTagName", required = false)List<String> hashTagName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> searchList = gatherService.findTitle(pageable, keyword);
+        Page<Gather> searchList = gatherService.findTitle(pageable, hashTagName);
         SearchResponse response = new SearchResponse(
                 searchList.getContent(), // Gather 리스트
                 searchList.getNumber(), // 현재 페이지 번호

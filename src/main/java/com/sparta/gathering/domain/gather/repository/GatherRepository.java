@@ -17,12 +17,4 @@ public interface GatherRepository extends JpaRepository<Gather, Long>, GatherCus
             "AND g.deletedAt IS NULL " +
             "ORDER BY g.createdAt DESC")
     Page<Gather> findByCategoryWithHashTags(@Param("categoryId") Pageable pageable, Long categoryId);
-
-
-    @Query("SELECT g FROM Gather g " +
-            "JOIN FETCH g.map m" +
-            "LEFT JOIN FETCH g.hashTagList h " +
-            "WHERE (g.title LIKE %:keyword% OR h.hashTagName LIKE %:keyword%) " +
-            "AND g.deletedAt IS NULL")
-    Page<Gather> findByKeywordContaining(@Param("keyword") Pageable pageable, String keyword);
 }

@@ -111,15 +111,15 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findTitle(Pageable pageable, String keyword) {
-        return gatherRepository.findByKeywordContaining(pageable, keyword);
+    public Page<Gather> findTitle(Pageable pageable, List<String> hashTagName) {
+        return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 
     @Transactional(readOnly = true)
     @Override
 //    @Scheduled(cron = "*/10 * * * * *")
     public List<RankResponse> ranks() {
-        Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 5);
+        Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 4);
 
         List<RankResponse> rankResponses = rankingWithMembers.stream()
                 .map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
