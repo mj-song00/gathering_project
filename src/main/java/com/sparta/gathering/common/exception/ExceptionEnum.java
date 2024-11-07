@@ -39,6 +39,7 @@ public enum ExceptionEnum {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "PASSWORD_MISMATCH", "비밀번호가 일치하지 않습니다."),
     PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "PASSWORD_SAME_AS_OLD", "새 비밀번호가 기존 비밀번호와 동일합니다."),
     NICKNAME_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "NICKNAME_SAME_AS_OLD", "새 닉네임이 기존 닉네임과 동일합니다."),
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "INVALID_VERIFICATION_CODE", "인증 코드가 일치하지 않습니다."),
 
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),
@@ -67,7 +68,7 @@ public enum ExceptionEnum {
     MANAGER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "MANAGER_NOT_FOUND", "권한을 확인해주세요"),
     MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "MEMBER_NOT_FOUND", "멤버를 찾을 수 없습니다."),
     ALREADY_DELETED_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "탈퇴한 게스트입니다."),
-    MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"MEMBER_NOT_ALLIOWED","올바른 요청이 아닙니다" ),
+    MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "MEMBER_NOT_ALLIOWED", "올바른 요청이 아닙니다"),
 
     // 보드 관련
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD_NOT_FOUND", "해당 보드를 찾을 수 없습니다."),

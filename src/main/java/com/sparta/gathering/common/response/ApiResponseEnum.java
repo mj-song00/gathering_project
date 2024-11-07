@@ -11,6 +11,8 @@ public enum ApiResponseEnum {
     PROFILE_RETRIEVED_SUCCESS("프로필 조회가 성공적으로 완료되었습니다."),
     PASSWORD_CHANGED_SUCCESS("비밀번호 변경이 성공적으로 완료되었습니다."),
     NICKNAME_CHANGED_SUCCESS("닉네임 변경이 성공적으로 완료되었습니다."),
+    EMAIL_VERIFICATION_CODE_SENT("이메일로 인증 코드가 발송되었습니다."),
+    EMAIL_VERIFICATION_SUCCESS("이메일 인증이 완료되었습니다."),
 
 
     // 유저 프로필 등록
