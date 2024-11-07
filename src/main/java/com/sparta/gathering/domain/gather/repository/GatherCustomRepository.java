@@ -11,4 +11,8 @@ public interface GatherCustomRepository {
     Optional<Gather> findByIdWithBoardAndSchedule(Long gatherId);
 
     Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName);
+
+    Page<Gather> findByTitle(Pageable pageable, String title);
+
+    Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId);
 }

@@ -113,7 +113,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findTitle(Pageable pageable, List<String> hashTagName) {
+    public Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName) {
         return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 
@@ -145,6 +145,12 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
 
         return new GatherResponse(gather);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Gather> findByTitles(Pageable pageable, String title){
+        return gatherRepository.findByTitle(pageable, title);
     }
 
     // 새로운 모임 5개 조회
