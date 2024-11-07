@@ -8,13 +8,12 @@ import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
