@@ -107,7 +107,7 @@ public class GatherController {
     }
 
     //title 검색
-    @Operation(summary = "title 검색", description = "%like% 검색 방식입니다." +
+    @Operation(summary = "title 검색", description = "contain 검색 방식입니다." +
             "page size는 10입니다.")
     @GetMapping("/title")
     public ApiResponse<SearchResponse> searchTitles(
@@ -115,7 +115,14 @@ public class GatherController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size){
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> titleList = gatherService.find
+        Page<Gather> titleList = gatherService.findByTitles(pageable, title);
+        SearchResponse response = new SearchResponse(
+                titleList.getContent(), // Gather 리스트
+                titleList.getNumber(), // 현재 페이지 번호
+                titleList.getTotalPages(), // 총 페이지 수
+                titleList.getTotalElements() // 총 요소 수
+        );
+        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
 
     //랭킹 조회

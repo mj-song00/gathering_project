@@ -147,6 +147,12 @@ public class GatherServiceImpl implements GatherService {
         return new GatherResponse(gather);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Gather> findByTitles(Pageable pageable, String title){
+        return gatherRepository.findByTitle(pageable, title);
+    }
+
     // 새로운 모임 5개 조회
     @Transactional(readOnly = true)
     public List<NewGatherResponse> newCreatedGatherList() {

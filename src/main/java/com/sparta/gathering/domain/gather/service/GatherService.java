@@ -28,4 +28,6 @@ public interface GatherService {
     GatherResponse getDetails(Long gatherId);
 
     List<NewGatherResponse> newCreatedGatherList();
+
+    Page<Gather> findByTitles(Pageable pageable, String title);
 }

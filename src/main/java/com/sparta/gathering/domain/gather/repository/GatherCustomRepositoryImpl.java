@@ -24,7 +24,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     public Optional<Gather> findByIdWithBoardAndSchedule(Long gatherId) {
         Gather result = q.selectFrom(gather)
                 .leftJoin(gather.scheduleList).fetchJoin() // schedule 리스트 가져오기
-                .where(gather.id.eq(gatherId))
+                .where(gather.id.eq(gatherId).and(gather.deletedAt.isNull()))
                 .fetchOne();
         return Optional.ofNullable(result);
     }
@@ -33,7 +33,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     public Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName) {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
-                .where(hashtagCondition(hashTagName)) // 동일한 메서드로 적용
+                .where(hashtagCondition(hashTagName).and(gather.deletedAt.isNull())) // 동일한 메서드로 적용
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -46,6 +46,27 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
 
 
         if (count == null) count = 0L;
+
+        return new PageImpl<>(result, pageable, count);
+    }
+
+    @Override
+    public Page<Gather> findByTitle(Pageable pageable, String title){
+       List<Gather> result = q.selectFrom(gather)
+               .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+               .where(
+                       gather.title.contains(title)
+                               .and(gather.deletedAt.isNull())
+
+               )
+               .offset(pageable.getOffset())
+               .limit(pageable.getPageSize())
+               .fetch();
+
+
+       Long count = q.select(gather.count())
+               .from(gather)
+               .fetchOne();
 
         return new PageImpl<>(result, pageable, count);
     }
