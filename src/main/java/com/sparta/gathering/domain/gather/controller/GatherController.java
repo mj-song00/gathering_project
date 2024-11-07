@@ -96,12 +96,31 @@ public class GatherController {
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> searchList = gatherService.findTitle(pageable, hashTagName);
+        Page<Gather> searchList = gatherService.findByHashTags(pageable, hashTagName);
         SearchResponse response = new SearchResponse(
                 searchList.getContent(), // Gather 리스트
                 searchList.getNumber(), // 현재 페이지 번호
                 searchList.getTotalPages(), // 총 페이지 수
                 searchList.getTotalElements() // 총 요소 수
+        );
+        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+    }
+
+    //title 검색
+    @Operation(summary = "title 검색", description = "contain 검색 방식입니다." +
+            "page size는 10입니다.")
+    @GetMapping("/title")
+    public ApiResponse<SearchResponse> searchTitles(
+            @RequestParam(value = "title")String title,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Gather> titleList = gatherService.findByTitles(pageable, title);
+        SearchResponse response = new SearchResponse(
+                titleList.getContent(), // Gather 리스트
+                titleList.getNumber(), // 현재 페이지 번호
+                titleList.getTotalPages(), // 총 페이지 수
+                titleList.getTotalElements() // 총 요소 수
         );
         return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
     }
