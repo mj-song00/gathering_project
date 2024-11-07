@@ -1,13 +1,15 @@
 package com.sparta.gathering.domain.agreement.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.agreement.enums.AgreementType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,14 +30,14 @@ public class Agreement extends Timestamped {
     @Column(nullable = false)
     private String version;        // 약관 버전 정보
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AgreementType type;  // 약관 유형 추가
 
-    public Agreement(String content, String version) {
+    public Agreement(String content, String version, AgreementType type) {
         this.content = content;
         this.version = version;
+        this.type = type;
     }
 
-    public void updateContent(String newContent) {
-        this.content = newContent;
-        this.setUpdatedAt(LocalDateTime.now());
-    }
 }

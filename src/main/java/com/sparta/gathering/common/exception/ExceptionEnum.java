@@ -43,6 +43,7 @@ public enum ExceptionEnum {
 
     // 약관 관련
     AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "AGREEMENT_NOT_FOUND", "해당 약관을 찾을 수 없습니다."),
+    DUPLICATE_AGREEMENT_VERSION(HttpStatus.BAD_REQUEST, "DUPLICATE_AGREEMENT_VERSION", "중복된 약관 버전입니다."),
 
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),
@@ -84,6 +85,7 @@ public enum ExceptionEnum {
 
     // 스케쥴 관련
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
+
 
     private final HttpStatus status;
     private final String errorCode;

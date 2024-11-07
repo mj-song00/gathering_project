@@ -1,6 +1,8 @@
 package com.sparta.gathering.domain.agreement.dto.request;
 
+import com.sparta.gathering.domain.agreement.enums.AgreementType;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +17,8 @@ public class AgreementRequestDto {
 
     @NotBlank(message = "약관 버전 정보는 필수 입력 값입니다.")
     private String version;
+
+    @NotNull(message = "약관 유형이 누락되었습니다.")
+    private AgreementType type;
 
 }
