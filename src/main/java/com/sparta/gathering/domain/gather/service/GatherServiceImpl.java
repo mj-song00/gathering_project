@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
@@ -136,6 +137,16 @@ public class GatherServiceImpl implements GatherService {
     @Override
     public GatherResponse getDetails(Long gatherId) {
         return gatherRepository.findByIdWithBoardAndSchedule(gatherId);
+    }
+
+    // 새로운 모임 5개 조회
+    @Transactional(readOnly = true)
+    public List<NewGatherResponse> newCreatedGatherList() {
+        List<Gather> gatherList = gatherRepository.findTop5ByOrderByCreatedAtDesc();
+
+        return gatherList.stream()
+                .map(NewGatherResponse::from)
+                .collect(Collectors.toList());
     }
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {

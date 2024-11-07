@@ -123,4 +123,13 @@ public class GatherController {
         GatherResponse responseItem = gatherService.getDetails(gatherId);
         return ResponseEntity.ok(ApiResponse.successWithData(responseItem, ApiResponseEnum.GET_SUCCESS));
     }
+
+
+    @Operation(summary = "새로 생긴 모임 조회", description = "최근에 새로 생긴 모임 목록 5개 조회 됩니다.")
+    @GetMapping("/newGather")
+    public ResponseEntity<ApiResponse<List<NewGatherResponse>>> newCreatedGatherList() {
+        List<NewGatherResponse> list = gatherService.newCreatedGatherList();
+        return ResponseEntity.ok(ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS));
+    }
 }
