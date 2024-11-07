@@ -51,22 +51,51 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     }
 
     @Override
-    public Page<Gather> findByTitle(Pageable pageable, String title){
-       List<Gather> result = q.selectFrom(gather)
-               .leftJoin(gather.hashTagList, hashTag).fetchJoin()
-               .where(
-                       gather.title.contains(title)
-                               .and(gather.deletedAt.isNull())
+    public Page<Gather> findByTitle(Pageable pageable, String title) {
+        List<Gather> result = q.selectFrom(gather)
+                .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .where(
+                        gather.title.contains(title)
+                                .and(gather.deletedAt.isNull())
 
-               )
-               .offset(pageable.getOffset())
-               .limit(pageable.getPageSize())
-               .fetch();
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
+        Long count = q.select(gather.count())
+                .from(gather)
+                .where(
+                        gather.title.contains(title)
+                                .and(gather.deletedAt.isNull())
+                )
+                .fetchOne();
+        if (count == null) count = 0L;
+        return new PageImpl<>(result, pageable, count);
+    }
 
-       Long count = q.select(gather.count())
-               .from(gather)
-               .fetchOne();
+    @Override
+    public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId){
+        List<Gather> result =  q.selectFrom(gather)
+                .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .leftJoin(gather.category).fetchJoin()
+                .where(
+                        gather.category.id.eq(categoryId)
+                                .and(gather.deletedAt.isNull())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = q.select(gather.count())
+                .from(gather)
+                .where(
+                        gather.category.id.eq(categoryId)
+                                .and(gather.deletedAt.isNull())
+                )
+                .fetchOne();
+
+        if (count == null) count = 0L;
 
         return new PageImpl<>(result, pageable, count);
     }

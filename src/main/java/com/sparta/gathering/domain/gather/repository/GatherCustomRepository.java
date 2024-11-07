@@ -13,4 +13,6 @@ public interface GatherCustomRepository {
     Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName);
 
     Page<Gather> findByTitle(Pageable pageable, String title);
+
+    Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId);
 }
