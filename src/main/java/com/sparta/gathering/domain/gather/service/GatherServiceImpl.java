@@ -113,7 +113,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findTitle(Pageable pageable, List<String> hashTagName) {
+    public Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName) {
         return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 

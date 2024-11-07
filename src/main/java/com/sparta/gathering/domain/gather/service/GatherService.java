@@ -21,7 +21,7 @@ public interface GatherService {
 
     Page<Gather> gathers(Pageable pageable, Long categoryId);
 
-    Page<Gather> findTitle(Pageable pageable, List<String> hashTagName);
+    Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName);
 
     List<RankResponse> ranks();
 
