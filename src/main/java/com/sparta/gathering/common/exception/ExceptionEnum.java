@@ -40,10 +40,17 @@ public enum ExceptionEnum {
     PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "PASSWORD_SAME_AS_OLD", "새 비밀번호가 기존 비밀번호와 동일합니다."),
     NICKNAME_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "NICKNAME_SAME_AS_OLD", "새 닉네임이 기존 닉네임과 동일합니다."),
     INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "INVALID_VERIFICATION_CODE", "인증 코드가 일치하지 않습니다."),
+    EMAIL_VERIFICATION_REQUIRED(HttpStatus.BAD_REQUEST, "EMAIL_VERIFICATION_REQUIRED", "이메일 인증이 필요합니다."),
 
     // 약관 관련
     AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "AGREEMENT_NOT_FOUND", "해당 약관을 찾을 수 없습니다."),
     DUPLICATE_AGREEMENT_VERSION(HttpStatus.BAD_REQUEST, "DUPLICATE_AGREEMENT_VERSION", "중복된 약관 버전입니다."),
+
+    // 사용자 약관 관련
+    USER_AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_AGREEMENT_NOT_FOUND", "해당 사용자의 약관을 찾을 수 없습니다."),
+    LATEST_AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "LATEST_AGREEMENT_NOT_FOUND", "최신 약관에 동의하지 않았습니다."),
+    AGREEMENT_NOT_ACCEPTED(HttpStatus.BAD_REQUEST, "AGREEMENT_NOT_ACCEPTED", "약관에 동의하지 않았습니다."),
+
 
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),

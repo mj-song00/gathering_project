@@ -14,4 +14,9 @@ public interface AgreementRepository extends JpaRepository<Agreement, UUID> {
     List<Agreement> findLatestAgreementByType(AgreementType type, Pageable pageable);
 
     boolean existsByTypeAndVersion(AgreementType type, String version);
+
+    @Query("SELECT a FROM Agreement a WHERE a.id IN " +
+            "(SELECT MAX(a2.id) FROM Agreement a2 GROUP BY a2.type)")
+    List<Agreement> findAllLatestAgreements();
+
 }

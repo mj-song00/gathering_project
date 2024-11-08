@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.agreement.dto.request.AgreementRequestDto;
 import com.sparta.gathering.domain.agreement.entity.Agreement;
 import com.sparta.gathering.domain.agreement.enums.AgreementType;
 import com.sparta.gathering.domain.agreement.repository.AgreementRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,19 @@ public class AgreementService {
         agreementRepository.save(agreement);
     }
 
+    // 최신 약관 조회 (특정 타입)
+    @Transactional(readOnly = true)
     public Agreement getLatestAgreement(AgreementType type) {
         return agreementRepository.findLatestAgreementByType(type, PageRequest.of(0, 1))
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new BaseException(ExceptionEnum.AGREEMENT_NOT_FOUND));
+    }
+
+    // 모든 최신 약관 조회
+    @Transactional(readOnly = true)
+    public List<Agreement> getAllLatestAgreements() {
+        return agreementRepository.findAllLatestAgreements();
     }
 
 }

@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.agreement.service.AgreementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,15 @@ public class AgreementController {
             @RequestParam AgreementType type) {
         Agreement agreement = agreementService.getLatestAgreement(type);
         ApiResponse<Agreement> response = ApiResponse.successWithData(agreement,
+                ApiResponseEnum.AGREEMENT_RETRIEVED_SUCCESS);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "모든 최신 약관 조회", description = "모든 유형의 최신 약관을 조회합니다.")
+    @GetMapping("/latest/all")
+    public ResponseEntity<ApiResponse<List<Agreement>>> getAllLatestAgreement() {
+        List<Agreement> agreements = agreementService.getAllLatestAgreements();
+        ApiResponse<List<Agreement>> response = ApiResponse.successWithData(agreements,
                 ApiResponseEnum.AGREEMENT_RETRIEVED_SUCCESS);
         return ResponseEntity.ok(response);
     }

@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzc5Njk3OC0yYTZiLTQ4N2QtOGEyYy1iNGNkZGVkZmU2OWMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzEwMjc4NzgsImV4cCI6MTczMTAyOTY3OH0.GiKN2y6F4ptO0n7HRn_iWrt49vqEZbNfjHqY4-sxSVg
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzc5Njk3OC0yYTZiLTQ4N2QtOGEyYy1iNGNkZGVkZmU2OWMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzEwNjAwNTMsImV4cCI6MTczMTA2MTg1M30.BZqTyFWXYHlwOBXyp1r8sdIAjLdc5hr8tipm6_slUCo
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -13,6 +13,28 @@
 @gatherId = 1
 
 @agreementId = 75cfe008-cc23-4107-a5bb-a000d5de46dc
+
+### 약관 생성 테스트
+### PRIVACY_POLICY = 개인정보 처리방침
+### TERMS_OF_SERVICE = 서비스 이용약관
+### MARKETING_INFO_RECEIVE_AGREEMENT = 마케팅 정보 수신 동의
+POST{{base_url}}/api/agreements
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "content": "신규 필수 이용약관 내용입니다.",
+  "version": "1.1",
+  "type": "PRIVACY_POLICY"
+}
+
+### 최신 약관 조회 테스트
+GET {{base_url}}/api/agreements/latest?type=PRIVACY_POLICY
+Accept: application/json
+
+### 모든 최신 약관 조회 테스트
+GET {{base_url}}/api/agreements/latest/all
+Accept: application/json
 
 ### 이메일 인증 코드 발송 요청
 POST {{base_url}}/api/verification/send
@@ -28,37 +50,34 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "code": "694985"
+  "code": "479672"
 }
-
-### 약관 생성 테스트
-### PRIVACY_POLICY = 개인정보 처리방침
-### TERMS_OF_SERVICE = 서비스 이용약관
-### MARKETING_INFO_RECEIVE_AGREEMENT = 마케팅 정보 수신 동의
-POST{{base_url}}/api/agreements
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "content": "이용약관 내용입니다.",
-  "version": "1.4",
-  "type": "PRIVACY_POLICY"
-}
-
-### 최신 약관 조회 테스트
-GET {{base_url}}/api/agreements/latest?type=PRIVACY_POLICY
-Accept: application/json
-
 
 ### 회원가입 요청
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "nbcteam21test@gmail.com",
   "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE"
+}
+
+### 회원가입 요청 - 약관 통합 예상
+POST {{base_url}}/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "nbcteam21test@gmail.com",
+  "nickName": "홍길동",
+  "password": "password123A!",
+  "identityProvider": "NONE",
+  "agreedAgreementIds": [
+    "6dccb0e9-a12d-43df-a114-ae3287477165",
+    "2f95fb4c-5ce1-493f-afc8-428b694cf299",
+    "ccbe23f3-4365-4456-a873-3f1be59bf73b"
+  ]
 }
 
 ### 일반 로그인 요청
