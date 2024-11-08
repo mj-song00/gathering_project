@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.agreement.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.agreement.dto.request.AgreementRequestDto;
@@ -18,7 +19,17 @@ public class AgreementService {
     private final AgreementRepository agreementRepository;
 
     @Transactional
-    public void createAgreement(AgreementRequestDto agreementRequestDto) {
+    public void createAgreement(AgreementRequestDto agreementRequestDto, AuthenticatedUser authenticatedUser) {
+
+        // 인증되지 않은 사용자는 접근 불가
+        if (authenticatedUser == null) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_USER);
+        }
+
+        // ROULE_ADMIN 권한이 없는 사용자는 접근 불가  Collection<? extends GrantedAuthority> authorities; // 사용자 권한 정보
+        if (authenticatedUser.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
+        }
 
         boolean exists = agreementRepository.existsByTypeAndVersion(
                 agreementRequestDto.getType(),

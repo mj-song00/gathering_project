@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.agreement.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.agreement.dto.request.AgreementRequestDto;
@@ -12,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,8 +32,9 @@ public class AgreementController {
     @Operation(summary = "약관 생성", description = "약관을 생성합니다.")
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> createAgreement(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @Valid @RequestBody AgreementRequestDto agreementRequestDto) {
-        agreementService.createAgreement(agreementRequestDto);
+        agreementService.createAgreement(agreementRequestDto, authenticatedUser);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.successWithOutData(ApiResponseEnum.AGREEMENT_CREATED_SUCCESS));
     }
