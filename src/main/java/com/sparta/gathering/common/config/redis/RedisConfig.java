@@ -1,4 +1,4 @@
-package com.sparta.gathering.common.config.Redis;
+package com.sparta.gathering.common.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

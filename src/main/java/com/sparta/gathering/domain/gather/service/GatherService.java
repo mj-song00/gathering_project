@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.gather.service;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import org.springframework.data.domain.Page;
@@ -20,9 +21,13 @@ public interface GatherService {
 
     Page<Gather> gathers(Pageable pageable, Long categoryId);
 
-    Page<Gather> findTitle(Pageable pageable, String keyword);
+    Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName);
 
     List<RankResponse> ranks();
 
     GatherResponse getDetails(Long gatherId);
+
+    List<NewGatherResponse> newCreatedGatherList();
+
+    Page<Gather> findByTitles(Pageable pageable, String title);
 }

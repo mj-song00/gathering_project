@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
@@ -29,6 +30,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -117,31 +119,54 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findTitle(Pageable pageable, String keyword) {
-        return gatherRepository.findByKeywordContaining(pageable, keyword);
+    public Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName) {
+        return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 
     @Transactional(readOnly = true)
     @Override
 //    @Scheduled(cron = "*/10 * * * * *")
     public List<RankResponse> ranks() {
-        Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 5);
+        Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 4);
 
-        List<RankResponse> rankResponses = rankingWithMembers.stream()
-                .map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
+        List<RankResponse> rankResponses = rankingWithMembers == null ? Collections.emptyList()
+                : rankingWithMembers.stream().map(tuple -> {
+                    Double score = tuple.getScore();
+                    String value = tuple.getValue() == null ? null : tuple.getValue().toString();
+
+                    return new RankResponse(score, value);
+                })
                 .collect(Collectors.toList());
         // 콘솔에 출력
         rankResponses.forEach(rankResponse ->
                 System.out.println("Score: " + rankResponse.getScore() + ", Adress: " + rankResponse.getAdress())
         );
-
         return rankResponses;
     }
 
     @Transactional(readOnly = true)
     @Override
     public GatherResponse getDetails(Long gatherId) {
-        return gatherRepository.findByIdWithBoardAndSchedule(gatherId);
+        Gather gather = gatherRepository.findByIdWithBoardAndSchedule(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+
+        return new GatherResponse(gather);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Gather> findByTitles(Pageable pageable, String title){
+        return gatherRepository.findByTitle(pageable, title);
+    }
+
+    // 새로운 모임 5개 조회
+    @Transactional(readOnly = true)
+    public List<NewGatherResponse> newCreatedGatherList() {
+        List<Gather> gatherList = gatherRepository.findTop5ByOrderByCreatedAtDesc();
+
+        return gatherList.stream()
+                .map(NewGatherResponse::from)
+                .collect(Collectors.toList());
     }
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
