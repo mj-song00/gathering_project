@@ -308,7 +308,7 @@ Content-Type: application/json
 {
   "latitude": "37.5134034035131",
   "longitude": "126.943292835393",
-  "distance": 0
+  "distance": 175
 }
 
 
