@@ -4,7 +4,6 @@ import com.sparta.gathering.domain.gather.entity.Gather;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.geo.Point;
 
 @Entity
 @NoArgsConstructor
@@ -33,7 +32,6 @@ public class Map {
         this.addressName = addressName;
         this.latitude = latitude;
         this.longitude = longitude;
-//        this.point = point;
     }
 
     public void saveGather(Gather gather) {

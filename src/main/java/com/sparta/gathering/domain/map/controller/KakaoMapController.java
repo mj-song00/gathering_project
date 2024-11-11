@@ -1,17 +1,13 @@
 package com.sparta.gathering.domain.map.controller;
 
-import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
-import com.sparta.gathering.domain.map.dto.request.LocationDto;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.request.SearchGatherRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.service.KakaoService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,23 +51,23 @@ public class KakaoMapController {
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> myMapList(
             @RequestBody SearchGatherRequest request
     ) {
-        List<AroundPlaceResponse> list = kakaoService.listMyMap(request.getLongitude(), request.getLatitude());
+        List<AroundPlaceResponse> list = kakaoService.listMyMap(request.getLongitude(), request.getLatitude(), request.getDistance());
         ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/location/{gatherId}")
-    public ResponseEntity<Void> addLocation(@RequestBody LocationDto location,
-                                            @PathVariable Long gatherId) {
-        kakaoService.add(gatherId, location);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
+    /**
+     * 위치기반 주변 모임추천 api
+     *
+     * 래디스의 지오 스페셜 자료구조를 활용 하여 조회 성능을 높인 api
+     * @param request 사용자의 위경도 정보와 추천 범위를 지정할 distance 값을 받아온다.
+     * @return 반경 distance 만큼 모임을 추천 받는다.
+     */
     @GetMapping("/api/kakaoMap/RedisSearch")
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> redisSearch(
             @RequestBody SearchGatherRequest request
     ) {
-        List<AroundPlaceResponse> list = kakaoService.nearByVenues(request.getLongitude(), request.getLatitude());
+        List<AroundPlaceResponse> list = kakaoService.nearByVenues(request.getLongitude(), request.getLatitude(),request.getDistance());
         ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

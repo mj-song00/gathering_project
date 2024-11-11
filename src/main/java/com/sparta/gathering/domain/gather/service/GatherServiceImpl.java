@@ -47,9 +47,9 @@ public class GatherServiceImpl implements GatherService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> rediusTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
-    private final GeoOperations geoOperations;
 
     // 모임생성
     @Transactional
@@ -59,11 +59,7 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
-        GeoOperations<String, Object> geoOps = redisTemplate.opsForGeo(); // Specify <String, String>
-        Point point = new Point(request.getLongitude(),request.getLatitude());
-        geoOps.add("map", point, request.getAddressName());
-
+        addRedisMap(request); //래디스 맵저장 로직 메서드
         Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
         Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
@@ -87,7 +83,8 @@ public class GatherServiceImpl implements GatherService {
 
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        Map map = mapRepository.findByGatherId(id).orElseThrow(() -> new RuntimeException("dddd"));
+        Map map = mapRepository.findByGatherId(id)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         // redis 기존 score -1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
@@ -180,8 +177,10 @@ public class GatherServiceImpl implements GatherService {
         }
     }
 
-    public void add(Gather gather, Point point) {
-        String key = gather.getTitle() + ":" + gather.getId();;
-        geoOperations.add("gather", point, key);
+    //래디스 모임 위치 저장 로직
+    private void addRedisMap(GatherRequest request){
+        GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
+        Point point = new Point(request.getLongitude(),request.getLatitude());
+        geoOperations.add("map", point, request.getTitle());
     }
 }

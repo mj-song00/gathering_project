@@ -8,7 +8,6 @@ import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
-import com.sparta.gathering.domain.map.dto.request.LocationDto;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.entity.Map;
@@ -90,8 +89,8 @@ public class KakaoService {
 
 
     @Transactional
-    public List<AroundPlaceResponse> listMyMap(Double x, Double y) {//경도 x lon,위도 y lat
-        List<Map> maps = mapRepository.findWithinBounds(x, y);
+    public List<AroundPlaceResponse> listMyMap(Double x, Double y, Integer d) {//경도 x lon,위도 y lat
+        List<Map> maps = mapRepository.findWithinBounds(x, y ,d);
 
         return maps.stream()
                 .map(map -> new AroundPlaceResponse(map.getAddressName(), map.getLatitude(), map.getLongitude()))
@@ -99,35 +98,26 @@ public class KakaoService {
     }
 
 
-    public void add(Long id, LocationDto locationDto) {
-        Gather gather = gatherRepository.findById(id).orElseThrow();
-        String key = gather.getTitle() + ":" + gather.getId();
-        Point point = new Point(locationDto.getLng(), locationDto.getLat());
-        geoOperations.add("gather", point, key);
-    }
 
-
-    public List<AroundPlaceResponse> nearByVenues(Double longitude, Double latitude) {
+    public List<AroundPlaceResponse> nearByVenues(Double longitude, Double latitude, Integer distance) {
 
         Point searchPoint = new Point(longitude, latitude);
-        Distance radius = new Distance(3, Metrics.KILOMETERS); // search within 3 km
-        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations.radius("gather", new Circle(searchPoint, radius));
+        Distance radius = new Distance(distance, Metrics.KILOMETERS); // search within 3 km
+        //래디스에서 위치 기반으로 데이터 가져오기
+        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations.radius("map", new Circle(searchPoint, radius));
 
+        // redis geo 자료구조 설정
+        GeoOperations<String, String> geoOperations = redisTemplate.opsForGeo();
 
         assert results != null;
 
+        // List 형태로 변환
         return results.getContent().stream()
                 .flatMap(c -> {
-                    List<Point> position = geoOperations.position("gather", c.getContent().getName());
+                    List<Point> position = geoOperations.position("map", c.getContent().getName());
                     assert position != null;
 
-                    return position.stream().map(point -> {
-                        AroundPlaceResponse responseDto = new AroundPlaceResponse();
-                        responseDto.setLatitude(point.getX());
-                        responseDto.setLongitude(point.getY());
-                        responseDto.setAddress(c.getContent().getName());
-                        return responseDto;
-                    });
+                    return position.stream().map(point -> new AroundPlaceResponse(c.getContent().getName(), point.getX(), point.getY()));
                 })
                 .collect(Collectors.toList());
     }
