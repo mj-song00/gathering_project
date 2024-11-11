@@ -1,13 +1,17 @@
 package com.sparta.gathering.domain.map.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.map.dto.request.LocationDto;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.request.SearchGatherRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.service.KakaoService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +56,22 @@ public class KakaoMapController {
             @RequestBody SearchGatherRequest request
     ) {
         List<AroundPlaceResponse> list = kakaoService.listMyMap(request.getLongitude(), request.getLatitude());
+        ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/location/{gatherId}")
+    public ResponseEntity<Void> addLocation(@RequestBody LocationDto location,
+                                            @PathVariable Long gatherId) {
+        kakaoService.add(gatherId, location);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/api/kakaoMap/RedisSearch")
+    public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> redisSearch(
+            @RequestBody SearchGatherRequest request
+    ) {
+        List<AroundPlaceResponse> list = kakaoService.nearByVenues(request.getLongitude(), request.getLatitude());
         ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

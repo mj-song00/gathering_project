@@ -21,6 +21,8 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Point;
+import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -45,7 +47,7 @@ public class GatherServiceImpl implements GatherService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
-
+    private final GeoOperations geoOperations;
 
     // 모임생성
     @Transactional
@@ -55,6 +57,11 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
+        GeoOperations<String, Object> geoOps = redisTemplate.opsForGeo(); // Specify <String, String>
+        Point point = new Point(request.getLongitude(),request.getLatitude());
+        geoOps.add("map", point, request.getAddressName());
+
         Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
         Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
@@ -67,7 +74,6 @@ public class GatherServiceImpl implements GatherService {
         } else {
             redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
         }
-
         memberRepository.save(member);
     }
 
@@ -147,5 +153,10 @@ public class GatherServiceImpl implements GatherService {
                         authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
+    }
+
+    public void add(Gather gather, Point point) {
+        String key = gather.getTitle() + ":" + gather.getId();;
+        geoOperations.add("gather", point, key);
     }
 }

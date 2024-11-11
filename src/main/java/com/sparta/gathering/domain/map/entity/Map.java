@@ -4,6 +4,7 @@ import com.sparta.gathering.domain.gather.entity.Gather;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.geo.Point;
 
 @Entity
 @NoArgsConstructor
@@ -23,6 +24,9 @@ public class Map {
     @Column
     private Double longitude;//경도 x
 
+//    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
+//    private Point point;
+
     @OneToOne
     @JoinColumn(name = "gather_id")
     private Gather gather;
@@ -32,6 +36,7 @@ public class Map {
         this.addressName = addressName;
         this.latitude = latitude;
         this.longitude = longitude;
+//        this.point = point;
     }
 
     public void saveGather(Gather gather) {

@@ -2,9 +2,13 @@ package com.sparta.gathering.domain.map.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AroundPlaceResponse {
 
     private String address; //주소 이름

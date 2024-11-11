@@ -8,18 +8,23 @@ import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.map.dto.request.LocationDto;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.geo.*;
+import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.data.redis.core.GeoOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -32,7 +37,8 @@ public class KakaoService {
     private final MapRepository mapRepository;
     private final ObjectMapper objectMapper;
     private final GatherRepository gatherRepository;
-
+    private final RedisTemplate redisTemplate;
+    private final GeoOperations geoOperations;
 
     @Value("${kakao.map.api-key}")
     private String appKey;
@@ -89,6 +95,40 @@ public class KakaoService {
 
         return maps.stream()
                 .map(map -> new AroundPlaceResponse(map.getAddressName(), map.getLatitude(), map.getLongitude()))
+                .collect(Collectors.toList());
+    }
+
+
+    public void add(Long id, LocationDto locationDto) {
+        Gather gather = gatherRepository.findById(id).orElseThrow();
+        String key = gather.getTitle() + ":" + gather.getId();
+        Point point = new Point(locationDto.getLng(), locationDto.getLat());
+        geoOperations.add("gather", point, key);
+    }
+
+
+    public List<AroundPlaceResponse> nearByVenues(Double longitude, Double latitude) {
+
+        Point searchPoint = new Point(longitude, latitude);
+        Distance radius = new Distance(3, Metrics.KILOMETERS); // search within 3 km
+        GeoResults<RedisGeoCommands.GeoLocation<String>> results = geoOperations.radius("gather", new Circle(searchPoint, radius));
+
+
+        assert results != null;
+
+        return results.getContent().stream()
+                .flatMap(c -> {
+                    List<Point> position = geoOperations.position("gather", c.getContent().getName());
+                    assert position != null;
+
+                    return position.stream().map(point -> {
+                        AroundPlaceResponse responseDto = new AroundPlaceResponse();
+                        responseDto.setLatitude(point.getX());
+                        responseDto.setLongitude(point.getY());
+                        responseDto.setAddress(c.getContent().getName());
+                        return responseDto;
+                    });
+                })
                 .collect(Collectors.toList());
     }
 }
