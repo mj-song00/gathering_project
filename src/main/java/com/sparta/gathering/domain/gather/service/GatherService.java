@@ -23,7 +23,7 @@ public interface GatherService {
 
     Page<Gather> findByHashTags(Pageable pageable, List<String> hashTagName);
 
-    List<RankResponse> ranks();
+    List<RankResponse> getTop5Ranking();
 
     GatherResponse getDetails(Long gatherId);
 
