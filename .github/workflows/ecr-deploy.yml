@@ -3,14 +3,14 @@ name: Deploy to ECR
 on:
   push:
     branches:
-      - main  # main 브랜치에 푸시될 때마다 실행
+      - feature/gyeol
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 코드를 체크아웃
+      - name: 코드 체크아웃
         uses: actions/checkout@v4
 
       - name: Java 17 버전 설정
@@ -26,25 +26,40 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION: ap-northeast-2
 
-      - name: IMAGE_TAG 설정 및 확인
-        id: image_tag
+      - name: .env 파일 생성
         run: |
-          IMAGE_TAG=${GITHUB_SHA::7}
-          if [ -z "$IMAGE_TAG" ]; then IMAGE_TAG="latest"; fi
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          echo "Using IMAGE_TAG: $IMAGE_TAG"
+          echo "DEV_SERVER_PORT=${{ secrets.DEV_SERVER_PORT }}" >> .env
+          echo "DEV_DB_HOST=${{ secrets.DEV_DB_HOST }}" >> .env
+          echo "DEV_DB_PORT=${{ secrets.DEV_DB_PORT }}" >> .env
+          echo "DEV_DB_NAME=${{ secrets.DEV_DB_NAME }}" >> .env
+          echo "DEV_DB_USER=${{ secrets.DEV_DB_USER }}" >> .env
+          echo "DEV_DB_PASS=${{ secrets.DEV_DB_PASS }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+          echo "JWT_EXPIRATION_TIME=${{ secrets.JWT_EXPIRATION_TIME }}" >> .env
+          echo "S3_PLACE=${{ secrets.S3_PLACE }}" >> .env
+          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+          echo "S3_URL=${{ secrets.S3_URL }}" >> .env
+          echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> .env
+          echo "DEFAULT_PROFILE_IMAGE_URL=${{ secrets.DEFAULT_PROFILE_IMAGE_URL }}" >> .env
+          echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+          echo "KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
+          echo "KAKAO_MAP_REST_API=${{ secrets.KAKAO_MAP_REST_API }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
 
-      - name: Docker 이미지를 빌드하고 ECR에 푸시
+      - name: Docker Compose로 이미지 빌드
         env:
           AWS_REGION: ap-northeast-2
-          ECR_REPOSITORY: 435944164288.dkr.ecr.ap-northeast-2.amazonaws.com/gathering-21
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: latest 태그로도 푸시
-        env:
-          ECR_REPOSITORY: 435944164288.dkr.ecr.ap-northeast-2.amazonaws.com/gathering-21
-        run: |
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REPOSITORY:latest
+          # Docker Compose를 사용하여 서비스 빌드
+          docker-compose -f docker-compose.yml --env-file .env build
+          
+          # 태그를 설정하고 ECR로 푸시
+          docker tag gathering-21-build:latest $ECR_REPOSITORY:${GITHUB_SHA::7}
+          docker push $ECR_REPOSITORY:${GITHUB_SHA::7}
+          
+          # latest 태그로도 푸시
+          docker tag gathering-21-build:latest $ECR_REPOSITORY:latest
           docker push $ECR_REPOSITORY:latest

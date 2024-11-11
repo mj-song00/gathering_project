@@ -3,7 +3,10 @@ services:
     image: gathering-21-build:latest
     environment:
       DEV_DB_HOST: gathering_project-db-1
+      DEV_DB_PORT: ${DEV_DB_PORT}
       REDIS_HOST: gathering_project-redis-1
+      REDIS_PORT: ${REDIS_PORT}
+      SPRING_DATASOURCE_INITIALIZATION_MODE: always  # 스프링부트에서 데이터베이스 초기화 로직을 실행할 수 있도록 설정
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,6 +19,7 @@ services:
       - redis
     networks:
       - app-network
+    restart: on-failure
 
   db:
     image: mysql:8.0
@@ -29,6 +33,12 @@ services:
       - app-network
     volumes:
       - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10  # 초기화가 오래 걸리는 경우를 대비하여 재시도 횟수 증가
+    restart: always  # db 서비스가 오류 발생 시 자동 재시작
 
   redis:
     image: redis:latest
@@ -39,6 +49,7 @@ services:
       - app-network
     volumes:
       - redis-data:/data
+    restart: always
 
 networks:
   app-network:
@@ -47,3 +58,5 @@ networks:
 volumes:
   db-data:
   redis-data:
+
+
