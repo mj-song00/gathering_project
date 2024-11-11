@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTI5OTUwOCwiZXhwIjoxNzMxMzAxMzA4fQ.GR6V2wnbClzfjkLr81ziBmw-3YMa7Feg3Rh1msgxyd0
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTMwMTMzOSwiZXhwIjoxNzMxMzAzMTM5fQ.eetPnHY-1l8qnCy4E0hpbadJUTZDV77za91LyRQnA80
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -99,7 +99,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 모임 생성
-POST {{base_url}}/api/gathers/2
+POST {{base_url}}/api/gathers/{{category_Id}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -107,7 +107,7 @@ Authorization: Bearer {{jwt_token}}
   "title": "즐거운 풋살모임",
   "description": "같이 공차실분",
   "hashtags": ["futsal","실내"],
-  "addressName": "경기 광명시 소하동 1299",
+  "addressName": "서울 영등포구 여의도동 82-9",
   "latitude": "37.5134034035131",
   "longitude": "126.943292835393"
 }
@@ -148,7 +148,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 동네 조회
-GET {{base_url}}/api/gathers/rank
+GET {{base_url}}/api/gathers/topRanking
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

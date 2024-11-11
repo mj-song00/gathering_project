@@ -134,10 +134,12 @@ public class GatherServiceImpl implements GatherService {
             redisTemplate.opsForZSet().removeRange("top5Ranking", 5, -1);
 
             // 새 데이터를 top5Ranking에 추가
-            top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue(), tuple.getScore()));
+            top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
         } else {
             // top5가 null이거나 비어있으면 그냥 새로운 데이터만 저장
-            top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue(), tuple.getScore()));
+            if (top5 != null) {
+                top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
+            }
         }
 
         // 3. 기존 랭킹 데이터 삭제
@@ -151,7 +153,7 @@ public class GatherServiceImpl implements GatherService {
         Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet().reverseRangeWithScores("top5Ranking", 0, 4);
 
         // 조회된 데이터를 RankResponse 리스트로 변환
-        return top5 == null ? Collections.emptyList()
+        return (top5 == null || top5.isEmpty()) ? Collections.emptyList()
                 : top5.stream().map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
                 .collect(Collectors.toList());
     }
