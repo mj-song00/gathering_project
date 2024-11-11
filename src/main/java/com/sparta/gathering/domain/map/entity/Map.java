@@ -24,9 +24,6 @@ public class Map {
     @Column
     private Double longitude;//경도 x
 
-//    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
-//    private Point point;
-
     @OneToOne
     @JoinColumn(name = "gather_id")
     private Gather gather;
