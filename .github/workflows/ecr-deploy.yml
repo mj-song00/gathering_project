@@ -42,7 +42,7 @@ jobs:
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REPOSITORY:$IMAGE_TAG
 
-      - name: 'latest' 태그로도 푸시
+      - name: latest 태그로도 푸시
         env:
           ECR_REPOSITORY: 435944164288.dkr.ecr.ap-northeast-2.amazonaws.com/gathering-21
         run: |
