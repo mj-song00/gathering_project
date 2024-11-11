@@ -17,9 +17,9 @@ FROM eclipse-temurin:17-jre
 COPY --from=build /app/build/libs/*.jar app.jar
 
 # 포트 설정
-EXPOSE 8080
+ARG DEV_SERVER_PORT=8080
+ENV DEV_SERVER_PORT=${DEV_SERVER_PORT}
+EXPOSE ${DEV_SERVER_PORT}
 
 # 애플리케이션 실행 명령어
-ENTRYPOINT ["java", "-jar", "/app.jar"]
-
-ENV DEV_SERVER_PORT=8080
+ENTRYPOINT ["sh", "-c", "java -jar /app.jar --server.port=${DEV_SERVER_PORT}"]

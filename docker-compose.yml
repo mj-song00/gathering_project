@@ -1,40 +1,44 @@
 services:
   app:
     image: gathering-21-build:latest
+    environment:
+      DEV_DB_HOST: gathering_project-db-1
+      REDIS_HOST: gathering_project-redis-1
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "${DEV_SERVER_PORT}:${DEV_SERVER_PORT}"
     env_file:
-      - .env.dev  # 환경 변수 파일로 모든 변수를 불러오기
+      - .env.dev
     depends_on:
       - db
       - redis
     networks:
       - app-network
 
-
   db:
-    image: mysql:8.0  # MySQL 버전 설정
+    image: mysql:8.0
+    container_name: gathering_project-db-1
     environment:
       MYSQL_ROOT_PASSWORD: ${DEV_DB_PASS}
       MYSQL_DATABASE: ${DEV_DB_NAME}
     ports:
-      - "3306:3306"
+      - "${DEV_DB_PORT}:${DEV_DB_PORT}"
     networks:
       - app-network
     volumes:
-      - db-data:/var/lib/mysql  # 데이터 영구 저장을 위한 볼륨
+      - db-data:/var/lib/mysql
 
   redis:
-    image: redis:latest  # Redis 버전 설정
+    image: redis:latest
+    container_name: gathering_project-redis-1
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
     networks:
       - app-network
     volumes:
-      - redis-data:/data  # Redis 데이터 영구 저장을 위한 볼륨
+      - redis-data:/data
 
 networks:
   app-network:
