@@ -27,6 +27,7 @@ import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,7 @@ public class GatherServiceImpl implements GatherService {
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
 
+
     // 모임생성
     @Transactional
     @Override
@@ -72,6 +74,7 @@ public class GatherServiceImpl implements GatherService {
         } else {
             redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
         }
+
         memberRepository.save(member);
     }
 
@@ -120,25 +123,45 @@ public class GatherServiceImpl implements GatherService {
         return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 
+    /**
+     * 매일 자정마다 실행되는 스케쥴러 입니다.
+     * 상위 5개의 데이터를 top5Ranking에 별도 저장후 기존 저장된 city는 삭제됩니다.
+     * 이후 다시 모임이 생성되면 city역시 다시 저장됩니다.
+     */
+    @Transactional(readOnly = true)
+    @Scheduled(cron = "0 0 0 * * *")
+    public void ranks() {
+        // 1. 상위 5개 데이터 조회
+        Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet().reverseRangeWithScores("city", 0, 4);
+
+        // 2. 상위 5개 데이터를 별도의 키에 저장 (top5Ranking)
+        if (top5 != null && !top5.isEmpty()) {
+            // 기존 top5Ranking에서 데이터가 있다면 6번째 이후 항목 삭제
+            redisTemplate.opsForZSet().removeRange("top5Ranking", 5, -1);
+
+            // 새 데이터를 top5Ranking에 추가
+            top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
+        } else {
+            // top5가 null이거나 비어있으면 그냥 새로운 데이터만 저장
+            if (top5 != null) {
+                top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
+            }
+        }
+
+        // 3. 기존 랭킹 데이터 삭제
+        redisTemplate.opsForZSet().removeRange("city", 0, -1);
+    }
+
     @Transactional(readOnly = true)
     @Override
-//    @Scheduled(cron = "*/10 * * * * *")
-    public List<RankResponse> ranks() {
-        Set<ZSetOperations.TypedTuple<Object>> rankingWithMembers = zsetOperations.reverseRangeWithScores("city", 0, 4);
+    public List<RankResponse> getTop5Ranking() {
+        // top5Ranking 키에서 상위 5개 데이터 조회
+        Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet().reverseRangeWithScores("top5Ranking", 0, 4);
 
-        List<RankResponse> rankResponses = rankingWithMembers == null ? Collections.emptyList()
-                : rankingWithMembers.stream().map(tuple -> {
-                    Double score = tuple.getScore();
-                    String value = tuple.getValue() == null ? null : tuple.getValue().toString();
-
-                    return new RankResponse(score, value);
-                })
+        // 조회된 데이터를 RankResponse 리스트로 변환
+        return (top5 == null || top5.isEmpty()) ? Collections.emptyList()
+                : top5.stream().map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
                 .collect(Collectors.toList());
-        // 콘솔에 출력
-        rankResponses.forEach(rankResponse ->
-                System.out.println("Score: " + rankResponse.getScore() + ", Adress: " + rankResponse.getAdress())
-        );
-        return rankResponses;
     }
 
     @Transactional(readOnly = true)
