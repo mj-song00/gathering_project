@@ -91,7 +91,7 @@ public class GatherController {
             "page size는 10입니다.")
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<SearchResponse>> search(
-            @RequestParam(value = "hashTagName", required = false)List<String> hashTagName,
+            @RequestParam(value = "hashTagName", required = false) List<String> hashTagName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -112,9 +112,9 @@ public class GatherController {
             "page size는 10입니다.")
     @GetMapping("/title")
     public ResponseEntity<ApiResponse<SearchResponse>> searchTitles(
-            @RequestParam(value = "title")String title,
+            @RequestParam(value = "title") String title,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size){
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Gather> titleList = gatherService.findByTitles(pageable, title);
         SearchResponse response = new SearchResponse(

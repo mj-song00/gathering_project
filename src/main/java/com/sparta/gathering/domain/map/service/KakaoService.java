@@ -90,13 +90,12 @@ public class KakaoService {
 
     @Transactional
     public List<AroundPlaceResponse> listMyMap(Double x, Double y, Integer d) {//경도 x lon,위도 y lat
-        List<Map> maps = mapRepository.findWithinBounds(x, y ,d);
+        List<Map> maps = mapRepository.findWithinBounds(x, y, d);
 
         return maps.stream()
                 .map(map -> new AroundPlaceResponse(map.getAddressName(), map.getLatitude(), map.getLongitude()))
                 .collect(Collectors.toList());
     }
-
 
 
     public List<AroundPlaceResponse> nearByVenues(Double longitude, Double latitude, Integer distance) {

@@ -175,7 +175,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findByTitles(Pageable pageable, String title){
+    public Page<Gather> findByTitles(Pageable pageable, String title) {
         return gatherRepository.findByTitle(pageable, title);
     }
 
@@ -201,9 +201,9 @@ public class GatherServiceImpl implements GatherService {
     }
 
     //래디스 모임 위치 저장 로직
-    private void addRedisMap(GatherRequest request){
+    private void addRedisMap(GatherRequest request) {
         GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
-        Point point = new Point(request.getLongitude(),request.getLatitude());
+        Point point = new Point(request.getLongitude(), request.getLatitude());
         geoOperations.add("map", point, request.getTitle());
     }
 }
