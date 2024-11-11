@@ -37,8 +37,8 @@ jobs:
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
           echo "JWT_EXPIRATION_TIME=${{ secrets.JWT_EXPIRATION_TIME }}" >> .env
           echo "S3_PLACE=${{ secrets.S3_PLACE }}" >> .env
-          echo "AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }}" >> .env
-          echo "AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
           echo "S3_URL=${{ secrets.S3_URL }}" >> .env
           echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> .env
           echo "DEFAULT_PROFILE_IMAGE_URL=${{ secrets.DEFAULT_PROFILE_IMAGE_URL }}" >> .env
@@ -48,13 +48,13 @@ jobs:
           echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
           echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
 
-      - name: Docker Compose로 이미지 빌드
+      - name: Docker Compose로 이미지 빌드 및 푸시
         env:
           AWS_REGION: ap-northeast-2
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
           # Docker Compose를 사용하여 서비스 빌드
-          docker-compose -f docker-compose.yml --env-file .env build
+          docker compose -f docker-compose.yml --env-file .env build
           
           # 태그를 설정하고 ECR로 푸시
           docker tag gathering-21-build:latest $ECR_REPOSITORY:${GITHUB_SHA::7}
