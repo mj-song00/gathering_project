@@ -104,14 +104,13 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임",
+  "title": "강릉",
   "description": "같이 공차실분",
-  "hashtags": ["futsal","실내"],
-  "map": {
-    "addressName": "서울 동작구 노량진로 156",
-    "latitude": "126.943292835393",
-    "longitude": "37.5134034035131"
-  }
+  "hashtags": ["여의도공원", "저녁", "실외"],
+  "addressName": "서울 동작구 노량진로 111",
+  "latitude": 37.7645195812136,
+  "longitude": 128.899617238918
+
 }
 
 ### 모임 수정
@@ -140,7 +139,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### hashTag 검색
-GET {{base_url}}/api/gathers/search?hashTagName=20대&hashTagName=건강&page=2
+GET {{base_url}}/api/gathers/search?hashTagName=20대&hashTagName=건강&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -150,7 +149,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 동네 조회
-GET {{base_url}}/api/gathers/rank
+GET {{base_url}}/api/gathers/topRanking
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -277,7 +276,7 @@ GET {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
-  "address": "서울 동작구 노량진로 156"
+  "address": "강원특별자치도 강릉시 용지로 176"
 }
 
 
@@ -291,10 +290,25 @@ Content-Type: application/json
 
 
 
+### 지도조회(래디스)
+GET {{base_url}}/api/kakaoMap/RedisSearch
+Content-Type: application/json
+
+{
+  "latitude": "37.51340296744142",
+  "longitude": "126.94329053163528",
+  "distance": 175
+}
 
 
+### 지도조회
+GET {{base_url}}/api/kakaoMap/search
+Content-Type: application/json
 
-
-
+{
+  "latitude": "37.5134034035131",
+  "longitude": "126.943292835393",
+  "distance": 175
+}
 
 
