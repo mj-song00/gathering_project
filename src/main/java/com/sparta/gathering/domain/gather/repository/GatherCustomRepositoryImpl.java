@@ -2,6 +2,7 @@ package com.sparta.gathering.domain.gather.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.gathering.common.contributor.CustomFunction;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,7 +56,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .where(
-                        gather.title.contains(title)
+                      CustomFunction.match(gather.title, title)
                                 .and(gather.deletedAt.isNull())
 
                 )
