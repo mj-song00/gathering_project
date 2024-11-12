@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMzc5Njk3OC0yYTZiLTQ4N2QtOGEyYy1iNGNkZGVkZmU2OWMiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzEwNjAwNTMsImV4cCI6MTczMTA2MTg1M30.BZqTyFWXYHlwOBXyp1r8sdIAjLdc5hr8tipm6_slUCo
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDk3NzE4MywiZXhwIjoxNzMwOTc4OTgzfQ.Q0_N2c5DYXlegWlyQR8pbQrs6PTApr6BvRdA75h9Q74
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -161,17 +161,13 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "즐거운 풋살모임",
+  "title": "강릉",
   "description": "같이 공차실분",
-  "hashtags": [
-    "futsal",
-    "실내"
-  ],
-  "map": {
-    "addressName": "서울 동작구 노량진로 156",
-    "latitude": "126.943292835393",
-    "longitude": "37.5134034035131"
-  }
+  "hashtags": ["여의도공원", "저녁", "실외"],
+  "addressName": "서울 동작구 노량진로 111",
+  "latitude": 37.7645195812136,
+  "longitude": 128.899617238918
+
 }
 
 ### 모임 수정
@@ -182,11 +178,7 @@ Authorization: Bearer {{jwt_token}}
 {
   "title": "농구하실분",
   "description": "여의도 공원 농구 모임",
-  "hashtags": [
-    "여의도공원",
-    "저녁",
-    "실외"
-  ],
+  "hashtags": ["여의도공원", "저녁", "실외"],
   "addressName": "서울 영등포구 여의도동 여의공원로 68",
   "latitude": "37.5134034035131",
   "longitude": "126.943292835393"
@@ -203,7 +195,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### hashTag 검색
-GET {{base_url}}/api/gathers/search?hashTagName=20대&hashTagName=건강&page=2
+GET {{base_url}}/api/gathers/search?hashTagName=20대&hashTagName=건강&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -213,7 +205,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 동네 조회
-GET {{base_url}}/api/gathers/rank
+GET {{base_url}}/api/gathers/topRanking
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -340,7 +332,7 @@ GET {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
-  "address": "서울 동작구 노량진로 156"
+  "address": "강원특별자치도 강릉시 용지로 176"
 }
 
 
@@ -354,10 +346,25 @@ Content-Type: application/json
 
 
 
+### 지도조회(래디스)
+GET {{base_url}}/api/kakaoMap/RedisSearch
+Content-Type: application/json
+
+{
+  "latitude": "37.51340296744142",
+  "longitude": "126.94329053163528",
+  "distance": 175
+}
 
 
+### 지도조회
+GET {{base_url}}/api/kakaoMap/search
+Content-Type: application/json
 
-
-
+{
+  "latitude": "37.5134034035131",
+  "longitude": "126.943292835393",
+  "distance": 175
+}
 
 

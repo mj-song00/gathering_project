@@ -75,8 +75,8 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     }
 
     @Override
-    public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId){
-        List<Gather> result =  q.selectFrom(gather)
+    public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId) {
+        List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .leftJoin(gather.category).fetchJoin()
                 .where(

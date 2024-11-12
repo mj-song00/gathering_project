@@ -17,7 +17,7 @@ public interface MapRepository extends JpaRepository<Map, Long> {
             "                     * cos(radians(l.longitude)\n" +
             "            - radians(:longitude))\n" +
             "        + sin(radians(:latitude))\n" +
-            "                     * sin(radians(l.latitude)))) < 2" +
+            "                     * sin(radians(l.latitude)))) < :d" +
             " ORDER BY " +
             " (6371 * acos(cos(radians(:latitude))\n" +
             "                     * cos(radians(l.latitude))\n" +
@@ -26,7 +26,8 @@ public interface MapRepository extends JpaRepository<Map, Long> {
             "        + sin(radians(:latitude))\n" +
             "                     * sin(radians(l.latitude))))")
     List<Map> findWithinBounds(@Param("longitude") double longitude,//x
-                               @Param("latitude") double latitude); //y
+                               @Param("latitude") double latitude,
+                               @Param("d") int d); //y
 
     Optional<Map> findByGatherId(Long id);
 }

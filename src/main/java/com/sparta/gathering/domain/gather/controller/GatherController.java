@@ -70,7 +70,7 @@ public class GatherController {
     @Operation(summary = "카테고리별 검색", description = "카테고리별로 모임조회사 가능합니다." +
             "page size는 10입니다.")
     @GetMapping("/{categoryId}")
-    public ApiResponse<CategoryListResponse> gathers(
+    public ResponseEntity<ApiResponse<CategoryListResponse>> gathers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @PathVariable Long categoryId) {
@@ -83,15 +83,15 @@ public class GatherController {
                 gatherList.getTotalPages(), // 총 페이지 수
                 gatherList.getTotalElements() // 총 요소 수
         );
-
-        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<CategoryListResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
     @Operation(summary = "hashtag 검색", description = "2개 이상의 keyword로 hashtag를 가진 모임을 검색합니다." +
             "page size는 10입니다.")
     @GetMapping("/search")
-    public ApiResponse<SearchResponse> search(
-            @RequestParam(value = "hashTagName", required = false)List<String> hashTagName,
+    public ResponseEntity<ApiResponse<SearchResponse>> search(
+            @RequestParam(value = "hashTagName", required = false) List<String> hashTagName,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -103,17 +103,18 @@ public class GatherController {
                 searchList.getTotalPages(), // 총 페이지 수
                 searchList.getTotalElements() // 총 요소 수
         );
-        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<SearchResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
     //title 검색
     @Operation(summary = "title 검색", description = "contain 검색 방식입니다." +
             "page size는 10입니다.")
     @GetMapping("/title")
-    public ApiResponse<SearchResponse> searchTitles(
-            @RequestParam(value = "title")String title,
+    public ResponseEntity<ApiResponse<SearchResponse>> searchTitles(
+            @RequestParam(value = "title") String title,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size){
+            @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Gather> titleList = gatherService.findByTitles(pageable, title);
         SearchResponse response = new SearchResponse(
@@ -122,15 +123,16 @@ public class GatherController {
                 titleList.getTotalPages(), // 총 페이지 수
                 titleList.getTotalElements() // 총 요소 수
         );
-        return ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<SearchResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
-    //랭킹 조회
-    @Operation(summary = "모임 랭킹 조회", description = "어제까지 모임이 많이 생성된 지역입니다." +
-            "매일 0시 0분 0초에 갱신될 예정입니다.")
-    @GetMapping("/rank")
-    public List<RankResponse> zSetOperations() {
-        return gatherService.ranks();
+    @Operation(summary = "상위 5개 랭킹 조회", description = "Redis에 저장된 상위 5개 랭킹을 조회합니다.")
+    @GetMapping("/topRanking")
+    public ResponseEntity<ApiResponse<List<RankResponse>>> getTop5Ranking() {
+        List<RankResponse> top5RankingList = gatherService.getTop5Ranking();
+        return ResponseEntity.ok(ApiResponse.successWithData(top5RankingList,
+                ApiResponseEnum.GET_SUCCESS));
     }
 
     //gather 상세조회
