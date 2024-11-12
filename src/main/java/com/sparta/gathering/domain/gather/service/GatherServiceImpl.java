@@ -22,6 +22,8 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Point;
+import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -46,6 +48,8 @@ public class GatherServiceImpl implements GatherService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, String> rediusTemplate;
+    private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
 
 
@@ -57,6 +61,7 @@ public class GatherServiceImpl implements GatherService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
         User user = userRepository.findById(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+        addRedisMap(request); //래디스 맵저장 로직 메서드
         Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
         Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
         Member member = new Member(user, gather, Permission.MANAGER);
@@ -81,7 +86,8 @@ public class GatherServiceImpl implements GatherService {
 
         Gather gather = gatherRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        Map map = mapRepository.findByGatherId(id).orElseThrow(() -> new RuntimeException("dddd"));
+        Map map = mapRepository.findByGatherId(id)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         // redis 기존 score -1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
@@ -169,7 +175,7 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findByTitles(Pageable pageable, String title){
+    public Page<Gather> findByTitles(Pageable pageable, String title) {
         return gatherRepository.findByTitle(pageable, title);
     }
 
@@ -192,5 +198,12 @@ public class GatherServiceImpl implements GatherService {
                         authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
+    }
+
+    //래디스 모임 위치 저장 로직
+    private void addRedisMap(GatherRequest request) {
+        GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
+        Point point = new Point(request.getLongitude(), request.getLatitude());
+        geoOperations.add("map", point, request.getTitle());
     }
 }

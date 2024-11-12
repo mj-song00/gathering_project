@@ -48,8 +48,7 @@ public class CommentService {
             AuthenticatedUser authenticatedUser) {
 
         //댓글 찾기
-        Comment comment = commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
+        Comment comment = getComment(scheduleId, commentId);
 
         // 댓글 작성자가 아니라면 예외처리
         if (!authenticatedUser.getUserId().equals(comment.getMember().getUser().getId())) {
@@ -58,6 +57,7 @@ public class CommentService {
 
         comment.update(requestDto.getComment());
     }
+
 
     /* 댓글 조회 */
     public List<CommentResponse> getComment(Long scheduleId) {
@@ -74,8 +74,7 @@ public class CommentService {
         Member member = isValidMember(authenticatedUser); //멤버가 게스트이거나 매니저가 아닌경우 예외처리
 
         // 댓글 찾기
-        Comment comment = commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
+        Comment comment = getComment(scheduleId, commentId);
 
         // 댓글 작성자 or 매니저가 아니라면 예외처리
         checkAuth(member, authenticatedUser, comment);
@@ -98,9 +97,14 @@ public class CommentService {
 
     }
 
-    public Member isValidMember(AuthenticatedUser authenticatedUser) throws BaseException {
-
+    public Member isValidMember(AuthenticatedUser authenticatedUser) {
         return memberRepository.findByUserId(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+    }
+
+    //댓글 찾는 메서드
+    private Comment getComment(Long scheduleId, Long commentId) {
+        return commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
     }
 }

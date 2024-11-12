@@ -2,8 +2,10 @@ package com.sparta.gathering.domain.map.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class AroundPlaceResponse {
 
