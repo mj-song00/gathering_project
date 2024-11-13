@@ -56,8 +56,8 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .where(
-                      CustomFunction.match(gather.title, title)
-                                .and(gather.deletedAt.isNull())
+                        CustomFunction.match(gather.title, title)
+                        , (gather.deletedAt.isNull())
 
                 )
                 .offset(pageable.getOffset())
