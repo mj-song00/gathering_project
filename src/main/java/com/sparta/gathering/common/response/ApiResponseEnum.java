@@ -54,6 +54,10 @@ public enum ApiResponseEnum {
     //카카오맵 관련
     SAVED_MAP_SUCCESS("위치가 성공적으로 저장 되었습니다."),
 
+    // 쿠폰관련
+    SUCCESS_COUPON("쿠폰 요청이 대기열에 추가되었습니다."),
+    SUCCESS_GET_COUPON("쿠폰 대기열에 있습니다."),
+
     //멤버 관련
     CREATE_SUCCESS("멤버 생성에 성공하였습니다."),
     APPROVAL_SUCCESS("승인이 완료되었습니다."),
