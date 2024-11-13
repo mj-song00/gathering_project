@@ -63,20 +63,27 @@ public enum ExceptionEnum {
     // 게더 관련
     GATHER_NOT_FOUND(HttpStatus.NOT_FOUND, "GATHER_NOT_FOUND", "해당 모임을 찾을 수 없습니다."),
 
-    //멤버 관련
+    // 멤버 관련
     MANAGER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "MANAGER_NOT_FOUND", "권한을 확인해주세요"),
     MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "MEMBER_NOT_FOUND", "멤버를 찾을 수 없습니다."),
     ALREADY_DELETED_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "탈퇴한 게스트입니다."),
-    MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"MEMBER_NOT_ALLIOWED","올바른 요청이 아닙니다" ),
+    MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "MEMBER_NOT_ALLIOWED", "올바른 요청이 아닙니다"),
 
     // 보드 관련
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD_NOT_FOUND", "해당 보드를 찾을 수 없습니다."),
 
-    //댓글 관련
+    // 댓글 관련
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMENT_NOT_FOUND", "댓글 내용을 찾을 수 없습니다."),
-    //카카오 맵 관련
+
+    // 카카오 맵 관련
     NOT_JSON_TYPE_STRING(HttpStatus.FORBIDDEN, "NOT_JSON_TYPE_STRING", "json 타입의 문자열이 아닙니다."),
     JSON_TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "JSON_TYPE_MISMATCH", "json 타입의 형식이 다릅니다."),
+
+    // 쿠폰 관련
+    SOLD_OUT_COUPON(HttpStatus.BAD_REQUEST, "SOLD_OUT_COUPON", "모든 쿠폰이 소진되었습니다."),
+    ALREADY_ISSUED_COUPON(HttpStatus.BAD_REQUEST, "ALREADY_ISSUED_COUPON", "이미 발급받은 유저입니다."),
+    NOT_FOUND_COUPON(HttpStatus.NOT_FOUND, "NOT_FOUND_COUPON", "쿠폰이 존재하지 않습니다."),
+
 
     // 스케쥴 관련
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
