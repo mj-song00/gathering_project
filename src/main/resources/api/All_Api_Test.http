@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDk3NzE4MywiZXhwIjoxNzMwOTc4OTgzfQ.Q0_N2c5DYXlegWlyQR8pbQrs6PTApr6BvRdA75h9Q74
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYzM2ZjI2Ni04ZThkLTRkZTItOTY2YS05MmUwMTg5NmJmZTAiLCJlbWFpbCI6InRlc3Q0QGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxNTU5MjY2LCJleHAiOjE3MzE1NjEwNjZ9.iDw2JUjOP4F_Jcqqj5iJFLAi9web77bZxmVaXKLrrXA
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -28,7 +28,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test4@example.com",
   "password": "password123A!"
 }
 
@@ -272,7 +272,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 지도검색
-GET {{base_url}}/api/kakaoMap
+POST {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
@@ -291,7 +291,7 @@ Content-Type: application/json
 
 
 ### 지도조회(래디스)
-GET {{base_url}}/api/kakaoMap/RedisSearch
+POST {{base_url}}/api/kakaoMap/RedisSearch
 Content-Type: application/json
 
 {
@@ -302,7 +302,7 @@ Content-Type: application/json
 
 
 ### 지도조회
-GET {{base_url}}/api/kakaoMap/search
+POST {{base_url}}/api/kakaoMap/search
 Content-Type: application/json
 
 {
