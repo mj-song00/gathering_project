@@ -6,7 +6,6 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.coupon.dto.CouponRequest;
-import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -31,12 +30,12 @@ public class CouponService {
     @Transactional
     public void requestCoupon(UUID userId) throws JsonProcessingException {
 
-        Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+        Permission permission = memberRepository.findPermissionByUserId(userId);
 
-        if (!member.getPermission().equals(Permission.MANAGER)) {
+        if (!Permission.MANAGER.equals(permission)) {
             throw new BaseException(ExceptionEnum.MANAGER_NOT_FOUND);
         }
+
 
         log.info("쿠폰 요청 유저 : {}", userId);
 
@@ -69,22 +68,19 @@ public class CouponService {
 
     public String getCouponStatus(AuthenticatedUser authenticatedUser) {
         UUID userId = authenticatedUser.getUserId();
-
-
         // Redis 에서 쿠폰 발급 상태 조회
         String issuedStatus = (String) redisTemplate.opsForValue().get("couponIssued:" + userId);
-
         // 쿠폰이 발급되지 않았고, 대기열에 없는 경우 에러 반환
-        if ("ISSUED".equals(issuedStatus)) {
-            throw new BaseException(ExceptionEnum.ALREADY_ISSUED_COUPON);
-        }
-
         if (issuedStatus == null) {
             throw new BaseException(ExceptionEnum.NOT_FOUND_COUPON);
         }
-
-        return issuedStatus;
-
+        // 쿠폰 번호 조회
+        String couponCode = (String) redisTemplate.opsForHash().get("userCoupon:" + userId, "couponCode");
+        if (couponCode == null) {
+            couponCode = "쿠폰 번호 없음";
+        }
+        // 상태와 쿠폰 번호를 함께 반환
+        return String.format("상태 : %s / 쿠폰 번호: %s", issuedStatus, couponCode);
     }
 
 
