@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <title>Kakao 지도 시작하기</title>
@@ -15,7 +15,7 @@
 <div id="map" style="width:500px;height:400px;"></div>
 <!-- services와 clusterer, drawing 라이브러리 불러오기 -->
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=4c649ebf1a23a2767bc30728262f649d&libraries=services,clusterer,drawing"></script>
-<script type="text/javascript" src="./js/gather.js"></script>
+<script type="text/javascript" src="./js/findGather.js"></script>
 <script>
 
     var basicLon = 33.450701;
@@ -24,7 +24,6 @@
     var map;
 
     function search() {
-        basicLat = document.getElementById("address").value;
         setMapData()
         init();
     }
@@ -40,31 +39,32 @@
 
     function setMapData(){
         getAddressLonJsonData().then((res) => {
-            basicLon = res.document[0].x;
-            basicLat = res.document[0].y;
-
-            findGathersLonJsonData(basicLon,basicLat).then((res) => {
-                res.data.forEach((n, i) => {
-
-                    var address = res.data[i].address;
-                    var lat = res.data[i].latitude;
-                    var lng = res.data[i].longitude;
-
-                    var markerPosition  = new kakao.maps.LatLng(lat, lng);
-
-                    // 마커를 생성합니다
-                    var marker = new kakao.maps.Marker({
-                        position: markerPosition
-                    });
-
-                    marker.setMap(map);
-
-                    var infowindow = new kakao.maps.InfoWindow({
-                        content: `<div style="width:150px;text-align:center;padding:6px 0;">${address}</div>`
-                    });
-                    infowindow.open(map, marker);
-                });
-            });
+            basicLon = res.document.x;
+            basicLat = res.document.y;
+            var coords = new kakao.maps.LatLng(basicLat, basicLon);
+            map.setCenter(coords);
+            // findGathersLonJsonData(basicLon,basicLat).then((res) => {
+            //     res.data.forEach((n, i) => {
+            //
+            //         var address = res.data[i].address;
+            //         var lat = res.data[i].latitude;
+            //         var lng = res.data[i].longitude;
+            //
+            //         var markerPosition  = new kakao.maps.LatLng(lat, lng);
+            //
+            //         // 마커를 생성합니다
+            //         var marker = new kakao.maps.Marker({
+            //             position: markerPosition
+            //         });
+            //
+            //         marker.setMap(map);
+            //
+            //         var infowindow = new kakao.maps.InfoWindow({
+            //             content: `<div style="width:150px;text-align:center;padding:6px 0;">${address}</div>`
+            //         });
+            //         infowindow.open(map, marker);
+            //     });
+            // });
         });
     }
 
