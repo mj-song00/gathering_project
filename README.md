@@ -1,5 +1,5 @@
 
-![제목을 입력해주세요_-001](https://github.com/user-attachments/assets/5d7f573f-95ec-4d6b-b9db-2d7a047fd047)
+![제목을 입력해주세요_-001 (1)](https://github.com/user-attachments/assets/5804c49b-d50a-47a7-9564-05ccd4762812)
 # 🎨 [취미 모임 관리 웹사이트](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
 
 같은 취미를 가진 사람들과 모임을 쉽게 만들고 관리할 수 있는 웹사이트입니다. 사용자는 모임을 생성하고, 멤버를 관리하며, 실시간 소통과 일정 관리를 할 수 있습니다.

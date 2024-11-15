@@ -13,6 +13,11 @@ jobs:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
 
+      - name: Actions 보안설정(이미지 스캔)
+        run: |
+          docker build -t my-image:latest .
+          docker run --rm aquasec/trivy:latest --image my-image:latest
+
       - name: Java 17 버전 설정
         uses: actions/setup-java@v4
         with:
