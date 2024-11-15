@@ -183,6 +183,7 @@ public class GatherServiceImpl implements GatherService {
         return gatherRepository.findByTitle(pageable, title);
     }
 
+
     // 새로운 모임 5개 조회
     @Transactional(readOnly = true)
     public List<NewGatherResponse> newCreatedGatherList() {
