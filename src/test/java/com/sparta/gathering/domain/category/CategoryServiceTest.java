@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,7 +25,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,7 +41,7 @@ class CategoryServiceTest {
     @InjectMocks
     private CategoryService categoryService;
 
-//    private User testUser;
+    //    private User testUser;
     private CategoryReq categoryReq;
     private AuthenticatedUser authenticatedUser;
     private User user1;
@@ -50,7 +50,7 @@ class CategoryServiceTest {
 
     @BeforeEach
     void setUp() {
-       user1 = User.builder()
+        user1 = User.builder()
                 .id(UUID.randomUUID())
                 .email("test1@test.com")
                 .password("password123A!")
@@ -59,19 +59,19 @@ class CategoryServiceTest {
                 .identityProvider(IdentityProvider.NONE)
                 .profileImage(null)
                 .build();
-       user2 = User.builder()
-             .id(UUID.randomUUID())
-             .email("test2@test.com")
-             .password("password123A!")
-             .nickName("nickname2")
-             .userRole(UserRole.ROLE_USER)
-             .identityProvider(IdentityProvider.NONE)
-             .profileImage(null)
-             .build();
+        user2 = User.builder()
+                .id(UUID.randomUUID())
+                .email("test2@test.com")
+                .password("password123A!")
+                .nickName("nickname2")
+                .userRole(UserRole.ROLE_USER)
+                .identityProvider(IdentityProvider.NONE)
+                .profileImage(null)
+                .build();
 
         categoryReq = new CategoryReq("운동");
         authenticatedUser = new AuthenticatedUser(user1.getId(), user1.getEmail(), null);
-        category = new Category("카테고리 명",user1);
+        category = new Category("카테고리 명", user1);
 
 
     }
@@ -145,7 +145,7 @@ class CategoryServiceTest {
         when(userRepository.findById(authenticatedUser.getUserId())).thenReturn(Optional.of(user1));
         // when
         BaseException exception = assertThrows(BaseException.class, () ->
-                categoryService.updateCategory(authenticatedUser,2L ,categoryReq)
+                categoryService.updateCategory(authenticatedUser, 2L, categoryReq)
         );
         // then
         assertEquals(ExceptionEnum.NOT_FOUNT_CATEGORY, exception.getExceptionEnum());
@@ -159,7 +159,7 @@ class CategoryServiceTest {
         when(userRepository.findById(authenticatedUser.getUserId())).thenReturn(Optional.of(user1));
         when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         // when
-        categoryService.deleteCategory(authenticatedUser,category.getId());
+        categoryService.deleteCategory(authenticatedUser, category.getId());
         // then
         assertNotNull(category.getDeletedAt());
         verify(categoryRepository, never()).save(any(Category.class));
@@ -177,8 +177,6 @@ class CategoryServiceTest {
         assertEquals(1, result.size());
         verify(categoryRepository, never()).save(any(Category.class));
     }
-
-
 
 
 }

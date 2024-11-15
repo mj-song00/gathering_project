@@ -17,7 +17,6 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
-import com.sparta.gathering.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,9 +47,6 @@ class HashTagServiceTest {
     @Mock
     private GatherRepository gatherRepository;
 
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private HashTagService hashTagService;
 
@@ -59,7 +56,6 @@ class HashTagServiceTest {
     private HashTagsReq hashTagsReq;
     private User testUser;
     private Category category;
-    private List<HashTag> hashTags;
 
     @BeforeEach
     void setUp() {
