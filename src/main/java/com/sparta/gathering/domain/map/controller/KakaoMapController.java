@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:63342")
+//@CrossOrigin(origins = "http://localhost:63342")
 public class KakaoMapController {
 
     private final KakaoService kakaoService;
@@ -29,18 +29,6 @@ public class KakaoMapController {
         return kakaoService.searchMap(searchMap);
     }
 
-    /**
-     * @param gatherId 모임의 아이디
-     * @param saveMap
-     * @return
-     */
-    @PostMapping("/api/kakaoMap/{gatherId}")
-    public ResponseEntity<ApiResponse<Void>> saveMap(@PathVariable Long gatherId, @RequestBody MapRequest saveMap) {
-        kakaoService.saveMap(saveMap, gatherId);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.SAVED_MAP_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 
     /**
      * 위치기반 주변 모임추천 api
