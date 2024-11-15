@@ -10,8 +10,6 @@ import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.gather.entity.GatherDocument;
-import com.sparta.gathering.domain.gather.repository.GatherElasticRepository;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
@@ -33,7 +31,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -50,7 +51,6 @@ public class GatherServiceImpl implements GatherService {
     private final RedisTemplate<String, String> rediusTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
-    private final GatherElasticRepository elasticRepository;
 
 
     // 모임생성
@@ -67,7 +67,6 @@ public class GatherServiceImpl implements GatherService {
         Member member = new Member(user, gather, Permission.MANAGER);
         gather.saveMap(newMap);
         gatherRepository.save(gather);
-        indexAll();
         //레디스에서 값 찾아오기
         Object result = redisTemplate.opsForZSet().score("city", gather.getMap().getAddressName());
         if (result != null) {
@@ -94,7 +93,7 @@ public class GatherServiceImpl implements GatherService {
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
         // redis 수정된 주소 score +1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), 1);
-        indexAll();
+
         gatherRepository.save(gather);
     }
 
@@ -108,7 +107,6 @@ public class GatherServiceImpl implements GatherService {
         //  redis 기존 score -1
         redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
         gather.delete();
-        indexAll();
         gatherRepository.save(gather);
     }
 
@@ -178,25 +176,9 @@ public class GatherServiceImpl implements GatherService {
     @Transactional(readOnly = true)
     @Override
     public Page<Gather> findByTitles(Pageable pageable, String title) {
-        Page<GatherDocument> result = elasticRepository.findByTitle(pageable, title);
-        // GatherDocument를 Gather로 변환하여 Page로 반환
-        return result.map(this::convertToGather);
+        return gatherRepository.findByTitle(pageable, title);
     }
 
-
-    @Transactional(readOnly=true)
-    public void indexAll(){
-        List<Gather> gathers = gatherRepository.findAll();
-        for (Gather gather: gathers){
-            GatherDocument gatherDocument = new GatherDocument(
-                    gather.getId(),
-                    gather.getTitle(),
-                    gather.getDescription(),
-                    gather.getDeletedAt()
-            );
-            elasticRepository.save(gatherDocument);
-        }
-    }
 
     // 새로운 모임 5개 조회
     @Transactional(readOnly = true)
@@ -224,12 +206,5 @@ public class GatherServiceImpl implements GatherService {
         GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
         Point point = new Point(request.getLongitude(), request.getLatitude());
         geoOperations.add("map", point, request.getTitle());
-    }
-
-    // GatherDocument를 Gather로 변환하는 메서드
-    private Gather convertToGather(GatherDocument gatherDocument) {
-        return new Gather(
-                gatherDocument.getTitle()
-        );
     }
 }

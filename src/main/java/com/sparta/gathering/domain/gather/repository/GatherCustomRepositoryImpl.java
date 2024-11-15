@@ -55,6 +55,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     public Page<Gather> findByTitle(Pageable pageable, String title) {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .leftJoin(gather.map).fetchJoin()
                 .where(
                         CustomFunction.match(gather.title, title)
                         , (gather.deletedAt.isNull())
@@ -80,6 +81,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .leftJoin(gather.category).fetchJoin()
+                .leftJoin(gather.map).fetchJoin()
                 .where(
                         gather.category.id.eq(categoryId)
                                 .and(gather.deletedAt.isNull())
