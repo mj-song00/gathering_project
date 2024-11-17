@@ -51,6 +51,7 @@ public class Gather extends Timestamped {
     @JoinColumn(name = "map_id", unique = true)
     private Map map;
 
+
     public Gather(String title) {
         this.title = title;
     }

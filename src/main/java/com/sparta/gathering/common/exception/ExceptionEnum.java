@@ -86,7 +86,10 @@ public enum ExceptionEnum {
 
 
     // 스케쥴 관련
-    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
+    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다."),
+
+    // 좋아요 관련
+    LIKE_NOT_ALLOWED(HttpStatus.CONFLICT,"LIKE_NOT_ALLOWED","이미 좋아요를 눌렀습니다.");
 
     private final HttpStatus status;
     private final String errorCode;

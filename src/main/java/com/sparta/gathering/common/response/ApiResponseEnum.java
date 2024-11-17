@@ -62,7 +62,10 @@ public enum ApiResponseEnum {
     CREATE_SUCCESS("멤버 생성에 성공하였습니다."),
     APPROVAL_SUCCESS("승인이 완료되었습니다."),
     REFUSAL_SUCCESS("가입이 거절되었습니다."),
-    WITHDRAWAL_SUCCESS("모임탈퇴가 완료되었습니다.");
+    WITHDRAWAL_SUCCESS("모임탈퇴가 완료되었습니다."),
+
+    //좋아요 관련
+    REQUEST_SUCCESS("요청에 성공하였습니다.");
 
 
     private final String message;
