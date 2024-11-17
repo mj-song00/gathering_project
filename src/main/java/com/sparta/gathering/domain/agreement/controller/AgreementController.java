@@ -4,6 +4,7 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.agreement.dto.request.AgreementRequestDto;
+import com.sparta.gathering.domain.agreement.dto.request.AgreementUpdateRequestDto;
 import com.sparta.gathering.domain.agreement.entity.Agreement;
 import com.sparta.gathering.domain.agreement.enums.AgreementType;
 import com.sparta.gathering.domain.agreement.service.AgreementService;
@@ -11,11 +12,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +61,27 @@ public class AgreementController {
         ApiResponse<List<Agreement>> response = ApiResponse.successWithData(agreements,
                 ApiResponseEnum.AGREEMENT_RETRIEVED_SUCCESS);
         return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "약관 ID 조회", description = "약관 ID로 약관을 조회합니다.")
+    @GetMapping("/{agreementId}")
+    public ResponseEntity<ApiResponse<Agreement>> getAgreementById(
+            @PathVariable UUID agreementId) {
+        Agreement agreement = agreementService.getAgreementById(agreementId);
+        ApiResponse<Agreement> response = ApiResponse.successWithData(agreement,
+                ApiResponseEnum.AGREEMENT_RETRIEVED_SUCCESS);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "약관 업데이트", description = "약관을 업데이트합니다.")
+    @PatchMapping("/update/{agreementId}")
+    public ResponseEntity<ApiResponse<Void>> updateAgreement(
+            @PathVariable UUID agreementId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @Valid @RequestBody AgreementUpdateRequestDto agreementUpdateRequestDto) {
+        agreementService.updateAgreement(agreementId, agreementUpdateRequestDto, authenticatedUser);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.successWithOutData(ApiResponseEnum.AGREEMENT_UPDATED_SUCCESS));
     }
 
 }

@@ -71,12 +71,13 @@ public class GlobalExceptionHandler {
                         ExceptionEnum.INVALID_INPUT_VALUE.getStatus()));
     }
 
-    /*// 그 외 예상치 못한 예외 처리
+    // 그 외 예상치 못한 예외 처리
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleOtherExceptions(Exception ex) {
         log.error("Unexpected exception: ", ex);
         return ResponseEntity.status(ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus())
-                .body(ApiResponse.error(ExceptionEnum.INTERNAL_SERVER_ERROR, ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus()));
-    }*/
+                .body(ApiResponse.errorWithOutData(ExceptionEnum.INTERNAL_SERVER_ERROR,
+                        ExceptionEnum.INTERNAL_SERVER_ERROR.getStatus()));
+    }
 
 }

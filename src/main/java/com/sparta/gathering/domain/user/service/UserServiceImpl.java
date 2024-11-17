@@ -6,7 +6,6 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.agreement.entity.Agreement;
 import com.sparta.gathering.domain.agreement.enums.AgreementStatus;
 import com.sparta.gathering.domain.agreement.enums.AgreementType;
-import com.sparta.gathering.domain.agreement.repository.AgreementRepository;
 import com.sparta.gathering.domain.agreement.service.AgreementService;
 import com.sparta.gathering.domain.emailverification.service.EmailVerificationService;
 import com.sparta.gathering.domain.user.dto.request.SignupRequest;
@@ -17,7 +16,7 @@ import com.sparta.gathering.domain.user.repository.UserRepository;
 import com.sparta.gathering.domain.user.service.factory.UserFactory;
 import com.sparta.gathering.domain.user.validation.UserValidation;
 import com.sparta.gathering.domain.useragreement.entity.UserAgreement;
-import com.sparta.gathering.domain.useragreement.repository.UserAgreementRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +33,10 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AgreementRepository agreementRepository;
-    private final UserAgreementRepository userAgreementRepository;
     private final AgreementService agreementService;
     private final UserValidation userValidation;
     private final EmailVerificationService emailVerificationService;
+    private final AuthService authService;
 
     @Value("${default.profile.image.url}")
     private String defaultProfileImageUrl;
@@ -68,17 +66,15 @@ public class UserServiceImpl implements UserService {
                 signupRequest.getEmail(),
                 signupRequest.getNickName(),
                 encodedPassword,
-                UserRole.ROLE_USER,  // 기본적으로 ROLE_USER로 설정
-                signupRequest.getIdentityProvider(),  // 일반 로그인 사용자는 NONE
+                UserRole.ROLE_USER,
+                signupRequest.getIdentityProvider(),
                 defaultProfileImageUrl
         );
 
-        // 약관 동의 상태 저장
+        // 동의 상태 저장 (약관 이력 포함)
         saveUserAgreements(user, signupRequest);
 
         userRepository.save(user);
-
-
     }
 
     // 필수 약관 동의 여부 확인 메서드
@@ -89,43 +85,42 @@ public class UserServiceImpl implements UserService {
                 AgreementType.TERMS_OF_SERVICE
         );
 
-        // 필수 약관에 대해 최신 버전 동의 여부 확인
+        // 필수 약관의 최신 동의 여부 확인
         for (AgreementType type : requiredAgreements) {
             Agreement latestAgreement = agreementService.getLatestAgreement(type);
             if (!signupRequest.hasAgreedTo(latestAgreement.getId())) {
-                throw new BaseException(ExceptionEnum.LATEST_AGREEMENT_NOT_FOUND);
+                throw new BaseException(ExceptionEnum.AGREEMENT_NOT_ACCEPTED);
             }
         }
     }
 
     // 약관 동의 상태 저장 메서드
     private void saveUserAgreements(User user, SignupRequest signupRequest) {
-        // 최신 약관 리스트 가져오기
+        List<UUID> agreedIds = signupRequest.getAgreedAgreementIds();
         List<Agreement> latestAgreements = agreementService.getAllLatestAgreements();
 
-        // 요청된 약관 ID가 최신 약관 ID 리스트에 포함되는지 확인
-        List<UUID> agreedIds = signupRequest.getAgreedAgreementIds();
-
         for (Agreement agreement : latestAgreements) {
-            AgreementStatus status;
-
-            // 필수 약관은 무조건 AGREE, 선택적 약관은 요청에 포함 여부에 따라 결정
-            if (agreement.getType() == AgreementType.PRIVACY_POLICY
-                    || agreement.getType() == AgreementType.TERMS_OF_SERVICE) {
-                if (!agreedIds.contains(agreement.getId())) {
-                    throw new BaseException(ExceptionEnum.AGREEMENT_NOT_ACCEPTED); // 필수 약관 동의가 없을 경우 예외 발생
-                }
-                status = AgreementStatus.AGREED;
-            } else {
-                status = agreedIds.contains(agreement.getId()) ? AgreementStatus.AGREED : AgreementStatus.DISAGREED;
-            }
+            final AgreementStatus status = getStatus(agreement, agreedIds);
 
             // UserAgreement 객체 생성 후 사용자에 추가
             UserAgreement userAgreement = new UserAgreement(user, agreement, status);
             user.addUserAgreement(userAgreement);
-            log.info("UserAgreement added: userId={}, agreementId={}, status={}", user.getId(), agreement.getId(),
-                    status);
         }
+    }
+
+    private static AgreementStatus getStatus(Agreement agreement, List<UUID> agreedIds) {
+        AgreementStatus status;
+
+        if (agreement.getType() == AgreementType.PRIVACY_POLICY
+                || agreement.getType() == AgreementType.TERMS_OF_SERVICE) {
+            if (!agreedIds.contains(agreement.getId())) {
+                throw new BaseException(ExceptionEnum.AGREEMENT_NOT_ACCEPTED);
+            }
+            status = AgreementStatus.AGREED;
+        } else {
+            status = agreedIds.contains(agreement.getId()) ? AgreementStatus.AGREED : AgreementStatus.DISAGREED;
+        }
+        return status;
     }
 
 
@@ -205,7 +200,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteUser(AuthenticatedUser authenticatedUser) {
+    public void deleteUser(AuthenticatedUser authenticatedUser, String refreshToken, HttpServletResponse response) {
 
         // 인증된 사용자 확인
         userValidation.validateAuthenticatedUser(authenticatedUser);
@@ -216,9 +211,13 @@ public class UserServiceImpl implements UserService {
         // 사용자 탈퇴 여부 확인
         userValidation.validateUserNotDeleted(user);
 
-        // 소프트 삭제 처리
+        // 사용자 소프트 삭제 처리
         user.setDeletedAt();
         userRepository.save(user);
+
+        // 로그아웃 처리 (리프레시 토큰 블랙리스트 및 쿠키 삭제)
+        authService.logout(refreshToken, response);
+
     }
 
 }

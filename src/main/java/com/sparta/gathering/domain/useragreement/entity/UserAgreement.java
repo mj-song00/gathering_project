@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.useragreement.entity;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.agreement.entity.Agreement;
 import com.sparta.gathering.domain.agreement.enums.AgreementStatus;
+import com.sparta.gathering.domain.agreement.enums.AgreementType;
 import com.sparta.gathering.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,4 +62,9 @@ public class UserAgreement extends Timestamped {
         this.user = user;
     }
 
+    // 필수 약관인지 확인하는 메서드
+    public boolean isRequired() {
+        return agreement.getType() == AgreementType.PRIVACY_POLICY
+                || agreement.getType() == AgreementType.TERMS_OF_SERVICE;
+    }
 }

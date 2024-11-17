@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
-public class MailConfig {
+public class STMPConfig {
 
     @Value("${mail.host}")
     private String host;

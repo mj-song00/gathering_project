@@ -15,39 +15,33 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "agreement_history")
 @Getter
-@Table(name = "Agreement")
 @NoArgsConstructor
-public class Agreement extends Timestamped {
+public class AgreementHistory extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(nullable = false)
-    private String content;        // 약관 내용
+    private UUID agreementId;  // 기존 Agreement와 매핑하기 위한 참조 ID
 
     @Column(nullable = false)
-    private String version;        // 약관 버전 정보
+    private String content;    // 이전 약관 내용
+
+    @Column(nullable = false)
+    private String version;    // 이전 약관 버전 정보
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AgreementType type;  // 약관 유형 추가
+    private AgreementType type;
 
-    public Agreement(String content, String version, AgreementType type) {
+    public AgreementHistory(UUID agreementId, String content, String version, AgreementType type) {
+        this.agreementId = agreementId;
         this.content = content;
         this.version = version;
         this.type = type;
     }
-
-    // 테스트용 생성자
-    public Agreement(UUID agreementId) {
-        this.id = agreementId;
-    }
-
-    public void updateContentAndVersion(String content, String version) {
-        this.content = content;
-        this.version = version;
-    }
-
 }
+

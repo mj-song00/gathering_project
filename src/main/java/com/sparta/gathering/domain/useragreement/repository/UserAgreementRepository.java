@@ -4,11 +4,14 @@ import com.sparta.gathering.domain.agreement.entity.Agreement;
 import com.sparta.gathering.domain.agreement.enums.AgreementStatus;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.useragreement.entity.UserAgreement;
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 public interface UserAgreementRepository extends JpaRepository<UserAgreement, UUID> {
 
@@ -16,7 +19,17 @@ public interface UserAgreementRepository extends JpaRepository<UserAgreement, UU
 
     Optional<UserAgreement> findByUserAndAgreement(User user, Agreement agreement);
 
-    // 유예 기간 만료 검사를 위한 PENDING_REAGREE 상태 및 특정 날짜 이전 사용자 약관 조회
-    List<UserAgreement> findByStatusAndAgreedAtBefore(AgreementStatus status, LocalDateTime agreedBeforeDate);
+    List<UserAgreement> findByAgreementIdAndStatus(UUID agreementId, AgreementStatus status);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE UserAgreement ua SET ua.status = 'EXPIRED' WHERE ua.status = 'PENDING_REAGREE' AND ua.updatedAt < :expirationDateTime")
+    int expireOldPendingReAgreements(LocalDateTime expirationDateTime);
+
+    @Query("SELECT ua FROM UserAgreement ua WHERE ua.status = 'PENDING_REAGREE' AND ua.updatedAt < :expirationDateTime")
+    List<UserAgreement> findPendingReAgreementsOlderThan(LocalDateTime expirationDateTime);
+
+    @Query("SELECT ua FROM UserAgreement ua WHERE ua.status = :status")
+    List<UserAgreement> findByStatus(AgreementStatus status);
 
 }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -56,6 +57,11 @@ public class SecurityConfig {
                         .failureUrl("/api/auth/social-login/failure") // 로그인 실패 시 리디렉트
                 )
                 .build();
+    }
+
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new CustomHiddenHttpMethodFilter();
     }
 
 }

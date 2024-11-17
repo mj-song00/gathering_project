@@ -21,7 +21,6 @@ public enum ApiResponseEnum {
 
     // 사용자 약관 관련
     AGREEMENT_STATUS_RETRIEVED_SUCCESS("약관 동의 상태 조회가 성공적으로 완료되었습니다."),
-    AGREEMENT_AGREED_SUCCESS("약관 동의가 성공적으로 완료되었습니다."),
     AGREEMENT_REAGREED_SUCCESS("약관 재동의가 성공적으로 완료되었습니다."),
 
     // 유저 프로필 등록

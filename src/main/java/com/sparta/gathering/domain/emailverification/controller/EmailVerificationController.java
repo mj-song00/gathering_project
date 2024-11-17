@@ -7,7 +7,6 @@ import com.sparta.gathering.domain.emailverification.dto.request.VerificationCod
 import com.sparta.gathering.domain.emailverification.service.EmailVerificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class EmailVerificationController {
     @Operation(summary = "이메일 인증 코드 발송", description = "이메일로 인증 코드를 발송합니다.")
     @PostMapping("/send")
     public ResponseEntity<ApiResponse<Void>> sendVerificationCode(
-            @Valid @RequestBody EmailVerificationRequestDto requestDto) throws MessagingException {
+            @Valid @RequestBody EmailVerificationRequestDto requestDto) {
         emailVerificationService.sendVerificationCode(requestDto.getEmail());
         return ResponseEntity.ok(ApiResponse.successWithOutData(ApiResponseEnum.EMAIL_VERIFICATION_CODE_SENT));
     }
@@ -39,4 +38,5 @@ public class EmailVerificationController {
         emailVerificationService.confirmVerificationCode(requestDto.getEmail(), requestDto.getCode());
         return ResponseEntity.ok(ApiResponse.successWithOutData(ApiResponseEnum.EMAIL_VERIFICATION_SUCCESS));
     }
+
 }

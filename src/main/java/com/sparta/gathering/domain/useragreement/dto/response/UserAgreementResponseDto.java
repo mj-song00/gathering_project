@@ -16,4 +16,5 @@ public class UserAgreementResponseDto {
     private UUID agreementId;
     private AgreementStatus status;
     private LocalDateTime agreedAt;
+
 }

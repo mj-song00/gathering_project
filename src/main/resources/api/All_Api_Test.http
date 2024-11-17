@@ -2,9 +2,13 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMDk3NzE4MywiZXhwIjoxNzMwOTc4OTgzfQ.Q0_N2c5DYXlegWlyQR8pbQrs6PTApr6BvRdA75h9Q74
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxNzA1MzkyLCJleHAiOjE3MzE3MDcxOTJ9.yTlg1zKHNoY8sOMw1mcQchaCm_7AsFxIQpctzQd1AOs
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
+
+@refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
+
+@expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
 
 @memberId = 2
 
@@ -12,7 +16,7 @@
 
 @gatherId = 1
 
-@agreementId = 75cfe008-cc23-4107-a5bb-a000d5de46dc
+@agreement_Id = cfc7db0e-a244-11ef-89b9-00155d19365e
 
 ### 약관 생성 테스트
 ### PRIVACY_POLICY = 개인정보 처리방침
@@ -23,16 +27,26 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "content": "신규 필수 이용약관 내용입니다.",
-  "version": "1.1",
+  "content": "약관 내용입니다.",
+  "version": "1.0",
   "type": "PRIVACY_POLICY"
 }
 
-### 최신 약관 조회 테스트
+### 약관 수정 테스트
+PATCH {{base_url}}/api/agreements/update/{{agreement_Id}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "content": "수정된 이용약관 내용입니다88",
+  "version": "8.8"
+}
+
+### 타입별 약관 조회 테스트
 GET {{base_url}}/api/agreements/latest?type=PRIVACY_POLICY
 Accept: application/json
 
-### 모든 최신 약관 조회 테스트
+### 모든 약관 조회 테스트
 GET {{base_url}}/api/agreements/latest/all
 Accept: application/json
 
@@ -50,21 +64,14 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "code": "479672"
+  "code": "438799"
 }
 
-### 회원가입 요청
-POST {{base_url}}/api/users/signup
+### Agreement Expiration Job 실행 요청
+POST {{base_url}}/api/batch/runAgreementExpiration
 Content-Type: application/json
 
-{
-  "email": "nbcteam21test@gmail.com",
-  "nickName": "홍길동",
-  "password": "password123A!",
-  "identityProvider": "NONE"
-}
-
-### 회원가입 요청 - 약관 통합 예상
+### 회원가입 요청 - 약관 통합
 POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
@@ -74,9 +81,24 @@ Content-Type: application/json
   "password": "password123A!",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "6dccb0e9-a12d-43df-a114-ae3287477165",
-    "2f95fb4c-5ce1-493f-afc8-428b694cf299",
-    "ccbe23f3-4365-4456-a873-3f1be59bf73b"
+    "cfc7db0e-a244-11ef-89b9-00155d19365e",
+    "cfc7e142-a244-11ef-89b9-00155d19365e",
+    "cfc7ebe5-a244-11ef-89b9-00155d19365e"
+  ]
+}
+
+### 회원가입 요청 - 약관 통합
+POST {{base_url}}/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "nbcteam21test@gmail.com",
+  "nickName": "홍길동",
+  "password": "password123A!",
+  "identityProvider": "NONE",
+  "agreedAgreementIds": [
+    "4c2b7d86-0f48-448e-949a-fc37557cc983",
+    "2f95fb4c-5ce1-493f-afc8-428b694cf299"
   ]
 }
 
@@ -85,9 +107,24 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "nbcteam21test@gmail.com",
   "password": "password123A!"
 }
+
+### 리프레시 토큰으로 액세스 토큰 재발급
+POST {{base_url}}/api/auth/refresh-token
+Content-Type: application/json
+Cookie: refreshToken={{refresh_token}}
+
+### 만료된 리프레시 토큰으로 재발급 요청
+POST {{base_url}}/api/auth/refresh-token
+Content-Type: application/json
+Cookie: refreshToken={{expired_refresh_token}}
+
+### 로그아웃 요청 (리프레시 토큰 삭제)
+POST {{base_url}}/api/auth/logout
+Content-Type: application/json
+Cookie: refreshToken={{refresh_token}}
 
 ### 비밀번호 변경
 PATCH {{base_url}}/api/users/me/password
@@ -117,7 +154,7 @@ Authorization: Bearer {{jwt_token}}
 PATCH {{base_url}}/api/users/me/delete
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
-
+Cookie: refreshToken={{refresh_token}}
 
 ### 회원탈퇴 요청 (JWT 토큰 만료)
 PATCH {{base_url}}/api/users/me/delete
@@ -163,11 +200,14 @@ Authorization: Bearer {{jwt_token}}
 {
   "title": "강릉",
   "description": "같이 공차실분",
-  "hashtags": ["여의도공원", "저녁", "실외"],
+  "hashtags": [
+    "여의도공원",
+    "저녁",
+    "실외"
+  ],
   "addressName": "서울 동작구 노량진로 111",
   "latitude": 37.7645195812136,
   "longitude": 128.899617238918
-
 }
 
 ### 모임 수정
@@ -178,7 +218,11 @@ Authorization: Bearer {{jwt_token}}
 {
   "title": "농구하실분",
   "description": "여의도 공원 농구 모임",
-  "hashtags": ["여의도공원", "저녁", "실외"],
+  "hashtags": [
+    "여의도공원",
+    "저녁",
+    "실외"
+  ],
   "addressName": "서울 영등포구 여의도동 여의공원로 68",
   "latitude": "37.5134034035131",
   "longitude": "126.943292835393"
@@ -335,7 +379,6 @@ Content-Type: application/json
   "address": "강원특별자치도 강릉시 용지로 176"
 }
 
-
 ### 지도저장
 POST {{base_url}}/api/kakaoMap/2
 Content-Type: application/json
@@ -343,8 +386,6 @@ Content-Type: application/json
 {
   "address": "인천 석남1동"
 }
-
-
 
 ### 지도조회(래디스)
 GET {{base_url}}/api/kakaoMap/RedisSearch
@@ -357,14 +398,5 @@ Content-Type: application/json
 }
 
 
-### 지도조회
-GET {{base_url}}/api/kakaoMap/search
-Content-Type: application/json
-
-{
-  "latitude": "37.5134034035131",
-  "longitude": "126.943292835393",
-  "distance": 175
-}
 
 
