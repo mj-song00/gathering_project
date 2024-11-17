@@ -2,6 +2,7 @@ package com.sparta.gathering.domain.gather.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.gathering.common.contributor.CustomFunction;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,9 +55,10 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     public Page<Gather> findByTitle(Pageable pageable, String title) {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .leftJoin(gather.map).fetchJoin()
                 .where(
-                        gather.title.contains(title)
-                                .and(gather.deletedAt.isNull())
+                        CustomFunction.match(gather.title, title)
+                        , (gather.deletedAt.isNull())
 
                 )
                 .offset(pageable.getOffset())
@@ -79,6 +81,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .leftJoin(gather.category).fetchJoin()
+                .leftJoin(gather.map).fetchJoin()
                 .where(
                         gather.category.id.eq(categoryId)
                                 .and(gather.deletedAt.isNull())

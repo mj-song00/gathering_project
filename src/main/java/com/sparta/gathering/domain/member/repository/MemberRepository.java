@@ -23,4 +23,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByUserId(UUID id);
 
     Optional<Member> findByGatherIdAndPermission(long gatherId, Permission permission);
+
+    @Query("SELECT m.permission FROM Member m WHERE m.user.id = :userId")
+    Permission findPermissionByUserId(@Param("userId") UUID userId);
+
 }

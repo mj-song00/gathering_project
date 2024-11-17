@@ -198,7 +198,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "강릉",
+  "title": "강릉-",
   "description": "같이 공차실분",
   "hashtags": [
     "여의도공원",
@@ -244,7 +244,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 검색
-GET {{base_url}}/api/gathers/title?title=영화&page=1
+GET {{base_url}}/api/gathers/title?title=즐거운&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -398,5 +398,15 @@ Content-Type: application/json
 }
 
 
+### 쿠폰 요청
+POST {{base_url}}/api/coupons/request
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### 쿠폰 조회
+GET {{base_url}}/api/coupons/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 

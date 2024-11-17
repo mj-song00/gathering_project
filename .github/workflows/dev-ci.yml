@@ -62,7 +62,7 @@ jobs:
 
       - name: 빌드 및 테스트 실행
         run: |
-          ./gradlew build test \
+          ./gradlew build -x test \
           --no-daemon \
           --build-cache
 

@@ -1,0 +1,70 @@
+name: Deploy to ECR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Actions 보안설정(이미지 스캔)
+        run: |
+          docker build -t my-image:latest .
+          docker run --rm aquasec/trivy:latest --image my-image:latest
+
+      - name: Java 17 버전 설정
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: AWS ECR에 로그인
+        uses: aws-actions/amazon-ecr-login@v2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          AWS_REGION: ap-northeast-2
+
+      - name: .env 파일 생성
+        run: |
+          echo "DEV_SERVER_PORT=${{ secrets.DEV_SERVER_PORT }}" >> .env
+          echo "DEV_DB_HOST=${{ secrets.DEV_DB_HOST }}" >> .env
+          echo "DEV_DB_PORT=${{ secrets.DEV_DB_PORT }}" >> .env
+          echo "DEV_DB_NAME=${{ secrets.DEV_DB_NAME }}" >> .env
+          echo "DEV_DB_USER=${{ secrets.DEV_DB_USER }}" >> .env
+          echo "DEV_DB_PASS=${{ secrets.DEV_DB_PASS }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+          echo "JWT_EXPIRATION_TIME=${{ secrets.JWT_EXPIRATION_TIME }}" >> .env
+          echo "S3_PLACE=${{ secrets.S3_PLACE }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_KEY }}" >> .env
+          echo "S3_URL=${{ secrets.S3_URL }}" >> .env
+          echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> .env
+          echo "DEFAULT_PROFILE_IMAGE_URL=${{ secrets.DEFAULT_PROFILE_IMAGE_URL }}" >> .env
+          echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+          echo "KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}" >> .env
+          echo "KAKAO_MAP_REST_API=${{ secrets.KAKAO_MAP_REST_API }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+
+      - name: Docker Compose로 이미지 빌드 및 푸시
+        env:
+          AWS_REGION: ap-northeast-2
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        run: |
+          # Docker Compose를 사용하여 서비스 빌드
+          docker compose -f docker-compose.yml --env-file .env build
+          
+          # 태그를 설정하고 ECR로 푸시
+          docker tag gathering-21-build:latest $ECR_REPOSITORY:${GITHUB_SHA::7}
+          docker push $ECR_REPOSITORY:${GITHUB_SHA::7}
+          
+          # latest 태그로도 푸시
+          docker tag gathering-21-build:latest $ECR_REPOSITORY:latest
+          docker push $ECR_REPOSITORY:latest

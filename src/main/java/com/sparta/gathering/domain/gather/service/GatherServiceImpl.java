@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.gather.service;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
+import com.sparta.gathering.common.sevice.SlackNotifierService;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
@@ -51,6 +52,7 @@ public class GatherServiceImpl implements GatherService {
     private final RedisTemplate<String, String> rediusTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
+    private final SlackNotifierService slackNotifierService;
 
 
     // 모임생성
@@ -76,6 +78,8 @@ public class GatherServiceImpl implements GatherService {
         }
 
         memberRepository.save(member);
+        slackNotifierService.sendNotification("[모임이 생성되었습니다] \n 카테고리명 : " + category.getCategoryName() +
+                "\n 모임명 : " + request.getTitle());
     }
 
     //모임 수정 gather
@@ -178,6 +182,7 @@ public class GatherServiceImpl implements GatherService {
     public Page<Gather> findByTitles(Pageable pageable, String title) {
         return gatherRepository.findByTitle(pageable, title);
     }
+
 
     // 새로운 모임 5개 조회
     @Transactional(readOnly = true)
