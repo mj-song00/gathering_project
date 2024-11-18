@@ -27,6 +27,9 @@ public enum ExceptionEnum {
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_JWT_TOKEN", "잘못된 JWT 토큰입니다."),
     MALFORMED_JWT_TOKEN(HttpStatus.BAD_REQUEST, "MALFORMED_TOKEN", "JWT 토큰 형식이 잘못되었습니다."),
 
+    // 리프레시 토큰 관련
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_REFRESH_TOKEN", "잘못된 리프레시 토큰입니다."),
+
     // 유저 관련
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_NOT_FOUND", "사용자를 찾을 수 없습니다."),
     ALREADY_DELETED(HttpStatus.BAD_REQUEST, "ALREADY_DELETED", "탈퇴된 사용자입니다."),
@@ -39,6 +42,28 @@ public enum ExceptionEnum {
     PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "PASSWORD_MISMATCH", "비밀번호가 일치하지 않습니다."),
     PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "PASSWORD_SAME_AS_OLD", "새 비밀번호가 기존 비밀번호와 동일합니다."),
     NICKNAME_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "NICKNAME_SAME_AS_OLD", "새 닉네임이 기존 닉네임과 동일합니다."),
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "INVALID_VERIFICATION_CODE", "인증 코드가 일치하지 않습니다."),
+    EMAIL_VERIFICATION_REQUIRED(HttpStatus.BAD_REQUEST, "EMAIL_VERIFICATION_REQUIRED", "이메일 인증이 필요합니다."),
+
+    // 약관 관련
+    AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "AGREEMENT_NOT_FOUND", "해당 약관을 찾을 수 없습니다."),
+    DUPLICATE_AGREEMENT_VERSION(HttpStatus.BAD_REQUEST, "DUPLICATE_AGREEMENT_VERSION", "중복된 약관 버전입니다."),
+    SAME_AGREEMENT(HttpStatus.BAD_REQUEST, "SAME_AGREEMENT", "이전 약관과 동일한 내용입니다."),
+
+    // 사용자 약관 관련
+    USER_AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_AGREEMENT_NOT_FOUND", "해당 사용자의 약관을 찾을 수 없습니다."),
+    LATEST_AGREEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "LATEST_AGREEMENT_NOT_FOUND", "최신 약관에 동의하지 않았습니다."),
+    AGREEMENT_NOT_ACCEPTED(HttpStatus.BAD_REQUEST, "AGREEMENT_NOT_ACCEPTED", "약관에 동의하지 않았습니다."),
+    ALREADY_AGREED(HttpStatus.BAD_REQUEST, "ALREADY_AGREED", "이미 동의한 약관입니다."),
+
+    // 이메일 인증 관련
+    EMAIL_SEND_FAILURE(HttpStatus.BAD_REQUEST, "EMAIL_SEND_FAILURE", "이메일 전송에 실패하였습니다."),
+    DAILY_SEND_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "DAILY_SEND_LIMIT_EXCEEDED", "일일 최대 이메일 발송 횟수를 초과했습니다."),
+    DAILY_VERIFY_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "DAILY_VERIFY_LIMIT_EXCEEDED", "일일 최대 인증 시도 횟수를 초과했습니다."),
+
+
+    // 배치 관련
+    BATCH_JOB_EXEC_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BATCH_JOB_EXEC_FAILED", "배치 작업 실행에 실패하였습니다."),
 
     // 이미지 파일 등록 관련
     PERMISSION_DENIED(HttpStatus.BAD_REQUEST, "PERMISSION_DENIED", "사용자 ID와 일치하지 않는 파일입니다."),
@@ -86,7 +111,10 @@ public enum ExceptionEnum {
 
 
     // 스케쥴 관련
-    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다.");
+    SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "SCHEDULE_NOT_FOUND", "해당 스케쥴을 찾을 수 없습니다."),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "INVALID_TOKEN", "토큰이 유효하지 않습니다."),
+    SERIALIZE_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "SERIALIZE_FAILURE", "토큰 직렬화에 실패하였습니다."),
+    DESERIALIZE_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "DESERIALIZE_FAILURE", "토큰 역직렬화에 실패하였습니다.");
 
     private final HttpStatus status;
     private final String errorCode;

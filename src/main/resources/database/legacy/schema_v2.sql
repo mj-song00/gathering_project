@@ -111,14 +111,7 @@ CREATE TABLE comment
     FOREIGN KEY (schedule_id) REFERENCES schedule (id),
     FOREIGN KEY (member_id) REFERENCES member (id)
 );
-# CREATE TABLE map
-# (
-#     id         BIGINT NOT NULL AUTO_INCREMENT,
-#     location POINT  NOT NULL SRID 4326,
-#     gather_id    BIGINT NOT NULL,
-#     PRIMARY KEY (id),
-#     FOREIGN KEY (cafe_id) REFERENCES gather (id)
-# );
+
 
 
 

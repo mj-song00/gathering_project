@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -74,4 +75,9 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new CustomHiddenHttpMethodFilter();
+    }
+
 }
