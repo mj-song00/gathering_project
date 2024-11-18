@@ -2,13 +2,13 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYzM2ZjI2Ni04ZThkLTRkZTItOTY2YS05MmUwMTg5NmJmZTAiLCJlbWFpbCI6InRlc3Q0QGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxNTU5MjY2LCJleHAiOjE3MzE1NjEwNjZ9.iDw2JUjOP4F_Jcqqj5iJFLAi9web77bZxmVaXKLrrXA
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYzM2ZjI2Ni04ZThkLTRkZTItOTY2YS05MmUwMTg5NmJmZTAiLCJlbWFpbCI6InRlc3Q0QGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxOTA1NDEwLCJleHAiOjE3MzE5MDcyMTB9.h0j0IQbzEQrXZy6ALbK0qD7JiYFDfHlW-nFQoPNeh-Q
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
 @memberId = 2
 
-@category_Id = 2
+@category_Id = 1
 
 @gatherId = 1
 
@@ -17,7 +17,7 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "test5@example.com",
   "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE"
@@ -104,7 +104,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "강릉",
+  "title": "강릉2222",
   "description": "같이 공차실분",
   "hashtags": [
     "여의도공원",
@@ -122,7 +122,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "농구하실분",
+  "title": "농구하실분222",
   "description": "여의도 공원 농구 모임",
   "hashtags": [
     "여의도공원",
@@ -223,17 +223,17 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "boardTitle": "보드2",
+  "boardTitle": "보드333",
   "boardContent": "보드2 컨텐츠"
 }
 
 ### 스케쥴 생성
-POST {{base_url}}/api/gather/1/schedule
+POST {{base_url}}/api/gathers/1/schedules
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "scheduleTitle": "스케쥴2",
+  "scheduleTitle": "스케쥴4",
   "scheduleContent": "스케쥴2 컨텐츠"
 }
 
@@ -312,8 +312,8 @@ POST {{base_url}}/api/kakaoMap/search
 Content-Type: application/json
 
 {
-  "latitude": "37.5134034035131",
-  "longitude": "126.943292835393",
+  "latitude": 37.5134034035131,
+  "longitude": 126.943292835393,
   "distance": 175
 }
 

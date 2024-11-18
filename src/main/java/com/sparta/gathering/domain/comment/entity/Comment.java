@@ -1,6 +1,7 @@
 package com.sparta.gathering.domain.comment.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
@@ -36,6 +37,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "member_Id")
     private Member member;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "gather_id")
+//    private Gather gather;
 
     public Comment(String comment,Schedule schedule,Member member){
         this.nickName = member.getUser().getNickName();
