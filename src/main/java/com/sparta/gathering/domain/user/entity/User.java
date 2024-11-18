@@ -65,6 +65,7 @@ public class User extends Timestamped {
     @Column
     private String profileImage; // 사용자 프로필 이미지 URL (null 경우 디폴트 이미지)
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<UserAgreement> userAgreements = new ArrayList<>();
 

@@ -1,5 +1,13 @@
 package com.sparta.gathering.domain.coupon;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
@@ -8,22 +16,19 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.coupon.service.CouponService;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
-
+@SpringBootTest
 class CouponServiceTest {
 
     @InjectMocks
@@ -122,7 +127,8 @@ class CouponServiceTest {
         when(valueOperations.get("couponIssued:" + userId)).thenReturn(null);
 
         // When & Then
-        BaseException exception = assertThrows(BaseException.class, () -> couponService.getCouponStatus(authenticatedUser));
+        BaseException exception = assertThrows(BaseException.class,
+                () -> couponService.getCouponStatus(authenticatedUser));
         assertEquals(ExceptionEnum.NOT_FOUND_COUPON, exception.getExceptionEnum());
     }
 //

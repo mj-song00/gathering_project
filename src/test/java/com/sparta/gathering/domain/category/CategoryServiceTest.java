@@ -1,5 +1,14 @@
 package com.sparta.gathering.domain.category;
 
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
@@ -12,6 +21,9 @@ import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,16 +31,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
-
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
 
@@ -97,7 +102,8 @@ class CategoryServiceTest {
     void test2() {
         // given
         when(userRepository.findById(authenticatedUser.getUserId())).thenReturn(Optional.of(user1));
-        when(categoryRepository.findByCategoryName(categoryReq.getCategoryName())).thenReturn(Optional.of(new Category()));
+        when(categoryRepository.findByCategoryName(categoryReq.getCategoryName())).thenReturn(
+                Optional.of(new Category()));
 
         // when
         BaseException exception = assertThrows(BaseException.class, () ->
