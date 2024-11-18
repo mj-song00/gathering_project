@@ -16,7 +16,7 @@ jobs:
       mysql:
         image: mysql:8.0 # MySQL 8.0 이미지 사용
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_ROOT_PASS }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_PASS }}
           MYSQL_DATABASE: ${{ secrets.DEV_DB_NAME }}
         options: >-
           --health-cmd="mysqladmin ping --silent"
@@ -140,12 +140,12 @@ jobs:
                       client-authentication-method: client_secret_post
                       authorization-grant-type: authorization_code
 
-                provider:
-                  kakao:
-                    authorization-uri: https://kauth.kakao.com/oauth/authorize
-                    token-uri: https://kauth.kakao.com/oauth/token
-                    user-info-uri: https://kapi.kakao.com/v2/user/me
-                    user-name-attribute: id
+                  provider:
+                    kakao:
+                      authorization-uri: https://kauth.kakao.com/oauth/authorize
+                      token-uri: https://kauth.kakao.com/oauth/token
+                      user-info-uri: https://kapi.kakao.com/v2/user/me
+                      user-name-attribute: id
 
           aws:
             s3:
@@ -205,7 +205,7 @@ jobs:
 
       # Step 7: Gradle 빌드 및 테스트
       - name: Gradle 빌드 및 테스트
-        run: ./gradlew clean build -x test --no-daemon --build-cache
+        run: ./gradlew clean build test --no-daemon --build-cache
 
       # Step 8: Checkstyle 실행
       - name: Checkstyle 실행
