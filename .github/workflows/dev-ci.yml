@@ -104,7 +104,7 @@ jobs:
 
           spring:
             datasource:
-              url: jdbc:mysql://127.0.0.1:3306/${DEV_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+              url: jdbc:mysql://${DEV_DB_HOST}:${DEV_DB_PORT}/${DEV_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
               username: ${DEV_DB_USER}
               password: ${DEV_DB_PASS}
               driver-class-name: com.mysql.cj.jdbc.Driver
@@ -120,15 +120,15 @@ jobs:
 
             data:
               redis:
-                host: 127.0.0.1
-                port: 6379
+                host: ${REDIS_HOST}
+                port: ${REDIS_PORT}
                 repositories:
                   enabled: false
 
             security:
               oauth2:
                 client:
-                registration:
+                  registration:
                     kakao:
                       client-id: ${KAKAO_CLIENT_ID}
                       client-secret: ${KAKAO_CLIENT_SECRET}
@@ -140,12 +140,12 @@ jobs:
                       client-authentication-method: client_secret_post
                       authorization-grant-type: authorization_code
 
-                provider:
-                  kakao:
-                    authorization-uri: https://kauth.kakao.com/oauth/authorize
-                    token-uri: https://kauth.kakao.com/oauth/token
-                    user-info-uri: https://kapi.kakao.com/v2/user/me
-                    user-name-attribute: id
+                  provider:
+                    kakao:
+                      authorization-uri: https://kauth.kakao.com/oauth/authorize
+                      token-uri: https://kauth.kakao.com/oauth/token
+                      user-info-uri: https://kapi.kakao.com/v2/user/me
+                      user-name-attribute: id
 
           aws:
             s3:
