@@ -70,20 +70,20 @@ jobs:
             port: ${DEV_SERVER_PORT}
 
           spring:
+            application:
+              name: gathering
             datasource:
-              url: jdbc:mysql://${DEV_DB_HOST}:${DEV_DB_PORT}/${DEV_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul
-              username: ${DEV_DB_USER}
-              password: ${DEV_DB_PASS}
-              driver-class-name: com.mysql.cj.jdbc.Driver
+              url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+              username: test
+              password:
+              driver-class-name: org.h2.Driver
 
             jpa:
               hibernate:
-                ddl-auto: update
+                ddl-auto: create-drop
               properties:
                 hibernate:
-                  show_sql: true
-                  format_sql: true
-              open-in-view: false
+                  dialect: org.hibernate.dialect.H2Dialect
 
             data:
               redis:
