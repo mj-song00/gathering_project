@@ -4,6 +4,7 @@ import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -17,25 +18,27 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Slf4j
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
-    public static final String EMAIL_CLAIM = "email"; // JWT 이메일 클레임 키
-    public static final String USER_ROLE_CLAIM = "userRole"; // JWT 유저 권한 클레임 키
-    private static final String BEARER_PREFIX = "Bearer "; // Authorization 헤더의 Bearer 접두어
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256; // 서명 알고리즘
-    private static final int MIN_SECRET_KEY_LENGTH = 32; // 시크릿 키 최소 길이 (256비트)
+    public static final String EMAIL_CLAIM = "email";
+    public static final String USER_ROLE_CLAIM = "userRole";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
+    private static final int MIN_SECRET_KEY_LENGTH = 32;
 
     @Value("${jwt.expiration}")
-    private long expirationTime;
+    private long accessTokenExpiration;
+
+    @Value("${jwt.refresh-expiration}")
+    private long refreshTokenExpiration;
 
     @Value("${jwt.secret}")
     private String secretKey;
 
-    private Key key; // 암호화에 사용할 Key 객체
+    private Key key;
 
-    // 시크릿 키 길이 및 초기화 검증
     @PostConstruct
     public void init() {
         validateSecretKeyLength();
@@ -43,7 +46,6 @@ public class JwtTokenProvider {
         key = Keys.hmacShaKeyFor(decodedKey);
     }
 
-    // 시크릿 키 길이 및 유효성 검증
     private void validateSecretKeyLength() {
         if (secretKey == null || secretKey.isEmpty()) {
             throw new IllegalArgumentException("JWT secret key를 찾을 수 없습니다.");
@@ -53,21 +55,33 @@ public class JwtTokenProvider {
         }
     }
 
-    // JWT 토큰 생성
-    public String createToken(UUID userId, String email, UserRole userRole) {
+    // 액세스 토큰 생성
+    public String createAccessToken(UUID userId, String email, UserRole userRole) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + expirationTime * 1000); // 밀리초로 변환
+        Date expiryDate = new Date(now.getTime() + accessTokenExpiration * 1000);
         return Jwts.builder()
                 .setSubject(userId.toString())
                 .claim(EMAIL_CLAIM, email)
                 .claim(USER_ROLE_CLAIM, userRole.name())
-                .setIssuedAt(now) // 발급 시간
-                .setExpiration(expiryDate) // 만료 시간
-                .signWith(key, SIGNATURE_ALGORITHM) // 서명 설정
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SIGNATURE_ALGORITHM)
                 .compact();
     }
 
-    // Bearer 접두어 제거 후 토큰 반환
+    // 리프레시 토큰 생성
+    public String createRefreshToken(UUID userId) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + refreshTokenExpiration * 1000);
+        return Jwts.builder()
+                .setSubject(userId.toString())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SIGNATURE_ALGORITHM)
+                .compact();
+    }
+
+    // Bearer 접두어 제거
     public String substringToken(String tokenValue) {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(BEARER_PREFIX.length());
@@ -75,7 +89,7 @@ public class JwtTokenProvider {
         throw new BaseException(ExceptionEnum.JWT_TOKEN_NOT_FOUND);
     }
 
-    // JWT 토큰에서 Claims 추출
+    // Claims 추출
     public Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -83,4 +97,25 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    // 토큰 유효성 검증
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("Invalid JWT token", e);
+            return false;
+        }
+    }
+
+    // 토큰 남은 만료 시간 가져오기
+    public long getRemainingExpiration(String token) {
+        Claims claims = extractClaims(token);
+        return claims.getExpiration().getTime() - new Date().getTime();
+    }
 }
+

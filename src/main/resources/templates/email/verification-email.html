@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>이메일 인증 코드</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333; margin: 0; padding: 0;">
+<div
+    style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+  <div style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">
+    안녕하세요, 모놀로그 서비스 입니다. <br/>
+    이메일 인증 코드가 발송되었습니다.
+  </div>
+  <p>아래의 인증 코드를 입력하여 이메일 인증을 완료해 주세요:</p>
+
+  <div style="font-size: 24px; font-weight: bold; color: #007bff; margin: 20px 0;"
+       th:text="${code}">
+    [인증 코드]
+  </div>
+
+  <p>이 인증 코드는 5분 후에 만료됩니다.</p>
+
+  <div style="font-size: 12px; color: #999; margin-top: 20px;">
+    감사합니다. <br> Sparta Gathering Team 21
+  </div>
+</div>
+</body>
+</html>

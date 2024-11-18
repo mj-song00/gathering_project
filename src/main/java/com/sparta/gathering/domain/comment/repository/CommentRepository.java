@@ -1,13 +1,13 @@
 package com.sparta.gathering.domain.comment.repository;
 
 import com.sparta.gathering.domain.comment.entity.Comment;
-import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommentRepository extends JpaRepository<Comment,Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> findAllByScheduleIdAndDeleteAtIsNullOrderByUpdatedAtDesc(Long boardId);
+    List<Comment> findAllByScheduleIdAndDeletedAtIsNullOrderByUpdatedAtDesc(Long boardId);
 
-    Optional<Comment> findByScheduleIdAndIdAndDeleteAtIsNull(Long scheduleId, Long commentId);
+    Optional<Comment> findByScheduleIdAndIdAndDeletedAtIsNull(Long scheduleId, Long commentId);
 }

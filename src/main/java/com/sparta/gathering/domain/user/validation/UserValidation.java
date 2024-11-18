@@ -15,6 +15,7 @@ public class UserValidation {
 
     private final UserRepository userRepository;
 
+    // 인증된 사용자 확인
     public void validateAuthenticatedUser(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser == null) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_USER);

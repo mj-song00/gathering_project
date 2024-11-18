@@ -1,17 +1,24 @@
 package com.sparta.gathering.domain.user.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
+import com.sparta.gathering.domain.agreement.enums.AgreementStatus;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
+import com.sparta.gathering.domain.useragreement.entity.UserAgreement;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -58,6 +65,10 @@ public class User extends Timestamped {
     @Column
     private String profileImage; // 사용자 프로필 이미지 URL (null 경우 디폴트 이미지)
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserAgreement> userAgreements = new ArrayList<>();
+
     // 비밀번호 변경
     public void setPassword(String password) {
         this.password = password;
@@ -82,6 +93,20 @@ public class User extends Timestamped {
     // 프로필 이미지 업데이트
     public void setUpdateProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    // 약관 동의 추가
+    public void addUserAgreement(UserAgreement userAgreement) {
+        userAgreements.add(userAgreement);
+        if (userAgreement.getUser() != this) {
+            userAgreement.setUser(this);
+        }
+    }
+
+    // 필수 약관의 만료 상태를 확인하는 메서드
+    public boolean isInactiveDueToExpiredAgreements() {
+        return userAgreements.stream()
+                .anyMatch(agreement -> agreement.isRequired() && agreement.getStatus() == AgreementStatus.EXPIRED);
     }
 
 }

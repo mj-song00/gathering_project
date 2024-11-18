@@ -1,7 +1,13 @@
 package com.sparta.gathering.domain.map.entity;
 
 import com.sparta.gathering.domain.gather.entity.Gather;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "map")
 public class Map {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +31,6 @@ public class Map {
     private Double longitude;//경도 x
 
     @OneToOne
-    @JoinColumn(name = "gather_id")
     private Gather gather;
 
 
@@ -36,8 +42,5 @@ public class Map {
 
     public void saveGather(Gather gather) {
         this.gather = gather;
-        if (gather.getMap() != this) {
-            gather.saveMap(this); // 양방향 관계 설정
-        }
     }
 }

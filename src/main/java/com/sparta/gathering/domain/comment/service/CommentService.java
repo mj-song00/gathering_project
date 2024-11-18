@@ -61,7 +61,7 @@ public class CommentService {
 
     /* 댓글 조회 */
     public List<CommentResponse> getComment(Long scheduleId) {
-        return commentRepository.findAllByScheduleIdAndDeleteAtIsNullOrderByUpdatedAtDesc(scheduleId)
+        return commentRepository.findAllByScheduleIdAndDeletedAtIsNullOrderByUpdatedAtDesc(scheduleId)
                 .stream()
                 .map(CommentResponse::new)
                 .toList();
@@ -104,7 +104,7 @@ public class CommentService {
 
     //댓글 찾는 메서드
     private Comment getComment(Long scheduleId, Long commentId) {
-        return commentRepository.findByScheduleIdAndIdAndDeleteAtIsNull(scheduleId, commentId)
+        return commentRepository.findByScheduleIdAndIdAndDeletedAtIsNull(scheduleId, commentId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.COMMENT_NOT_FOUND));
     }
 }
