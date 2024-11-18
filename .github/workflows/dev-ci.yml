@@ -141,12 +141,12 @@ jobs:
                       client-authentication-method: client_secret_post
                       authorization-grant-type: authorization_code
 
-                provider:
-                  kakao:
-                    authorization-uri: https://kauth.kakao.com/oauth/authorize
-                    token-uri: https://kauth.kakao.com/oauth/token
-                    user-info-uri: https://kapi.kakao.com/v2/user/me
-                    user-name-attribute: id
+                  provider:
+                    kakao:
+                      authorization-uri: https://kauth.kakao.com/oauth/authorize
+                      token-uri: https://kauth.kakao.com/oauth/token
+                      user-info-uri: https://kapi.kakao.com/v2/user/me
+                      user-name-attribute: id
 
           aws:
             s3:
