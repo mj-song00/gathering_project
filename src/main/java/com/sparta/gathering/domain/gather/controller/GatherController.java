@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/gathers")
-@CrossOrigin(origins = "http://localhost:63342")
+//@CrossOrigin(origins = "http://localhost:63342")
 public class GatherController {
 
     private final GatherService gatherService;
