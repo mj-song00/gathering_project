@@ -100,7 +100,7 @@ jobs:
           MAIL_SENDER: ${{ secrets.MAIL_SENDER }}
           BASE_URL: ${{ secrets.BASE_URL }}
         run: |
-          cat <<EOT >> src/main/resources/dev.yml
+          cat <<EOT >> src/main/resources/application-dev.yml
           server:
             port: ${DEV_SERVER_PORT}
 
