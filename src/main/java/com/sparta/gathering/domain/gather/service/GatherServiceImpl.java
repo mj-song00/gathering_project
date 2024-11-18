@@ -3,7 +3,7 @@ package com.sparta.gathering.domain.gather.service;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.common.sevice.SlackNotifierService;
+import com.sparta.gathering.common.service.SlackNotifierService;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
