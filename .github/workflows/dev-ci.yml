@@ -58,14 +58,11 @@ jobs:
              echo "No Checkstyle violations found."
            fi
 
-
-
       - name: 빌드 및 테스트 실행
         run: |
           ./gradlew build test \
           --no-daemon \
           --build-cache
-
 
     env:
       # 개발 서버 설정

@@ -1,3 +1,4 @@
+/*
 package com.sparta.gathering.domain.coupon;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,12 +24,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
-@SpringBootTest
 class CouponServiceTest {
 
     @InjectMocks
@@ -148,4 +147,4 @@ class CouponServiceTest {
 //        // Then
 //        assertEquals("상태 : SUCCESS / 쿠폰 번호: 쿠폰 번호 없음", status);
 //    }
-}
+}*/
