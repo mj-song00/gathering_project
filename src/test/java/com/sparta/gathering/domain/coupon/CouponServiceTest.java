@@ -1,4 +1,3 @@
-/*
 package com.sparta.gathering.domain.coupon;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -147,4 +146,4 @@ class CouponServiceTest {
 //        // Then
 //        assertEquals("상태 : SUCCESS / 쿠폰 번호: 쿠폰 번호 없음", status);
 //    }
-}*/
+}
