@@ -1,16 +1,19 @@
 package com.sparta.gathering.domain.chat.entity;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "chat_massage")
+@Table(name = "chat_message")
 public class ChatMessage implements Serializable { // Serializable 구현
 
     @Id

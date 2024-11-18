@@ -22,7 +22,7 @@ CREATE TABLE user
 
 CREATE TABLE category
 (
-    id            BINARY(16) NOT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
     created_at    DATETIME(6),
     updated_at    DATETIME(6),
     deleted_at    DATETIME(6),
@@ -47,7 +47,7 @@ CREATE TABLE gather
 
 CREATE TABLE hashtag
 (
-    id            BINARY(16) NOT NULL,
+    id            BIGINT NOT NULL AUTO_INCREMENT,
     created_at    DATETIME(6),
     updated_at    DATETIME(6),
     deleted_at    DATETIME(6),
