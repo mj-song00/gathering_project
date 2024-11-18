@@ -42,7 +42,7 @@ public class CouponConsumer {
                         boolean isCouponIssued = issueCoupon(userId);
                         String status = isCouponIssued ? "SUCCESS" : "FAILED";
                         redisTemplate.opsForValue().set("couponIssued:" + userId, status);
-                        log.info("couponIssue status: " + status);
+                        log.info("couponIssue status: {}", status);
                     }
                 }
             } else {

@@ -97,6 +97,9 @@ dependencies {
     implementation 'org.springframework.batch:spring-batch-core'
     implementation 'org.springframework.batch:spring-batch-infrastructure'
 
+    // mac os
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.96.Final:osx-aarch_64'
+
 }
 
 checkstyle {
