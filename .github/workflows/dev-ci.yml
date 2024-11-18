@@ -12,6 +12,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_ROOT_PASS }}
+          MYSQL_DATABASE: ${{ secrets.DEV_DB_NAME }}
+          MYSQL_USER: ${{ secrets.DEV_DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DEV_DB_PASS }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
@@ -33,8 +49,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: 환경 변수 설정 및 dev.yml 생성
+      - name: 환경 변수 설정 및 application-test.yml 생성
         env:
+          DEV_DB_ROOT_PASS: ${{ secrets.DEV_DB_ROOT_PASS }}
           DEV_SERVER_PORT: ${{ secrets.DEV_SERVER_PORT }}
           DEV_DB_HOST: ${{ secrets.DEV_DB_HOST }}
           DEV_DB_PORT: ${{ secrets.DEV_DB_PORT }}
@@ -65,25 +82,25 @@ jobs:
           MAIL_SENDER: ${{ secrets.MAIL_SENDER }}
           BASE_URL: ${{ secrets.BASE_URL }}
         run: |
-          cat <<EOT >> src/main/resources/application-test.yml
+          cat <<EOT >> src/main/resources/application-dev.yml
           server:
             port: ${DEV_SERVER_PORT}
 
           spring:
-            application:
-              name: gathering
             datasource:
-              url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
-              username: test
-              password:
-              driver-class-name: org.h2.Driver
+              url: jdbc:mysql://${DEV_DB_HOST}:${DEV_DB_PORT}/${DEV_DB_NAME}?useSSL=false&serverTimezone=Asia/Seoul
+              username: ${DEV_DB_USER}
+              password: ${DEV_DB_PASS}
+              driver-class-name: com.mysql.cj.jdbc.Driver
 
             jpa:
               hibernate:
                 ddl-auto: create-drop
               properties:
                 hibernate:
-                  dialect: org.hibernate.dialect.H2Dialect
+                  show_sql: true
+                  format_sql: true
+              open-in-view: false
 
             data:
               redis:
@@ -192,6 +209,13 @@ jobs:
           fi
 
       - name: 빌드 및 테스트 실행
+        env:
+          DEV_DB_HOST: ${{ secrets.DEV_DB_HOST }}
+          DEV_DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DEV_DB_NAME: ${{ secrets.DEV_DB_NAME }}
+          DEV_DB_USER: ${{ secrets.DEV_DB_USER }}
+          DEV_DB_PASS: ${{ secrets.DEV_DB_PASS }}
+
         run: |
           ./gradlew build test \
           --no-daemon \

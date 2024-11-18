@@ -2,4 +2,4 @@ spring:
   application:
     name: gathering
   profiles:
-    active: test
+    active: dev
