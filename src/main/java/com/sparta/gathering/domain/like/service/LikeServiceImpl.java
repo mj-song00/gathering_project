@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -20,7 +21,7 @@ public class LikeServiceImpl implements LikeService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
 
-    @Transactional
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     @Override
     public void addLike( Long memberId, Long gatherId) {
         //멤버 조회
@@ -36,13 +37,23 @@ public class LikeServiceImpl implements LikeService {
         if(!isMember) throw new BaseException(ExceptionEnum.MEMBER_NOT_FOUND);
 
 
-        boolean alreadyLiked = likeRepository.existByMemberIdAndGatherId(memberId, gatherId);
-        if(alreadyLiked){
-            likeRepository.deleteLike(memberId, gatherId);
-        }else{
+       boolean alreadyLiked = likeRepository.existByMemberIdAndGatherId(memberId, gatherId);
+
+       if(alreadyLiked){
+           likeRepository.deleteLike(memberId, gatherId);
+            gather.disLike();
+      }else{
             Like like = new Like(gather, member);
+            gather.like();
             likeRepository.save(like);
-        }
+       }
 
     }
+
+    @Override
+    public int countLikeByGather(Gather gather) {
+        return likeRepository.countByGather(gather);
+    }
+
+
 }

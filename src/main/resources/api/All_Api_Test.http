@@ -1,8 +1,8 @@
 @base_url = http://localhost:8080
 
-@user_Id = c9867e7b-d9bf-4ad4-9676-1e8e219ad3b7
+@user_Id = bd4a2b14-1cc5-4e62-b75a-cd2d3a1c6238
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTg1Mzg3NCwiZXhwIjoxNzMxODU1Njc0fQ.CEApZ0sQESR9wm8aL-xXwK0hWhzyafHfKocXxecbj58
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTkwNTg3MCwiZXhwIjoxNzMxOTA3NjcwfQ.NJ1J_LggNuP_7Kyv-43-6ZE5eiYOmuovhB-r9TGcQOI
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -160,7 +160,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 모임 상세페이지
-GET {{base_url}}/api/gathers/{{gatherId}}/detail
+GET {{base_url}}/api/gathers/168/detail
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -184,6 +184,12 @@ Authorization: Bearer {{jwt_token}}
 PATCH {{base_url}}/api/members/{{memberId}}/withdrawl
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+### 모임 조회
+GET {{base_url}}/api/members/168
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
 
 ### 해시태그 생성
 POST {{base_url}}/api/gatherings/1/hashtags
@@ -218,17 +224,17 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 보드 생성
-POST {{base_url}}/api/gather/1/boards
+POST {{base_url}}/api/gathers/168/boards
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "boardTitle": "보드2",
-  "boardContent": "보드2 컨텐츠"
+  "boardTitle": "보드3",
+  "boardContent": "보드3 컨텐츠"
 }
 
 ### 스케쥴 생성
-POST {{base_url}}/api/gather/1/schedule
+POST {{base_url}}/api/gathers/168/schedules
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
