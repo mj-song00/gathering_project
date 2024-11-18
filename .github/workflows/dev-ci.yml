@@ -74,7 +74,7 @@ jobs:
           DEV_DB_PORT: 3306
           DEV_DB_NAME: ${{ secrets.DEV_DB_NAME }}
           DEV_DB_USER: ${{ secrets.DEV_DB_USER }}
-          DEV_DB_PASS: ${{ secrets.DEV_DB_PASS }}
+          DEV_DB_PASS: ${{ secrets.DEV_DB_ROOT_PASS }}
           REDIS_HOST: 127.0.0.1  # 서비스 컨테이너 내부에서 실행
           REDIS_PORT: 6379
           KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
@@ -106,7 +106,7 @@ jobs:
           spring:
             datasource:
               url: jdbc:mysql://${DEV_DB_HOST}:${DEV_DB_PORT}/${DEV_DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
-              username: ${DEV_DB_USER}
+              username: root
               password: ${DEV_DB_PASS}
               driver-class-name: com.mysql.cj.jdbc.Driver
 
