@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxNzA1MzkyLCJleHAiOjE3MzE3MDcxOTJ9.yTlg1zKHNoY8sOMw1mcQchaCm_7AsFxIQpctzQd1AOs
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxODg3MzE2LCJleHAiOjE3MzE4ODkxMTZ9.L9y5tcfXqp2XzFH_4htHdP42jlTtdnGtNIBSyJx-wpU
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -10,13 +10,13 @@
 
 @expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
 
-@memberId = 2
+@memberId = 1
 
-@category_Id = 2
+@category_Id = 1
 
 @gatherId = 1
 
-@agreement_Id = cfc7db0e-a244-11ef-89b9-00155d19365e
+@agreement_Id = 17a980dd-a53e-11ef-9770-00155dbf39e6
 
 ### 약관 생성 테스트
 ### PRIVACY_POLICY = 개인정보 처리방침
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "code": "438799"
+  "code": "393755"
 }
 
 ### Agreement Expiration Job 실행 요청
@@ -81,9 +81,9 @@ Content-Type: application/json
   "password": "password123A!",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "cfc7db0e-a244-11ef-89b9-00155d19365e",
-    "cfc7e142-a244-11ef-89b9-00155d19365e",
-    "cfc7ebe5-a244-11ef-89b9-00155d19365e"
+    "17a980dd-a53e-11ef-9770-00155dbf39e6",
+    "17a9833c-a53e-11ef-9770-00155dbf39e6",
+    "17a983d8-a53e-11ef-9770-00155dbf39e6"
   ]
 }
 
