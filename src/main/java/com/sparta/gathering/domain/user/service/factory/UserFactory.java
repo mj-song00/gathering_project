@@ -5,6 +5,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserFactory {
@@ -30,6 +31,7 @@ public class UserFactory {
                 .userRole(userRole)
                 .identityProvider(identityProvider)
                 .profileImage(profileImage)
+                .userAgreements(new ArrayList<>())
                 .build();
     }
 

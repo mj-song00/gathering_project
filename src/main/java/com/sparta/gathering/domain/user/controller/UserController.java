@@ -10,12 +10,14 @@ import com.sparta.gathering.domain.user.dto.response.UserProfileResponse;
 import com.sparta.gathering.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -81,11 +83,13 @@ public class UserController {
     @Operation(summary = "회원 탈퇴", description = "본인의 계정을 탈퇴합니다.")
     @PatchMapping("/me/delete")
     public ResponseEntity<ApiResponse<Void>> deleteUser(
-            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-        userService.deleteUser(authenticatedUser);
-        ApiResponse<Void> response =
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response) {
+        userService.deleteUser(authenticatedUser, refreshToken, response);
+        ApiResponse<Void> responseBody =
                 ApiResponse.successWithOutData(ApiResponseEnum.USER_DELETED_SUCCESS);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responseBody);
     }
 
 }
