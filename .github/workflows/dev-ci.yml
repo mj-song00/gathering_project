@@ -204,10 +204,6 @@ jobs:
           name: jacoco-reports
           path: build/reports/jacoco/test/html/**
 
-      # Step 8: dev.yml 파일 삭제
-      - name: dev.yml 파일 삭제
-        run: rm -f src/main/resources/application-dev.yml
-
   checkstyle:
     name: Checkstyle 검사
     runs-on: ubuntu-latest
