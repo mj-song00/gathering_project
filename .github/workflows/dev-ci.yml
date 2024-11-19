@@ -37,6 +37,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Java 버전 및 JAVA_HOME 확인
+        run: |
+          java -version
+          echo $JAVA_HOME
+
       # Step 5: 환경 변수 설정 및 dev.yml 생성
       - name: 환경 변수 설정 및 dev.yml 생성
         env:
@@ -251,3 +256,14 @@ jobs:
         with:
           name: checkstyle-html-report
           path: build/reports/checkstyle/checkstyleMain.html
+
+      - name: Checkstyle 위반 확인
+        run: |
+          violations=$(grep -c '<error ' build/reports/checkstyle/checkstyleMain.xml || true)
+          echo "Found $violations Checkstyle violations."
+          if [ "$violations" -gt 0 ]; then
+            echo "Checkstyle violations found: $violations"
+            exit 1
+          else
+            echo "No Checkstyle violations found."
+          fi
