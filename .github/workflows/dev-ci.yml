@@ -9,6 +9,7 @@ on:
       - dev  # dev 브랜치에 대한 PR 생성 시 실행
 
 jobs:
+
   build-and-test:
     name: 빌드 및 테스트
     runs-on: ubuntu-latest
