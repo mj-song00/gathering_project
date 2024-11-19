@@ -76,9 +76,9 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "nickName": "홍길동",
-  "password": "password123A!",
+  "email": "",
+  "nickName": "",
+  "password": "",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
     "17a980dd-a53e-11ef-9770-00155dbf39e6",
