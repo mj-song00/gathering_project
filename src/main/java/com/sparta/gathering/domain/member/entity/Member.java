@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "member")
 @Getter
+@Setter
 public class Member extends Timestamped {
 
     @Id
