@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "gather")
 @Getter
+@Setter
 public class Gather extends Timestamped {
 
     @Id
