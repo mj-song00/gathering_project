@@ -30,15 +30,7 @@ public class RefreshTokenRepository {
      * @return 블랙리스트에 포함되어 있으면 true, 아니면 false
      */
     public boolean isBlacklisted(String refreshToken) {
-        return redisTemplate.hasKey("blacklist:" + refreshToken);
+        return Boolean.TRUE.equals(redisTemplate.hasKey("blacklist:" + refreshToken));
     }
 
-    /**
-     * 블랙리스트에 포함된 리프레시 토큰을 삭제합니다.
-     *
-     * @param refreshToken 삭제할 리프레시 토큰
-     */
-    public void removeFromBlacklist(String refreshToken) {
-        redisTemplate.delete("blacklist:" + refreshToken);
-    }
 }
