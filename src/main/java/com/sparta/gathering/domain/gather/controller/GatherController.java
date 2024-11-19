@@ -153,4 +153,11 @@ public class GatherController {
         return ResponseEntity.ok(ApiResponse.successWithData(list,
                 ApiResponseEnum.GET_SUCCESS));
     }
+
+    @Operation(summary = "멤버로 있는 모임 조회", description = "본인이 가입되어있는 모임이 조회 됩니다.")
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<GatherListResponse>>> getGatherList(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        List<GatherListResponse> list = gatherService.getGatherList(authenticatedUser);
+        return ResponseEntity.ok(ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS));
+    }
 }

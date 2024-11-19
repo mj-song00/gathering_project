@@ -7,6 +7,7 @@ import com.sparta.gathering.common.service.SlackNotifierService;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
@@ -192,6 +193,16 @@ public class GatherServiceImpl implements GatherService {
         return gatherList.stream()
                 .map(NewGatherResponse::from)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<GatherListResponse> getGatherList(AuthenticatedUser authenticatedUser) {
+        User user = userRepository.findById(authenticatedUser.getUserId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+
+        List<Gather> gathers = gatherRepository.findAllByUserId(user.getId());
+
+        return gathers.stream().map(GatherListResponse::from).collect(Collectors.toList());
     }
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
