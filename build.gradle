@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.4'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'com.sparta'
@@ -102,6 +103,18 @@ dependencies {
 
 }
 
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 checkstyle {
     toolVersion = '10.3.4'
     configFile = file('src/main/resources/checkstyle/checkstyle.xml')
@@ -140,6 +153,7 @@ tasks.register('checkstyleFailOnViolation') {
 
 tasks.test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport // 테스트가 끝나면 Report 생성
     testLogging {
         events "PASSED", "FAILED", "SKIPPED"
         showStandardStreams = true // 테스트 출력 디버깅에 유용
