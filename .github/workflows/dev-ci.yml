@@ -37,11 +37,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Java 버전 및 JAVA_HOME 확인
-        run: |
-          java -version
-          echo $JAVA_HOME
-
       # Step 5: 환경 변수 설정 및 dev.yml 생성
       - name: 환경 변수 설정 및 dev.yml 생성
         env:
@@ -211,6 +206,12 @@ jobs:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
 
+      - name: JDK 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
       - name: dev.yml 다운로드
         uses: actions/download-artifact@v4
         with:
@@ -237,6 +238,12 @@ jobs:
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
+
+      - name: JDK 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: dev.yml 다운로드
         uses: actions/download-artifact@v4
