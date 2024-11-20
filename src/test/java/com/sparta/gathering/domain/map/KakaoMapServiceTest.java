@@ -1,30 +1,17 @@
 package com.sparta.gathering.domain.map;
 
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
-import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.service.KakaoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.geo.Circle;
-import org.springframework.data.geo.GeoResults;
-import org.springframework.data.geo.Point;
-import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.*;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -52,7 +39,7 @@ public class KakaoMapServiceTest {
     }
 
     @Test
-    public void searchMap_ShouldReturnExpectedResponse() {
+    public void searchMapShouldReturnExpectedResponse() {
         // Arrange
         MapRequest mapRequest = new MapRequest("Seoul");
         String mockResponse = "{\"documents\": [{\"address_name\": \"Seoul, South Korea\"}]}";

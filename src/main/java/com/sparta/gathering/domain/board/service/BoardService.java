@@ -7,13 +7,11 @@ import com.sparta.gathering.domain.board.dto.request.BoardRequestDto;
 import com.sparta.gathering.domain.board.dto.response.BoardResponseDto;
 import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.board.repository.BoardRepository;
-import com.sparta.gathering.domain.comment.entity.Comment;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import java.time.LocalDateTime;
 
 import com.sparta.gathering.domain.member.entity.Member;
-import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

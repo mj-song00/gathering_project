@@ -84,7 +84,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void userRepository_FindById_ShouldReturnUser() {
+    public void userRepositoryFindByIdShouldReturnUser() {
         when(userRepository.findById(authenticatedUser.getUserId())).thenReturn(Optional.of(mockUser));
         Optional<User> foundUser = userRepository.findById(authenticatedUser.getUserId());
         assertThat(foundUser.isPresent()).isTrue();
@@ -93,7 +93,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName("isValidMember 메서드 확인")
-    public void isValidMember_ShouldReturnMember() {
+    public void isValidMemberShouldReturnMember() {
         // Setup mock for memberRepository
         when(memberRepository.findByUserId(authenticatedUser.getUserId())).thenReturn(Optional.of(mockMember));
 
@@ -104,7 +104,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName("댓글 생성이 정상적으로 작동")
-    public void createComment_ShouldCreateAndSaveCommentSuccessfully() {
+    public void createCommentShouldCreateAndSaveCommentSuccessfully() {
         // Arrange
         Long scheduleId = 1L; // Example schedule ID
         String commentText = "This is a test comment."; // Example comment text
@@ -137,14 +137,14 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void createComment_ShouldThrowException_WhenUserIsNotMember() {
+    public void createCommentShouldThrowExceptionWhenUserIsNotMember() {
         when(memberRepository.findByUserId(any())).thenReturn(Optional.empty());
         assertThrows(BaseException.class, () -> commentService.createComment(1L, authenticatedUser, request));
     }
 
     @Test
     @DisplayName("업데이트가 정상적으로 작동 확인")
-    public void updateComment_ShouldUpdateComment_WhenUserIsAuthorized() {
+    public void updateCommentShouldUpdateCommentWhenUserIsAuthorized() {
         Long scheduleId = 1L;
         Long commentId = 1L;
         String updatedCommentText = "Updated comment text";
@@ -164,7 +164,7 @@ public class CommentServiceTest {
 
     @Test
     @DisplayName("승인되지 않은 사용자 예외처리")
-    public void updateComment_ShouldThrowException_WhenUserIsNotAuthorized() {
+    public void updateCommentShouldThrowExceptionWhenUserIsNotAuthorized() {
         Long scheduleId = 1L;
         Long commentId = 1L;
         request = new CommentRequest("Unauthorized update attempt");
@@ -184,7 +184,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void getComment_ShouldReturnCommentList_WhenScheduleIdIsValid() {
+    public void getCommentShouldReturnCommentListWhenScheduleIdIsValid() {
         Long scheduleId = 1L;
         // Setup mocks
         when(comment1.getComment()).thenReturn("First comment");
@@ -201,7 +201,7 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void deleteComment_ShouldDeleteComment_WhenUserIsAuthorized() {
+    public void deleteCommentShouldDeleteCommentWhenUserIsAuthorized() {
         Long scheduleId = 1L;
         Long commentId = 1L;
 
