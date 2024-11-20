@@ -7,7 +7,6 @@ import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
 import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.entity.Comment;
 import com.sparta.gathering.domain.comment.repository.CommentRepository;
-import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
