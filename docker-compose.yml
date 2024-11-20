@@ -2,8 +2,8 @@ services:
   app:
     image: gathering-21-build:latest
     environment:
-      DEV_DB_HOST: gathering_project-db-1
-      DEV_DB_PORT: ${DEV_DB_PORT}
+      # DEV_DB_HOST: gathering_project-db-1
+      # DEV_DB_PORT: ${DEV_DB_PORT}
       REDIS_HOST: gathering_project-redis-1
       REDIS_PORT: ${REDIS_PORT}
       SPRING_DATASOURCE_INITIALIZATION_MODE: always  # 스프링부트에서 데이터베이스 초기화 로직을 실행할 수 있도록 설정
