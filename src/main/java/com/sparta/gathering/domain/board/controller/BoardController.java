@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.board.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.board.dto.request.BoardRequestDto;
@@ -9,7 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,9 +24,11 @@ public class BoardController {
     @Operation(summary = "보드 생성", description = "Board 생성")
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @PathVariable(name = "gatherId") Long gatherId,
-            @RequestBody BoardRequestDto boardRequestDto)
-    {
-        BoardResponseDto board = boardService.createBoard(gatherId, boardRequestDto);
+            @RequestBody BoardRequestDto boardRequestDto,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser)
+
+        {
+        BoardResponseDto board = boardService.createBoard(gatherId, boardRequestDto,authenticatedUser);
         return ResponseEntity.ok(ApiResponse.successWithData(board, ApiResponseEnum.BOARD_CREATED));
     }
 
@@ -34,19 +37,21 @@ public class BoardController {
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "boardsId") Long boardsId,
-            @RequestBody BoardRequestDto boardRequestDto)
+            @RequestBody BoardRequestDto boardRequestDto,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser)
     {
-        BoardResponseDto updatedBoard = boardService.updateBoard(gatherId, boardsId, boardRequestDto);
+        BoardResponseDto updatedBoard = boardService.updateBoard(gatherId, boardsId, boardRequestDto,authenticatedUser);
         return ResponseEntity.ok(ApiResponse.successWithData(updatedBoard, ApiResponseEnum.BOARD_UPDATED));
     }
 
-    @PatchMapping("/{boardsId}")
+    @PatchMapping("/delete/{boardsId}")
     @Operation(summary = "보드 삭제", description = "Board 삭제")
     public ResponseEntity<ApiResponse<Void>> deleteBoard(
             @PathVariable(name = "gatherId") Long gatherId,
-            @PathVariable(name = "boardsId") Long boardsId)
+            @PathVariable(name = "boardsId") Long boardsId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser)
     {
-        boardService.deleteBoard(gatherId, boardsId);
+        boardService.deleteBoard(gatherId, boardsId,authenticatedUser);
         return ResponseEntity.ok(ApiResponse.successWithData(null, ApiResponseEnum.BOARD_DELETED));
     }
 }

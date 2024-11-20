@@ -1,18 +1,20 @@
 @base_url = http://localhost:8080
 
-@user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
+@user_Id = b0610880-5e0b-49ec-807d-f1b4383666c3
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTY1OTEzOCwiZXhwIjoxNzMxNjYwOTM4fQ.aaufgPxpckCJLC_lRHOQcK-t-zvN7AsMNn82P0eGpw0
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYWRkNGNkNC0wNTQzLTQ1ZmItYTg5NS1jZDdkMDJlMjFhMTQiLCJlbWFpbCI6ImR1cnczMTY1QGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczMjEyNDExNiwiZXhwIjoxNzMyMTI1OTE2fQ.DA2rVwwcjFOO9e2tiFULTfaMCI68l80hJaNjBUKIiAs
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYWRkNGNkNC0wNTQzLTQ1ZmItYTg5NS1jZDdkMDJlMjFhMTQiLCJlbWFpbCI6ImR1cnczMTY1QGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMyMDcxMzc3LCJleHAiOjE3MzIwNzMxNzd9.o9x7hIKpEUv7p8JBRjSuSCMguySpaW-sZStnCm_BB-I
 
-@refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
+@refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMTE4OTNlZC1lY2ViLTQ0ZGEtYjJlOS1mNjUwOWMwZWJlOGQiLCJpYXQiOjE3MzIwNzU4NzcsImV4cCI6MTczMjE2MjI3N30.sozjZQnwpVheN1cDCTCvVJOKFDwfkNE_7kx-wapgKsc
 
 @expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
 
-@category_Id = 2
+@category_Id = 1
 
 @gatherId = 1
+
+@scheduleId = 4
 
 @agreement_Id = 17a980dd-a53e-11ef-9770-00155dbf39e6
 
@@ -53,7 +55,7 @@ POST {{base_url}}/api/verification/send
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com"
+  "email": "durw3166@gmail.com"
 }
 
 ### 인증 코드 확인 요청
@@ -61,8 +63,8 @@ POST {{base_url}}/api/verification/confirm
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "code": "393755"
+  "email": "durw3164@gmail.com",
+  "code": "813049"
 }
 
 ### Agreement Expiration Job 실행 요청
@@ -74,14 +76,14 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "nickName": "홍길동",
+  "email": "durw3166@gmail.com",
+  "nickName": "홍길동11",
   "password": "password123A!",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "17a980dd-a53e-11ef-9770-00155dbf39e6",
-    "17a9833c-a53e-11ef-9770-00155dbf39e6",
-    "17a983d8-a53e-11ef-9770-00155dbf39e6"
+    "de2cdc3c-a6e9-11ef-8f9f-ef5cfddf6764",
+    "de2ced6c-a6e9-11ef-8f9f-ef5cfddf6764",
+    "de2cef06-a6e9-11ef-8f9f-ef5cfddf6764"
   ]
 }
 
@@ -105,7 +107,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "durw3165@gmail.com",
   "password": "password123A!"
 }
 
@@ -166,7 +168,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "영화"
+  "categoryName": "영화1"
 }
 
 ### 카테고리 조회
@@ -196,7 +198,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "강릉-",
+  "title": "중복 테스트 모임",
   "description": "같이 공차실분",
   "hashtags": [
     "여의도공원",
@@ -263,6 +265,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 멤버 승인
+@memberId = 2
 PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
@@ -310,7 +313,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 보드 생성
-POST {{base_url}}/api/gather/1/boards
+POST {{base_url}}/api/gathers/{{gatherId}}/boards
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -319,8 +322,27 @@ Authorization: Bearer {{jwt_token}}
   "boardContent": "보드2 컨텐츠"
 }
 
+### 보드 수정
+@boardsId = 3
+PUT {{base_url}}/api/gathers/{{gatherId}}/boards/{{boardsId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "boardTitle": "보드수정22",
+  "boardContent": "보드2 컨텐츠"
+}
+
+### 보드 삭제
+PATCH {{base_url}}/api/gathers/{{gatherId}}/boards/delete/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+}
+
 ### 스케쥴 생성
-POST {{base_url}}/api/gather/1/schedule
+POST {{base_url}}/api/gathers/1/schedules
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -330,14 +352,34 @@ Authorization: Bearer {{jwt_token}}
 }
 
 
-
-### 댓글생성
-POST {{base_url}}/api/schedule/1/comments
+### 스케쥴 수정
+PUT {{base_url}}/api/gathers/1/schedules/{{scheduleId}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 타이틀3"
+  "scheduleTitle": "스케쥴 수정",
+  "scheduleContent": "스케쥴2 컨텐츠"
+}
+
+
+### 스케쥴 삭제
+PATCH {{base_url}}/api/gathers/1/schedules/2/delete
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+}
+
+
+
+### 댓글생성
+POST {{base_url}}/api/schedule/{{scheduleId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "댓글 타이틀4"
 }
 
 ### 댓글조회
@@ -370,11 +412,11 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 지도검색
-GET {{base_url}}/api/kakaoMap
+POST {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
-  "address": "강원특별자치도 강릉시 용지로 176"
+  "address": "인천 석남1동"
 }
 
 

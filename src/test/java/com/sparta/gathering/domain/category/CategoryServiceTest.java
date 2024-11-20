@@ -75,8 +75,6 @@ class CategoryServiceTest {
         categoryReq = new CategoryReq("운동");
         authenticatedUser = new AuthenticatedUser(user1.getId(), user1.getEmail(), null);
         category = new Category("카테고리 명", user1);
-
-
     }
 
     @Test

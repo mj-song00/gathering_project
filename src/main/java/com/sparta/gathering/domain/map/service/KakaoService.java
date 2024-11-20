@@ -1,13 +1,5 @@
 package com.sparta.gathering.domain.map.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.gathering.common.exception.BaseException;
-import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.entity.Map;
@@ -34,10 +26,8 @@ public class KakaoService {
     private final RestTemplate restTemplate;
     private final HttpHeaders headers = new HttpHeaders();
     private final MapRepository mapRepository;
-    private final ObjectMapper objectMapper;
-    private final GatherRepository gatherRepository;
-    private final RedisTemplate redisTemplate;
-    private final GeoOperations geoOperations;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final GeoOperations<String, String> geoOperations;
 
     @Value("${kakao.map.api-key}")
     private String appKey;

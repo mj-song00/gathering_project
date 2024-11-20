@@ -1,7 +1,6 @@
 package com.sparta.gathering.domain.comment.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
-import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.Column;
