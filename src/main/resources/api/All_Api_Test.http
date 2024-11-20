@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxOTIwOTkyLCJleHAiOjE3MzE5MjI3OTJ9.i3epid073V5P7zJhvV6fMysKHB819XH5IwEvrsYdUyI
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMyMDY1NTY0LCJleHAiOjE3MzIwNjczNjR9.5HxoUKQBWZqZOOk9kMqei_LLvwJ139dFHp_-Bs0hLPM
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "code": "393755"
+  "code": "616766"
 }
 
 ### Agreement Expiration Job 실행 요청
@@ -97,8 +97,8 @@ Content-Type: application/json
   "password": "password123A!",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "4c2b7d86-0f48-448e-949a-fc37557cc983",
-    "2f95fb4c-5ce1-493f-afc8-428b694cf299"
+    "17a980dd-a53e-11ef-9770-00155dbf39e6",
+    "17a9833c-a53e-11ef-9770-00155dbf39e6"
   ]
 }
 

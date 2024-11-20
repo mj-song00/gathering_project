@@ -51,6 +51,7 @@ public class AgreementService {
 
         // 약관 생성
         Agreement agreement = new Agreement(
+                UUID.randomUUID(),
                 agreementRequestDto.getContent(),
                 agreementRequestDto.getVersion(),
                 agreementRequestDto.getType()
