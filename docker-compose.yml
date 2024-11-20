@@ -45,6 +45,11 @@ services:
     container_name: gathering_project-redis-1
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     networks:
       - app-network
     volumes:
