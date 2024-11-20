@@ -23,7 +23,7 @@ spring:
 
   data:
     redis:
-      host: redis
+      host: host.docker.internal
       port: 6379
       repositories:
         enabled: false
