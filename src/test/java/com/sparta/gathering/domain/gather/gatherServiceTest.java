@@ -63,9 +63,6 @@ public class gatherServiceTest {
     private CategoryRepository categoryRepository;
 
     @Mock
-    private HashTagRepository hashTagRepository;
-
-    @Mock
     private MapRepository mapRepository;
 
     @Mock
@@ -73,19 +70,6 @@ public class gatherServiceTest {
 
     @Mock
     private ZSetOperations<String, String> zSetOperations;
-
-
-//    @MockBean
-//    private RedisTemplate<String, Object> redisTemplate;
-//
-//    @MockBean
-//    private ZSetOperations zSetOperations; // ZSetOperations mock
-//
-//    @Mock
-//    private GeoOperations<String, String> geoOperations;
-//
-//    @MockBean
-//    private RedisTemplate<String, String> rediusTemplate;
 
     @Mock
     private SlackNotifierService slackNotifierService;
@@ -95,7 +79,6 @@ public class gatherServiceTest {
 
     private Category category;
     private User adminUser;
-    private User testUser;
     private User user;
     private Gather gather;
     private AuthenticatedUser authenticatedUser;
@@ -107,7 +90,6 @@ public class gatherServiceTest {
     private Long gatherId = 1L;
     private Pageable pageable;
     private List<String> hashTagName;
-    private Page<Gather> mockPage;
 
     @BeforeEach
     void setUp() {
@@ -164,14 +146,6 @@ public class gatherServiceTest {
 
         // Gather에 Map 설정
         gather.setMap(map); // Gather와 Map 연결
-
-
-
-        //geoOperations = Mockito.mock(GeoOperations.class);
-
-//        MockitoAnnotations.initMocks(this);
-//        Mockito.when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
-//        Mockito.doNothing().when(zSetOperations).add(any(), any());
     }
 
     @Nested
@@ -229,20 +203,6 @@ public class gatherServiceTest {
             assertThrows(BaseException.class, () -> gatherService.getUser(userId));
         }
 
-//        @Test
-//        @DisplayName("Redis에 Map 추가 테스트")
-//        void testAddRedisMap() {
-//            // given
-//            // 여기서는 addRedisMap() 메서드를 호출하기 전에 RedisTemplate을 mock하여 결과를 체크할 수 있음
-//
-//            // when
-//            gatherService.addRedisMap(request); // addRedisMap()을 직접 호출
-//
-//            // then
-//            verify(redisTemplate, times(1)).opsForGeo();  // geoOperations 호출 확인
-//            verify(redisTemplate.opsForGeo(), times(1)).add(anyString(), any(Point.class), anyString()); // GeoOperations add 호출 확인
-//        }
-
         @Test
         @DisplayName("Gather 및 Member 저장 성공 테스트")
         void testSaveGatherAndMember() {
@@ -260,42 +220,6 @@ public class gatherServiceTest {
             verify(memberRepository).save(member);
         }
 
-//        @Test
-//        @DisplayName("Redis ZSet 값 갱신 성공 테스트")
-//        void testUpdateRedisZSet() {
-//            // given
-//            Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude());
-//            Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
-//            gather.saveMap(newMap);
-//
-//            when(redisTemplate.opsForZSet().score("city", gather.getMap().getAddressName())).thenReturn(1.0);
-//
-//            // when
-//            gatherService.updateRedisZSet(gather);
-//
-//            // then
-//            verify(redisTemplate.opsForZSet()).incrementScore("city", gather.getMap().getAddressName(), 1);
-//        }
-
-//        @Test
-//        @DisplayName("Redis ZSet 값 신규 추가 테스트")
-//        void testUpdateRedisZSet_NewValue() {
-//            // given
-//            Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude());
-//            Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
-//            gather.saveMap(newMap);
-//
-//            when(redisTemplate.opsForZSet()).thenReturn(new De);
-//
-//            when(redisTemplate.opsForZSet().incrementScore("city",request.getAddressName(),1.0));
-//
-//            // when
-//            gatherService.updateRedisZSet(gather);
-//
-//            // then
-//            verify(redisTemplate.opsForZSet()).incrementScore("city", gather.getMap().getAddressName(), 1.0);
-//        }
-
         @Test
         @DisplayName("Slack 알림 전송 테스트")
         void testSendSlackNotification() {
@@ -310,26 +234,6 @@ public class gatherServiceTest {
             // then
             verify(slackNotifierService).sendNotification(contains("[모임이 생성되었습니다]"));
         }
-
-//        @Test
-//        @DisplayName("모임 생성 성공 테스트")
-//        void testCreateGather() {
-//            // given
-//            when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
-//            when(userRepository.findById(authenticatedUser.getUserId())).thenReturn(Optional.of(user));
-//            when(redisTemplate.opsForZSet().score("city", request.getAddressName())).thenReturn(null);
-//            when(redisTemplate.opsForGeo().add(anyString(), any(Point.class), anyString())).thenReturn(null);
-//
-//            // when
-//            gatherService.createGather(request, authenticatedUser, category.getId());
-//
-//            // then
-//            verify(gatherRepository).save(any(Gather.class));
-//            verify(memberRepository).save(any(Member.class));
-//            verify(redisTemplate.opsForGeo()).add(eq("map"), eq(new Point(request.getLongitude(), request.getLatitude())), eq(request.getTitle()));
-//            verify(redisTemplate.opsForZSet()).add("city", request.getAddressName(), 1);
-//            verify(slackNotifierService).sendNotification(contains("[모임이 생성되었습니다]"));
-//        }
     }
 
 

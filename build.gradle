@@ -101,6 +101,8 @@ dependencies {
     // mac os
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.96.Final:osx-aarch_64'
 
+    // embedded Redis
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
 }
 
 jacoco {
