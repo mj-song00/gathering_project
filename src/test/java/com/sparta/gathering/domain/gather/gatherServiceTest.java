@@ -10,7 +10,6 @@ import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.gather.service.GatherServiceImpl;
-import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
 import com.sparta.gathering.domain.member.entity.Member;
@@ -150,7 +149,7 @@ public class gatherServiceTest {
 
     @Nested
     @DisplayName("모임 생성")
-    class create {
+    class Create {
         @Test
         @DisplayName("카테고리 조회 성공 테스트")
         void testGetCategorySuccess() {
@@ -239,7 +238,7 @@ public class gatherServiceTest {
 
     @Nested
     @DisplayName("모임 수정")
-    class modify {
+    class Modify {
         @Test
         @DisplayName("수정실패 - 존재하지 않는 모임")
         void failModifyGatherNotFound() {
@@ -320,7 +319,7 @@ public class gatherServiceTest {
 
         @Nested
         @DisplayName("모임 삭제")
-        class delete {
+        class Delete {
             @Test
             @DisplayName("삭제실패 - 존재하지 않는 모임")
             void failDeleteGatherNotFound() {
@@ -374,7 +373,7 @@ public class gatherServiceTest {
 
         @Nested
         @DisplayName("모임 검식")
-        class search {
+        class Search {
             @Test
             @DisplayName("해시테그 검색")
             void successSearchHashtags() {

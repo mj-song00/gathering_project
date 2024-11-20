@@ -96,7 +96,7 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임가입 신청 관련")
-    class apply {
+    class Apply{
         @Test
         @DisplayName("모임 가입 신청 성공")
         void testApplyForGather() {
@@ -177,7 +177,7 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임조회 관련")
-    class check {
+    class Check {
         @Test
         @DisplayName("모임 조회 성공 - 페이징 반환")
         void successCheckGather() {
@@ -205,7 +205,7 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임승인 관련")
-    class approval {
+    class Approval {
         @Test
         @DisplayName("가입 승인")
         void successApproval() {
@@ -248,7 +248,7 @@ public class MemberServiceTest {
 
         @Nested
         @DisplayName("멤버 거절")
-        class refusal {
+        class Refusal {
             @Test
             @DisplayName("가입 거절완료")
             void successRefusal() {
@@ -292,7 +292,7 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("멤버 탈퇴")
-    class withdrawal {
+    class Withdrawal {
         @Test
         @DisplayName("탈퇴 완료")
         void successWithdrawal() {

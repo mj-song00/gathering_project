@@ -70,7 +70,7 @@ public class gatherServiceRedisTest {
 
     @Nested
     @DisplayName("redis test")
-    class create {
+    class Create {
         @Test
         @DisplayName("Redis score 관련 테스트")
         void scoreAddForNewGatherTest() {
