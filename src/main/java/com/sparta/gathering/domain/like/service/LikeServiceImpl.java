@@ -23,7 +23,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     @Override
-    public void addLike( Long memberId, Long gatherId) {
+    public void addLike(Long memberId, Long gatherId) {
         //멤버 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
@@ -33,20 +33,20 @@ public class LikeServiceImpl implements LikeService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
 
         //member가 gather에 소속되어있는지 확인
-        boolean isMember = memberRepository.existsByMemberIdAndGatherId(memberId,gatherId);
-        if(!isMember) throw new BaseException(ExceptionEnum.MEMBER_NOT_FOUND);
+        boolean isMember = memberRepository.existsByMemberIdAndGatherId(memberId, gatherId);
+        if (!isMember) throw new BaseException(ExceptionEnum.MEMBER_NOT_FOUND);
 
 
-       boolean alreadyLiked = likeRepository.existByMemberIdAndGatherId(memberId, gatherId);
+        boolean alreadyLiked = likeRepository.existByMemberIdAndGatherId(memberId, gatherId);
 
-       if(alreadyLiked){
-           likeRepository.deleteLike(memberId, gatherId);
+        if (alreadyLiked) {
+            likeRepository.deleteLike(memberId, gatherId);
             gather.disLike();
-      }else{
+        } else {
             Like like = new Like(gather, member);
             gather.like();
             likeRepository.save(like);
-       }
+        }
 
     }
 
