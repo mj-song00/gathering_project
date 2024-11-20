@@ -53,63 +53,76 @@ public class GatherServiceImpl implements GatherService {
     private final ZSetOperations<String, Object> zsetOperations;
     private final MapRepository mapRepository;
     private final SlackNotifierService slackNotifierService;
-
+    private static final String REDIS_CITY_KEY = "city";
 
     // 모임생성
     @Transactional
     @Override
     public void createGather(GatherRequest request, AuthenticatedUser authenticatedUser, Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
-        User user = userRepository.findById(authenticatedUser.getUserId())
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-        addRedisMap(request); //래디스 맵저장 로직 메서드
-        Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude()); // Map 객체 생성
-        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
-        Member member = new Member(user, gather, Permission.MANAGER);
-        gather.saveMap(newMap);
-        gatherRepository.save(gather);
-        //레디스에서 값 찾아오기
-        Object result = redisTemplate.opsForZSet().score("city", gather.getMap().getAddressName());
-        if (result != null) {
-            redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), 1);
-        } else {
-            redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
-        }
+        // 카테고리와 사용자 조회
+        Category category = getCategory(categoryId);
+        User user = getUser(authenticatedUser.getUserId());
 
-        memberRepository.save(member);
-        slackNotifierService.sendNotification("[모임이 생성되었습니다] \n 카테고리명 : " + category.getCategoryName() +
-                "\n 모임명 : " + request.getTitle());
+        // Redis에 map 저장
+        addRedisMap(request);
+
+        // Map 객체 생성 및 Gather, Member 생성
+        Map newMap = createMap(request);
+        Gather gather = createGather(request, category, newMap);
+        Member member = createMember(user, gather);
+
+        // Gather, Member 저장
+        saveGatherAndMember(gather, member);
+
+        // Redis ZSet 값 갱신
+        updateRedisZSet(gather);
+
+        // Slack 알림 전송
+        sendSlackNotification(category, request);
     }
 
     //모임 수정 gather
     @Transactional
     @Override
     public void modifyGather(GatherRequest request, Long id, AuthenticatedUser authenticatedUser) {
+        Gather gather = findGatherById(id);
         validateManager(id, authenticatedUser);
 
-        Gather gather = gatherRepository.findById(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        Map map = mapRepository.findByGatherId(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        // redis 기존 score -1
-        redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
+        Map map = findMapByGatherId(id);
+
+        updateRedisScores(gather, -1); // 기존 주소 score -1
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
-        // redis 수정된 주소 score +1
-        redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), 1);
+        updateRedisScores(gather, 1);  // 수정된 주소 score +1
 
         gatherRepository.save(gather);
+    }
+
+    private Gather findGatherById(Long id) {
+        return gatherRepository.findById(id)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+    }
+
+    private Map findMapByGatherId(Long id) {
+        return mapRepository.findByGatherId(id)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+    }
+
+    private void updateRedisScores(Gather gather, int scoreDelta) {
+        String addressName = gather.getMap().getAddressName();
+        redisTemplate.opsForZSet().incrementScore(REDIS_CITY_KEY, addressName, scoreDelta);
     }
 
     //모임 삭제
     @Transactional
     @Override
     public void deleteGather(Long id, AuthenticatedUser authenticatedUser) {
+        //매니저 검증
+
+
+        Gather gather = findGatherById(id);
         validateManager(id, authenticatedUser);
-        Gather gather = gatherRepository.findById(id)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         //  redis 기존 score -1
-        redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), -1);
+        redisTemplate.opsForZSet().incrementScore(REDIS_CITY_KEY, gather.getMap().getAddressName(), -1);
         gather.delete();
         gatherRepository.save(gather);
     }
@@ -195,20 +208,63 @@ public class GatherServiceImpl implements GatherService {
     }
 
     private void validateManager(Long id, AuthenticatedUser authenticatedUser) {
+
         UUID managerId = memberRepository.findManagerIdByGatherId(id)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
 
         if (!managerId.equals(authenticatedUser.getUserId()) && authenticatedUser.getAuthorities().stream()
-                .noneMatch(authority ->
-                        authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
+                .noneMatch(authority -> authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
     }
 
     //래디스 모임 위치 저장 로직
-    private void addRedisMap(GatherRequest request) {
+    void addRedisMap(GatherRequest request) {
         GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
         Point point = new Point(request.getLongitude(), request.getLatitude());
         geoOperations.add("map", point, request.getTitle());
+    }
+
+    public Category getCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_CATEGORY));
+    }
+
+    public User getUser(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
+    }
+
+    public Map createMap(GatherRequest request) {
+        return new Map(request.getAddressName(), request.getLatitude(), request.getLongitude());
+    }
+
+    public Gather createGather(GatherRequest request, Category category, Map newMap) {
+        Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
+        gather.saveMap(newMap);
+        return gather;
+    }
+
+    public Member createMember(User user, Gather gather) {
+        return new Member(user, gather, Permission.MANAGER);
+    }
+
+    public void saveGatherAndMember(Gather gather, Member member) {
+        gatherRepository.save(gather);
+        memberRepository.save(member);
+    }
+
+    public void updateRedisZSet(Gather gather) {
+        Object result = redisTemplate.opsForZSet().score("city", gather.getMap().getAddressName());
+        if (result != null) {
+            redisTemplate.opsForZSet().incrementScore("city", gather.getMap().getAddressName(), 1);
+        } else {
+            redisTemplate.opsForZSet().add("city", gather.getMap().getAddressName(), 1);
+        }
+    }
+
+    public void sendSlackNotification(Category category, GatherRequest request) {
+        slackNotifierService.sendNotification("[모임이 생성되었습니다] \n 카테고리명 : " + category.getCategoryName() +
+                "\n 모임명 : " + request.getTitle());
     }
 }

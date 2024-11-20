@@ -36,7 +36,7 @@ public class KakaoService {
     private final MapRepository mapRepository;
     private final ObjectMapper objectMapper;
     private final GatherRepository gatherRepository;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final GeoOperations geoOperations;
 
     @Value("${kakao.map.api-key}")
