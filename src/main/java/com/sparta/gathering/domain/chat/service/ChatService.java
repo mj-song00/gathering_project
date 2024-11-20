@@ -3,15 +3,15 @@ package com.sparta.gathering.domain.chat.service;
 import com.sparta.gathering.common.config.redis.WebSocketRedisPublisher;
 import com.sparta.gathering.domain.chat.entity.ChatMessage;
 import com.sparta.gathering.domain.chat.repository.ChatMessageRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class ChatService {
+
     private final ChatMessageRepository chatMessageRepository;
     private final WebSocketRedisPublisher webSocketRedisPublisher;
 
@@ -22,7 +22,7 @@ public class ChatService {
     }
 
     public List<ChatMessage> getChatHistory(Long gatheringId) {
-        return chatMessageRepository.findByGatheringIdOrderByTimestamp(gatheringId);
+        return chatMessageRepository.findByGatherIdOrderByTimestamp(gatheringId);
     }
 
 }

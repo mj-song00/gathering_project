@@ -50,6 +50,29 @@ Accept: application/json
 GET {{base_url}}/api/agreements/latest/all
 Accept: application/json
 
+### 약관 만료일 갱신 (테스트용)
+POST {{base_url}}/api/batch/test/runAgreementExpiration
+Content-Type: application/json
+
+### 약관 만료일 갱신 - 재시도 초과 (테스트용최대 3회)
+POST {{base_url}}/api/batch/test/runAgreementExpiration?retries=5
+Content-Type: application/json
+
+### 약관 재동의 요청 (테스트용)
+POST {{base_url}}/api/batch/test/runUserAgreementPendingReagree
+
+### 약관 재동의 요청 - 재시도 초과 (테스트용/최대 3회)
+POST {{base_url}}/api/batch/test/runUserAgreementPendingReagree?retries=5
+Content-Type: application/json
+
+### 대기 중인 배치 작업 요청 조회 (테스트용)
+GET {{base_url}}/api/batch/test/requests?jobName={jobName}
+Content-Type: application/json
+
+### 특정 배치 작업 요청 삭제 (테스트용)
+DELETE {{base_url}}/api/batch/test/requests/{requestId}
+Content-Type: application/json
+
 ### 이메일 인증 코드 발송 요청
 POST {{base_url}}/api/verification/send
 Content-Type: application/json
@@ -66,10 +89,6 @@ Content-Type: application/json
   "email": "nbcteam21test@gmail.com",
   "code": "616766"
 }
-
-### Agreement Expiration Job 실행 요청
-POST {{base_url}}/api/batch/runAgreementExpiration
-Content-Type: application/json
 
 ### 회원가입 요청 - 약관 통합
 POST {{base_url}}/api/users/signup

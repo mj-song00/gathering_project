@@ -41,7 +41,7 @@ public class ChatController {
     @SendTo("/topic/gathering/{gatheringId}")
     @Operation(summary = "메시지 전송", description = "메시지 전송")
     public ChatMessage sendMessage(@DestinationVariable Long gatheringId, ChatMessage chatMessage) {
-        chatMessage.setGatheringId(gatheringId);
+        chatMessage.setGatherId(gatheringId);
         return chatService.saveAndPublishMessage(chatMessage, topic);  // 메시지 저장 및 퍼블리시
     }
 

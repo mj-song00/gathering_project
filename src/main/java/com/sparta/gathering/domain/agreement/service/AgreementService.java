@@ -3,6 +3,7 @@ package com.sparta.gathering.domain.agreement.service;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
+import com.sparta.gathering.common.service.BatchJobRequestService;
 import com.sparta.gathering.domain.agreement.dto.request.AgreementRequestDto;
 import com.sparta.gathering.domain.agreement.dto.request.AgreementUpdateRequestDto;
 import com.sparta.gathering.domain.agreement.entity.Agreement;
@@ -25,7 +26,7 @@ public class AgreementService {
 
     private final AgreementRepository agreementRepository;
     private final AgreementHistoryRepository agreementHistoryRepository;
-    private final BatchJobService batchJobService;
+    private final BatchJobRequestService batchJobRequestService;
 
     @Transactional
     public void createAgreement(AgreementRequestDto agreementRequestDto, AuthenticatedUser authenticatedUser) {
@@ -88,27 +89,26 @@ public class AgreementService {
             AgreementUpdateRequestDto agreementUpdateRequestDto,
             AuthenticatedUser authenticatedUser) {
 
-        // 인증되지 않은 사용자는 접근 불가
+        // 인증 및 권한 확인
         if (authenticatedUser == null) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_USER);
         }
 
-        // ROLE_ADMIN 권한 확인
         if (authenticatedUser.getAuthorities().stream().noneMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
 
-        // 기존 약관 조회 및 존재 여부 확인
+        // 기존 약관 조회
         Agreement agreement = agreementRepository.findById(agreementId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.AGREEMENT_NOT_FOUND));
 
-        // 기존 약관 정보와 수정할 약관 정보가 동일한 경우
+        // 변경 사항 검증
         if (agreement.getContent().equals(agreementUpdateRequestDto.getContent()) &&
                 agreement.getVersion().equals(agreementUpdateRequestDto.getVersion())) {
             throw new BaseException(ExceptionEnum.SAME_AGREEMENT);
         }
 
-        // 기존 약관 정보를 AgreementHistory에 저장
+        // 기존 약관을 AgreementHistory에 저장
         AgreementHistory history = new AgreementHistory(
                 agreement.getId(),
                 agreement.getContent(),
@@ -117,9 +117,6 @@ public class AgreementService {
         );
         agreementHistoryRepository.save(history);
 
-        // 약관에 동의한 사용자들의 UserAgreement 상태를 PENDING_REAGREE로 변경
-        batchJobService.runBatchJob(agreement.getId().toString());
-
         // 약관 정보 업데이트
         agreement.updateContentAndVersion(
                 agreementUpdateRequestDto.getContent(),
@@ -127,6 +124,8 @@ public class AgreementService {
         );
         agreementRepository.save(agreement);
 
+        // 배치 작업 실행 요청 추가 (대기열에 저장)
+        batchJobRequestService.createBatchJobRequest("userAgreementPendingReagreeJob", agreement.getId().toString());
     }
 
 }

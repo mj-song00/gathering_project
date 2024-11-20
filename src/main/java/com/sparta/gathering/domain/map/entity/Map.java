@@ -30,7 +30,7 @@ public class Map {
     @Column
     private Double longitude;//경도 x
 
-    @OneToOne
+    @OneToOne(mappedBy = "map")
     private Gather gather;
 
 
