@@ -1,4 +1,4 @@
-package com.sparta.gathering.common.sevice;
+package com.sparta.gathering.common.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

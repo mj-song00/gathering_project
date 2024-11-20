@@ -10,6 +10,7 @@ import com.sparta.gathering.domain.schedule.entity.Schedule;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,13 +20,14 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "gather")
 @Getter
+@Setter
 public class Gather extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String title;
     private String description;
 
@@ -50,6 +52,8 @@ public class Gather extends Timestamped {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "map_id", unique = true)
     private Map map;
+
+    private int likeCount;
 
     public Gather(String title) {
         this.title = title;
@@ -83,5 +87,13 @@ public class Gather extends Timestamped {
         if (map.getGather() != this) {
             map.saveGather(this);
         }
+    }
+
+    public void like() {
+        this.likeCount += 1;
+    }
+
+    public void disLike() {
+        this.likeCount -= 1;
     }
 }

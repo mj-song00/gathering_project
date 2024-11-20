@@ -9,12 +9,12 @@ on:
       - dev  # dev 브랜치에 대한 PR 생성 시 실행
 
 jobs:
-  build:
+  build-and-test:
+    name: 빌드 및 테스트
     runs-on: ubuntu-latest
-
     services:
       mysql:
-        image: mysql:8.0 # MySQL 8.0 이미지 사용
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_PASS }}
           MYSQL_DATABASE: ${{ secrets.DEV_DB_NAME }}
@@ -25,12 +25,10 @@ jobs:
           --health-retries=3
         ports:
           - 3306:3306
-
       redis:
         image: redis:6.2
         ports:
           - 6379:6379
-
     steps:
       # Step 1: 코드 체크아웃
       - name: 코드 체크아웃
@@ -56,25 +54,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Step 5: MySQL 연결 확인
-      - name: MySQL 연결 확인
-        run: |
-          until mysqladmin ping --host=127.0.0.1 --user=${{ secrets.DEV_DB_USER }} --password=${{ secrets.DEV_DB_PASS }} --silent; do
-            echo "Waiting for MySQL to be ready..."
-            sleep 2
-          done
-          echo "MySQL is ready."
-
-      # Step 6: 환경 변수 설정 및 dev.yml 생성
+      # Step 5: 환경 변수 설정 및 dev.yml 생성
       - name: 환경 변수 설정 및 dev.yml 생성
         env:
           DEV_SERVER_PORT: ${{ secrets.DEV_SERVER_PORT }}
-          DEV_DB_HOST: 127.0.0.1  # 서비스 컨테이너 내부에서 실행
+          DEV_DB_HOST: 127.0.0.1
           DEV_DB_PORT: 3306
           DEV_DB_NAME: ${{ secrets.DEV_DB_NAME }}
           DEV_DB_USER: ${{ secrets.DEV_DB_USER }}
           DEV_DB_PASS: ${{ secrets.DEV_DB_PASS }}
-          REDIS_HOST: 127.0.0.1  # 서비스 컨테이너 내부에서 실행
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: 6379
           KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
           KAKAO_CLIENT_SECRET: ${{ secrets.KAKAO_CLIENT_SECRET }}
@@ -203,15 +192,37 @@ jobs:
             base-url: ${BASE_URL}
           EOT
 
-      # Step 7: Gradle 빌드 및 테스트
-      - name: Gradle 빌드 및 테스트
-        run: ./gradlew clean build test --no-daemon --build-cache
+      # Step 6: Gradle 빌드 및 테스트 실행
+      - name: Gradle 빌드, 테스트 및 JaCoCo 실행
+        run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
-      # Step 8: Checkstyle 실행
+      # Step 7: JaCoCo 커버리지 리포트 저장
+      - name: JaCoCo 커버리지 리포트 저장
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-reports
+          path: build/reports/jacoco/test/html/**
+
+  checkstyle:
+    name: Checkstyle 검사
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: JDK 설정
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Gradle Wrapper 실행 권한 부여
+        run: chmod +x ./gradlew
+
       - name: Checkstyle 실행
-        run: ./gradlew clean checkstyleMain --no-build-cache
+        run: ./gradlew clean checkstyleMain --no-daemon --build-cache
 
-        # Step 9: Checkstyle HTML 보고서 저장
       - name: Checkstyle HTML 보고서 저장
         uses: actions/upload-artifact@v4
         if: always()
@@ -219,7 +230,6 @@ jobs:
           name: checkstyle-html-report
           path: build/reports/checkstyle/checkstyleMain.html
 
-      # Step 10: Checkstyle 위반 확인
       - name: Checkstyle 위반 확인
         run: |
           violations=$(grep -c '<error ' build/reports/checkstyle/checkstyleMain.xml || true)

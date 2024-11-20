@@ -1,14 +1,16 @@
 @base_url = http://localhost:8080
 
-@user_Id = b0610880-5e0b-49ec-807d-f1b4383666c3
+@user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYWRkNGNkNC0wNTQzLTQ1ZmItYTg5NS1jZDdkMDJlMjFhMTQiLCJlbWFpbCI6ImR1cnczMTY1QGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9BRE1JTiIsImlhdCI6MTczMjEyNDExNiwiZXhwIjoxNzMyMTI1OTE2fQ.DA2rVwwcjFOO9e2tiFULTfaMCI68l80hJaNjBUKIiAs
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxOTIwOTkyLCJleHAiOjE3MzE5MjI3OTJ9.i3epid073V5P7zJhvV6fMysKHB819XH5IwEvrsYdUyI
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyYWRkNGNkNC0wNTQzLTQ1ZmItYTg5NS1jZDdkMDJlMjFhMTQiLCJlbWFpbCI6ImR1cnczMTY1QGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzMyMDcxMzc3LCJleHAiOjE3MzIwNzMxNzd9.o9x7hIKpEUv7p8JBRjSuSCMguySpaW-sZStnCm_BB-I
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
-@refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMTE4OTNlZC1lY2ViLTQ0ZGEtYjJlOS1mNjUwOWMwZWJlOGQiLCJpYXQiOjE3MzIwNzU4NzcsImV4cCI6MTczMjE2MjI3N30.sozjZQnwpVheN1cDCTCvVJOKFDwfkNE_7kx-wapgKsc
+@refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
 
 @expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
+
+@memberId = 1
 
 @category_Id = 1
 
@@ -55,7 +57,7 @@ POST {{base_url}}/api/verification/send
 Content-Type: application/json
 
 {
-  "email": "durw3166@gmail.com"
+  "email": "nbcteam21test@gmail.com"
 }
 
 ### 인증 코드 확인 요청
@@ -63,8 +65,8 @@ POST {{base_url}}/api/verification/confirm
 Content-Type: application/json
 
 {
-  "email": "durw3164@gmail.com",
-  "code": "813049"
+  "email": "nbcteam21test@gmail.com",
+  "code": "393755"
 }
 
 ### Agreement Expiration Job 실행 요청
@@ -76,14 +78,14 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "durw3166@gmail.com",
-  "nickName": "홍길동11",
+  "email": "nbcteam21test@gmail.com",
+  "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "de2cdc3c-a6e9-11ef-8f9f-ef5cfddf6764",
-    "de2ced6c-a6e9-11ef-8f9f-ef5cfddf6764",
-    "de2cef06-a6e9-11ef-8f9f-ef5cfddf6764"
+    "17a980dd-a53e-11ef-9770-00155dbf39e6",
+    "17a9833c-a53e-11ef-9770-00155dbf39e6",
+    "17a983d8-a53e-11ef-9770-00155dbf39e6"
   ]
 }
 
@@ -92,7 +94,7 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "nbcteam21test@gmail.com",
   "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE",
@@ -107,7 +109,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "durw3165@gmail.com",
+  "email": "nbcteam21test@gmail.com",
   "password": "password123A!"
 }
 
@@ -168,7 +170,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "categoryName": "영화1"
+  "categoryName": "영화"
 }
 
 ### 카테고리 조회
@@ -198,7 +200,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "중복 테스트 모임",
+  "title": "강릉-",
   "description": "같이 공차실분",
   "hashtags": [
     "여의도공원",
@@ -265,7 +267,6 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 멤버 승인
-@memberId = 2
 PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
@@ -279,6 +280,12 @@ Authorization: Bearer {{jwt_token}}
 PATCH {{base_url}}/api/members/{{memberId}}/withdrawl
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+### 모임 조회
+GET {{base_url}}/api/members/168
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
 
 ### 해시태그 생성
 POST {{base_url}}/api/gatherings/1/hashtags
@@ -388,7 +395,6 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 타이틀3"
 }
 
 
@@ -398,7 +404,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 수정"
+  "comment": "댓글 수정"
 }
 
 
@@ -420,13 +426,6 @@ Content-Type: application/json
 }
 
 
-### 지도저장
-POST {{base_url}}/api/kakaoMap/2
-Content-Type: application/json
-
-{
-  "address": "인천 석남1동"
-}
 
 
 
@@ -460,5 +459,12 @@ Authorization: Bearer {{jwt_token}}
 
 ### 쿠폰 조회
 GET {{base_url}}/api/coupons/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+
+### 모임 좋아요/좋아요 취소
+POST {{base_url}}/api/likes/gather/168/member/169
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
