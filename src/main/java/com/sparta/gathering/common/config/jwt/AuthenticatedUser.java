@@ -1,11 +1,11 @@
 package com.sparta.gathering.common.config.jwt;
 
+import lombok.Getter;
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 @Getter
 public class AuthenticatedUser {
