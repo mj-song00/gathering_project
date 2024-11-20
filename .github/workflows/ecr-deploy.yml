@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      REDIS_PORT: 6379
+      DEV_SERVER_PORT: 3306
+
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
