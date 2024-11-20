@@ -55,5 +55,6 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_SHA::7}"
           
           # latest 태그로도 푸시
-          docker tag gathering-21-build:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          # docker tag gathering-21-build:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker build $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
