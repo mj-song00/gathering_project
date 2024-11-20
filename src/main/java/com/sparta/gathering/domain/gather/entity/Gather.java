@@ -27,7 +27,7 @@ public class Gather extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String title;
     private String description;
 
@@ -89,11 +89,11 @@ public class Gather extends Timestamped {
         }
     }
 
-    public void like(){
+    public void like() {
         this.likeCount += 1;
     }
 
-    public void disLike(){
+    public void disLike() {
         this.likeCount -= 1;
     }
 }

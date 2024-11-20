@@ -96,7 +96,7 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임가입 신청 관련")
-    class apply{
+    class apply {
         @Test
         @DisplayName("모임 가입 신청 성공")
         void testApplyForGather() {
@@ -121,7 +121,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("멤버 신청 실패 - 본인이 매니저")
-        void registration_failed(){
+        void registration_failed() {
             UUID userId = managerUser.getId(); // 매니저 ID
             long gatherId = gather.getId();
 
@@ -177,10 +177,10 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임조회 관련")
-    class check{
+    class check {
         @Test
         @DisplayName("모임 조회 성공 - 페이징 반환")
-        void success_check_gather(){
+        void success_check_gather() {
             //given
             List<Member> members = List.of(member);
             Page<Member> memberPage = new PageImpl<>(members, pageable, members.size());
@@ -205,10 +205,10 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임승인 관련")
-    class approval{
+    class approval {
         @Test
         @DisplayName("가입 승인")
-        void success_approval(){
+        void success_approval() {
             // given
             long memberId = member.getId();
             long gatherId = gather.getId();
@@ -228,7 +228,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("승인 실패 - 매니저 계정 아님 ")
-        void fail_approval(){
+        void fail_approval() {
             // given
             long memberId = member.getId();
             long gatherId = gather.getId();
@@ -248,10 +248,10 @@ public class MemberServiceTest {
 
         @Nested
         @DisplayName("멤버 거절")
-        class refusal{
+        class refusal {
             @Test
             @DisplayName("가입 거절완료")
-            void success_refusal(){
+            void success_refusal() {
                 // given
                 long memberId = member.getId();
                 long gatherId = gather.getId();
@@ -271,7 +271,7 @@ public class MemberServiceTest {
 
             @Test
             @DisplayName("가입 거절 실패-권한없음")
-            void fail_refusal(){
+            void fail_refusal() {
                 // given
                 long memberId = member.getId();
                 long gatherId = gather.getId();
@@ -292,10 +292,10 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("멤버 탈퇴")
-    class withdrawal{
+    class withdrawal {
         @Test
         @DisplayName("탈퇴 완료")
-        void success_withdrawal(){
+        void success_withdrawal() {
             //given
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
@@ -311,7 +311,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 존재하지 않는 멤버")
-        void fail_withdrawal_un_exist_member(){
+        void fail_withdrawal_un_exist_member() {
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
 
@@ -327,7 +327,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 존재하지 않는 유저")
-        void fail_withdrawal_un_exist_user(){
+        void fail_withdrawal_un_exist_user() {
             // given
             AuthenticatedUser user = new AuthenticatedUser(UUID.randomUUID(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = member.getId();
@@ -345,7 +345,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 이미 탈퇴한 유저")
-        void fail_withdrawal_already_deleted_user(){
+        void fail_withdrawal_already_deleted_user() {
             // given
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = 1L;

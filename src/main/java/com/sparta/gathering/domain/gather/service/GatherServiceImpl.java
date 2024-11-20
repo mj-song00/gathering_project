@@ -219,7 +219,7 @@ public class GatherServiceImpl implements GatherService {
     }
 
     //래디스 모임 위치 저장 로직
-     void addRedisMap(GatherRequest request) {
+    void addRedisMap(GatherRequest request) {
         GeoOperations<String, String> geoOperations = rediusTemplate.opsForGeo();
         Point point = new Point(request.getLongitude(), request.getLatitude());
         geoOperations.add("map", point, request.getTitle());
