@@ -1,0 +1,106 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gathering
+
+  datasource:
+    url: jdbc:mysql://database-gathering.cn0mq4gcet4o.ap-northeast-2.rds.amazonaws.com?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+    username: admin
+    password: gathering1!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        show_sql: true
+        format_sql: true
+    open-in-view: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      repositories:
+        enabled: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: e1509b9b537ae8d48db140a3f292ff6d
+            client-secret: QST8CZvzuFmdFslLZ3AO4ND0M4AUEfXr
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+            redirect-uri: "${BASE_URL}/login/oauth2/code/{registrationId}"
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+aws:
+  s3:
+    region: ap-northeast-2
+    access-key: AKIAWLACMBPAPJHSVB5L
+    secret-key: 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
+    url: https://gathering-21.s3.ap-northeast-2.amazonaws.com/
+    bucket-name: gathering-21
+  sqs:
+    region: ap-northeast-2
+    access-key: AKIAST6S7OOMBEVHKCPH
+    secret-key: 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
+    queue-url: https://sqs.ap-northeast-2.amazonaws.com/180294218648/EmailNotificationQueue
+
+logging:
+  level:
+    com.sparta.gathering: INFO
+    org.springframework.batch.core.configuration.annotation.BatchRegistrar: warn
+
+jwt:
+  secret: S3lqVGhGQ2t5Z0hWZlRIV05VNHRPaTVuOGhXa29PcTc=
+  expiration: 1800
+  refresh-expiration: 86400
+
+default:
+  profile:
+    image:
+      url: https:https://gathering-21.s3.ap-northeast-2.amazonaws.com/IMG_5127.JPG
+
+kakao:
+  map:
+    api-key: KakaoAK fe5907af108eb89d33ecb50f39844b0e
+
+slack:
+  webhook:
+    url: https://hooks.slack.com/services/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
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: gatheringmteam21@gmail.com
+  password: ycsg mzox vare klka
+  sender: gatheringmteam21@gmail.com
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+      transport:
+        protocol: smtp
+      debug: false
+
+app:
+  base-url: https://gathering-21.com
