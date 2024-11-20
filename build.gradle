@@ -165,3 +165,7 @@ tasks.build.dependsOn 'checkstyleFailOnViolation'
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:deprecation']
 }
+
+bootJar {
+    mainClass = 'com.sparta.gathering.GatheringApplication'
+}
