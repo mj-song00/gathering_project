@@ -10,7 +10,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 public class ThymeleafConfig {
 
     @Bean
-    public SpringResourceTemplateResolver templateResolver() {
+    public SpringResourceTemplateResolver emailTemplateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setPrefix("classpath:/templates/email/");
         templateResolver.setSuffix(".html");
@@ -20,9 +20,9 @@ public class ThymeleafConfig {
     }
 
     @Bean
-    public SpringResourceTemplateResolver mapTemplateResolver() {
+    public SpringResourceTemplateResolver staticTemplateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
-        templateResolver.setPrefix("classpath:/static");
+        templateResolver.setPrefix("classpath:/static/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
         templateResolver.setCharacterEncoding("UTF-8");
@@ -32,8 +32,10 @@ public class ThymeleafConfig {
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.setTemplateResolver(mapTemplateResolver());
+        templateEngine.addTemplateResolver(emailTemplateResolver()); // 첫 번째 리졸버 추가
+        templateEngine.addTemplateResolver(staticTemplateResolver()); // 두 번째 리졸버 추가
         return templateEngine;
     }
+    
 }
+
