@@ -12,8 +12,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,8 +47,10 @@ public class KakaoMapController {
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> myMapList(
             @RequestBody SearchGatherRequest request
     ) {
-        List<AroundPlaceResponse> list = kakaoService.listMyMap(request.getLongitude(), request.getLatitude(), request.getDistance());
-        ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
+        List<AroundPlaceResponse> list = kakaoService.listMyMap(request.getLongitude(), request.getLatitude(),
+                request.getDistance());
+        ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -66,8 +66,10 @@ public class KakaoMapController {
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> redisSearch(
             @RequestBody SearchGatherRequest request
     ) {
-        List<AroundPlaceResponse> list = kakaoService.nearByVenues(request.getLongitude(), request.getLatitude(), request.getDistance());
-        ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS);
+        List<AroundPlaceResponse> list = kakaoService.nearByVenues(request.getLongitude(), request.getLatitude(),
+                request.getDistance());
+        ApiResponse<List<AroundPlaceResponse>> response = ApiResponse.successWithData(list,
+                ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

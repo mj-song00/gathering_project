@@ -72,17 +72,45 @@ CREATE TABLE map
 -- 모임 테이블
 CREATE TABLE gather
 (
-    id          BIGINT NOT NULL AUTO_INCREMENT,
+    id          BIGINT  NOT NULL AUTO_INCREMENT,
     created_at  DATETIME(6),
     updated_at  DATETIME(6),
     deleted_at  DATETIME(6),
-    category_id BIGINT NULL,
+    category_id BIGINT  NULL,
     map_id      BIGINT UNIQUE,
     title       VARCHAR(255),
     description VARCHAR(255),
+    like_count  INTEGER NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE SET NULL,
     FOREIGN KEY (map_id) REFERENCES map (id)
+);
+
+-- 멤버 테이블
+CREATE TABLE member
+(
+    id         BIGINT     NOT NULL AUTO_INCREMENT,
+    created_at DATETIME(6),
+    updated_at DATETIME(6),
+    deleted_at DATETIME(6),
+    gather_id  BIGINT     NOT NULL,
+    user_id    BINARY(16) NOT NULL,
+    permission ENUM ('GUEST', 'MANAGER', 'PENDING', 'REFUSAL'),
+    PRIMARY KEY (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
+);
+
+create table likes
+(
+    id         BIGINT NOT NULL AUTO_INCREMENT,
+    created_at DATETIME(6),
+    updated_at DATETIME(6),
+    gather_id  BIGINT,
+    member_id  BIGINT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (member_id) REFERENCES member (id),
+    FOREIGN KEY (gather_id) REFERENCES gather (id)
 );
 
 -- 해시태그 테이블
@@ -96,21 +124,6 @@ CREATE TABLE hashtag
     hash_tag_name VARCHAR(255),
     PRIMARY KEY (id),
     FOREIGN KEY (gather_id) REFERENCES gather (id) ON DELETE CASCADE
-);
-
--- 회원 테이블
-CREATE TABLE member
-(
-    id         BIGINT     NOT NULL AUTO_INCREMENT,
-    created_at DATETIME(6),
-    updated_at DATETIME(6),
-    deleted_at DATETIME(6),
-    gather_id  BIGINT     NOT NULL,
-    user_id    BINARY(16) NOT NULL,
-    permission ENUM ('GUEST', 'MANAGER', 'PENDING', 'REFUSAL'),
-    PRIMARY KEY (id),
-    FOREIGN KEY (gather_id) REFERENCES gather (id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE
 );
 
 -- 일정 테이블

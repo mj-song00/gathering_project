@@ -9,10 +9,8 @@ import com.sparta.gathering.domain.schedule.service.ScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity; // 추가된 import
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +32,9 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<ScheduleResponseDto>> createSchedule(
             @PathVariable(name = "gatherId") Long gatherId,
             @RequestBody ScheduleRequestDto scheduleRequestDto,
-            @AuthenticationPrincipal AuthenticatedUser authUser)
-    {
-        ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(gatherId, scheduleRequestDto, authUser);
+            @AuthenticationPrincipal AuthenticatedUser authUser) {
+        ScheduleResponseDto scheduleResponseDto = scheduleService.createSchedule(gatherId, scheduleRequestDto,
+                authUser);
         return ResponseEntity.ok(ApiResponse.successWithData(scheduleResponseDto, ApiResponseEnum.SCHEDULE_CREATED));
     }
 
@@ -46,9 +44,9 @@ public class ScheduleController {
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "scheduleId") Long scheduleId,
             @RequestBody ScheduleRequestDto scheduleRequestDto,
-            @AuthenticationPrincipal AuthenticatedUser authUser)
-    {
-        ScheduleResponseDto updatedSchedule = scheduleService.updateSchedule(gatherId, scheduleId, scheduleRequestDto, authUser);
+            @AuthenticationPrincipal AuthenticatedUser authUser) {
+        ScheduleResponseDto updatedSchedule = scheduleService.updateSchedule(gatherId, scheduleId, scheduleRequestDto,
+                authUser);
         return ResponseEntity.ok(ApiResponse.successWithData(updatedSchedule, ApiResponseEnum.SCHEDULE_UPDATED));
     }
 
@@ -57,8 +55,7 @@ public class ScheduleController {
     public ResponseEntity<ApiResponse<Void>> deleteSchedule(
             @PathVariable(name = "gatherId") Long gatherId,
             @PathVariable(name = "scheduleId") Long scheduleId,
-            @AuthenticationPrincipal AuthenticatedUser authUser)
-    {
+            @AuthenticationPrincipal AuthenticatedUser authUser) {
         scheduleService.deleteSchedule(gatherId, scheduleId, authUser);
         return ResponseEntity.ok(ApiResponse.successWithData(null, ApiResponseEnum.SCHEDULE_DELETED));
     }

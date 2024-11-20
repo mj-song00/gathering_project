@@ -1,4 +1,15 @@
-package com.sparta.gathering.domain.comment.commentServiceTest;
+package com.sparta.gathering.domain.comment.commentservicetest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
@@ -16,6 +27,10 @@ import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,19 +39,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceTest {
+
     @Mock
     private CommentRepository commentRepository;
     @Mock
@@ -118,9 +123,11 @@ public class CommentServiceTest {
         when(mockMember.getUser()).thenReturn(mockUser); // Ensure that mockMember returns mockUser
 
         // Mock the repository methods
-        when(memberRepository.findByUserId(authenticatedUser.getUserId())).thenReturn(Optional.of(mockMember)); // Mock isValidMember
+        when(memberRepository.findByUserId(authenticatedUser.getUserId())).thenReturn(
+                Optional.of(mockMember)); // Mock isValidMember
         when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(schedule)); // Mock findSchedule
-        when(commentRepository.save(any(Comment.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Mock save to return the saved Comment
+        when(commentRepository.save(any(Comment.class))).thenAnswer(
+                invocation -> invocation.getArgument(0)); // Mock save to return the saved Comment
 
         // Act
         commentService.createComment(scheduleId, authenticatedUser, request);
@@ -151,7 +158,8 @@ public class CommentServiceTest {
         request = new CommentRequest(updatedCommentText);
 
         // Setup mocks
-        when(commentRepository.findByScheduleIdAndIdAndDeletedAtIsNull(scheduleId, commentId)).thenReturn(Optional.of(comment));
+        when(commentRepository.findByScheduleIdAndIdAndDeletedAtIsNull(scheduleId, commentId)).thenReturn(
+                Optional.of(comment));
         when(comment.getMember()).thenReturn(mockMember);
         when(mockMember.getUser()).thenReturn(mockUser);
         when(mockUser.getId()).thenReturn(authenticatedUser.getUserId());
@@ -170,7 +178,8 @@ public class CommentServiceTest {
         request = new CommentRequest("Unauthorized update attempt");
 
         // Setup mocks
-        when(commentRepository.findByScheduleIdAndIdAndDeletedAtIsNull(scheduleId, commentId)).thenReturn(Optional.of(comment));
+        when(commentRepository.findByScheduleIdAndIdAndDeletedAtIsNull(scheduleId, commentId)).thenReturn(
+                Optional.of(comment));
         when(comment.getMember()).thenReturn(mockMember);
         when(mockMember.getUser()).thenReturn(mockUser);
         when(mockUser.getId()).thenReturn(UUID.randomUUID()); // Simulate unauthorized user
