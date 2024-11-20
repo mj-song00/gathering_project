@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/gyeol
+      - feature/seokhoon
 
 jobs:
   deploy:
