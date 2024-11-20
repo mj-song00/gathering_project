@@ -59,10 +59,10 @@ jobs:
           AWS_REGION: ap-northeast-2
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
         run: |
-          # Docker Compose를 사용하여 서비스 빌드
+          # Docker Compose 를 사용하여 서비스 빌드
           docker compose -f docker-compose.yml --env-file .env build
           
-          # 태그를 설정하고 ECR로 푸시
+          # 태그를 설정하고 ECR 로 푸시
           docker tag gathering-21-build:latest $ECR_REPOSITORY:${GITHUB_SHA::7}
           docker push $ECR_REPOSITORY:${GITHUB_SHA::7}
           
