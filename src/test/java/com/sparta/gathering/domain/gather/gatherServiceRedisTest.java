@@ -73,7 +73,7 @@ public class gatherServiceRedisTest {
     class create {
         @Test
         @DisplayName("Redis score 관련 테스트")
-        void score_add_for_newGather_test() {
+        void scoreAddForNewGatherTest() {
             // Given: Redis에 해당 값이 없는 경우
             String addressName = "서울시 동작구";
             Map map = new Map(addressName, 37.5665, 126.9780);
@@ -90,7 +90,7 @@ public class gatherServiceRedisTest {
 
         @Test
         @DisplayName("Redis - score +1")
-        void increment_score_test() {
+        void incrementScoreTest() {
             // Given: Redis에 초기 데이터를 설정
             String addressName = "서울시 동작구";
             redisTemplate.opsForZSet().add("city", addressName, 1.0);
@@ -109,7 +109,7 @@ public class gatherServiceRedisTest {
 
         @Test
         @DisplayName("redis score -1")
-        void decrease_score_test() {
+        void decreaseScoreTest() {
             // Given: 테스트용 데이터 준비
             Long gatherId = 1L;
             String addressName = "서울시 동작구";

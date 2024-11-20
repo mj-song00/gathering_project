@@ -153,7 +153,7 @@ public class gatherServiceTest {
     class create {
         @Test
         @DisplayName("카테고리 조회 성공 테스트")
-        void testGetCategory_Success() {
+        void testGetCategorySuccess() {
             // given
             Long categoryId = category.getId();
             when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
@@ -168,7 +168,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("카테고리 조회 실패 테스트")
-        void testGetCategory_NotFound() {
+        void testGetCategoryNotFound() {
             // given
             Long categoryId = 999L;  // 존재하지 않는 카테고리 ID
             when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
@@ -179,7 +179,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("사용자 조회 성공 테스트")
-        void testGetUser_Success() {
+        void testGetUserSuccess() {
             // given
             UUID userId = authenticatedUser.getUserId();
             when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -194,7 +194,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("사용자 조회 실패 테스트")
-        void testGetUser_NotFound() {
+        void testGetUserNotFound() {
             // given
             UUID userId = UUID.randomUUID();  // 존재하지 않는 사용자 ID
             when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -242,7 +242,7 @@ public class gatherServiceTest {
     class modify {
         @Test
         @DisplayName("수정실패 - 존재하지 않는 모임")
-        void fail_modify_gather_not_found() {
+        void failModifyGatherNotFound() {
             when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
             BaseException exception = assertThrows(BaseException.class, () -> {
                 gatherService.modifyGather(request, gatherId, authenticatedUser);
@@ -253,7 +253,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("수정 실패 - 매니저 권한 없음")
-        void fail_modify_manager_not_found() {
+        void failModifyManagerNotFound() {
             when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
 
             BaseException exception = assertThrows(BaseException.class, () -> {
@@ -265,7 +265,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("수정 실패 - 지도 정보 없음")
-        void fail_modify_map_not_found() {
+        void failModifyMapNotFound() {
             when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
 
             BaseException exception = assertThrows(BaseException.class, () -> {
@@ -277,7 +277,7 @@ public class gatherServiceTest {
 
         @Test
         @DisplayName("수정 성공 - redis 제외")
-        void success_modify() {
+        void successModify() {
             // Given: Mock 데이터와 초기 상태 설정
             gatherId = 1L;
 
@@ -317,208 +317,188 @@ public class gatherServiceTest {
             assertEquals(expectedHashtags, actualHashtags);
             assertEquals(map, gather.getMap());
         }
-//        @Test
-//        @DisplayName("수정 성공")
-//        void success_modify(){
-//            gatherId = 1L;
-//            when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
-//            when(memberRepository.findByGatherIdAndPermission(gatherId, Permission.MANAGER))
-//                    .thenReturn(Optional.of(member));
-//            when(userRepository.findById(member.getUser().getId())).thenReturn(Optional.of(user));
-//            when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.of(UUID.randomUUID()));
-//            when(mapRepository.findByGatherId(1L)).thenReturn(Optional.of(map));
-//
-//            // Mock AuthenticatedUser 설정
-//            AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-//                    member.getUser().getId(),
-//                    "manager@example.com",
-//                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")) // 권한 설정
-//            );
-//            gatherService.modifyGather(request, gatherId, authenticatedUser);
-//
-//            // then
-//            verify(gatherRepository).save(gather);
-//        }
-    }
 
-    @Nested
-    @DisplayName("모임 삭제")
-    class delete {
-        @Test
-        @DisplayName("삭제실패 - 존재하지 않는 모임")
-        void fail_delete_gather_not_found() {
-            when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
-            BaseException exception = assertThrows(BaseException.class, () -> {
+        @Nested
+        @DisplayName("모임 삭제")
+        class delete {
+            @Test
+            @DisplayName("삭제실패 - 존재하지 않는 모임")
+            void failDeleteGatherNotFound() {
+                when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
+                BaseException exception = assertThrows(BaseException.class, () -> {
+                    gatherService.deleteGather(gatherId, authenticatedUser);
+                });
+
+                assertEquals(ExceptionEnum.GATHER_NOT_FOUND, exception.getExceptionEnum());
+            }
+
+            @Test
+            @DisplayName("삭제 실패 - 매니저 권한 없음")
+            void failModifyManagerNotFound() {
+                when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
+
+                BaseException exception = assertThrows(BaseException.class, () -> {
+                    gatherService.deleteGather(gatherId, authenticatedUser);
+                });
+                assertEquals(ExceptionEnum.MANAGER_NOT_FOUND, exception.getExceptionEnum());
+            }
+
+            @Test
+            @DisplayName("삭제 성공 - redis 제외")
+            void successDelete() {
+                // Given: Mock 데이터와 초기 상태 설정
+                gatherId = 1L;
+
+                // doNothing().when(gather).delete();
+                // Redis 관련 동작을 Mock 처리
+                when(redisTemplate.opsForZSet()).thenReturn(zSetOperations); // ZSetOperations Mock 리턴
+                doReturn(0.0).when(zSetOperations).incrementScore(anyString(), anyString(), anyDouble()); // incrementScore Mock 처리
+
+                when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
+                when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.of(UUID.randomUUID()));  // Mocking the method being called
+
+                AuthenticatedUser authenticatedUser = new AuthenticatedUser(
+                        member.getUser().getId(),
+                        "manager@example.com",
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")) // 권한 설정
+                );
+
                 gatherService.deleteGather(gatherId, authenticatedUser);
-            });
 
-            assertEquals(ExceptionEnum.GATHER_NOT_FOUND, exception.getExceptionEnum());
+                assertNotNull(gather.getDeletedAt());
+
+                // repository.save()가 호출되었는지 확인
+                verify(gatherRepository).save(gather);
+            }
         }
 
-        @Test
-        @DisplayName("삭제 실패 - 매니저 권한 없음")
-        void fail_modify_manager_not_found() {
-            when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
+        @Nested
+        @DisplayName("모임 검식")
+        class search {
+            @Test
+            @DisplayName("해시테그 검색")
+            void successSearchHashtags() {
+                pageable = PageRequest.of(0, 10);  // 0번째 페이지, 한 페이지당 10개의 데이터
+                hashTagName = List.of("Tag1", "Tag2");
 
-            BaseException exception = assertThrows(BaseException.class, () -> {
-                gatherService.deleteGather(gatherId, authenticatedUser);
-            });
-            assertEquals(ExceptionEnum.MANAGER_NOT_FOUND, exception.getExceptionEnum());
-        }
+                // mock된 Gather 객체 생성
+                Gather gather1 = new Gather("모임1", "내용1", new Category(), List.of("Tag1", "Tag3"));
+                Gather gather2 = new Gather("모임2", "내용2", new Category(), List.of("Tag2", "Tag1"));
+                Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));  // mock된 결과 페이지
 
-        @Test
-        @DisplayName("삭제 성공 - redis 제외")
-        void success_delete(){
-            // Given: Mock 데이터와 초기 상태 설정
-            gatherId = 1L;
-
-           // doNothing().when(gather).delete();
-            // Redis 관련 동작을 Mock 처리
-            when(redisTemplate.opsForZSet()).thenReturn(zSetOperations); // ZSetOperations Mock 리턴
-            doReturn(0.0).when(zSetOperations).incrementScore(anyString(), anyString(), anyDouble()); // incrementScore Mock 처리
-
-            when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
-            when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.of(UUID.randomUUID()));  // Mocking the method being called
-
-            AuthenticatedUser authenticatedUser = new AuthenticatedUser(
-                    member.getUser().getId(),
-                    "manager@example.com",
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")) // 권한 설정
-            );
-
-            gatherService.deleteGather(gatherId, authenticatedUser);
-
-            assertNotNull( gather.getDeletedAt());
-
-            // repository.save()가 호출되었는지 확인
-            verify(gatherRepository).save(gather);
-        }
-    }
-
-    @Nested
-    @DisplayName("모임 검식")
-    class search{
-        @Test
-        @DisplayName("해시테그 검색")
-        void success_search_hashtags(){
-            pageable = PageRequest.of(0, 10);  // 0번째 페이지, 한 페이지당 10개의 데이터
-            hashTagName = List.of("Tag1", "Tag2");
-
-            // mock된 Gather 객체 생성
-            Gather gather1 = new Gather("모임1", "내용1", new Category(), List.of("Tag1", "Tag3"));
-            Gather gather2 = new Gather("모임2", "내용2", new Category(), List.of("Tag2", "Tag1"));
-            Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));  // mock된 결과 페이지
-
-            // gatherRepository.findByKeywords가 mock된 결과를 반환하도록 설정
-            when(gatherRepository.findByKeywords(pageable, hashTagName)).thenReturn(gatherPage);
+                // gatherRepository.findByKeywords가 mock된 결과를 반환하도록 설정
+                when(gatherRepository.findByKeywords(pageable, hashTagName)).thenReturn(gatherPage);
 
 
-            pageable = PageRequest.of(0, 10);  // 0번째 페이지, 한 페이지당 10개의 데이터
-            Page<Gather> result = gatherService.findByHashTags(pageable, hashTagName);
+                pageable = PageRequest.of(0, 10);  // 0번째 페이지, 한 페이지당 10개의 데이터
+                Page<Gather> result = gatherService.findByHashTags(pageable, hashTagName);
 
-            // Then: 결과 검증
-            assertNotNull(result);  // 결과가 null이 아님을 검증
-            assertEquals(2, result.getContent().size());  // 결과 페이지에 2개의 Gather가 있어야 함
-            assertTrue(result.getContent().stream().anyMatch(gather -> gather.getHashTagList().stream()
-                    .anyMatch(hashTag -> hashTag.getHashTagName().equals("Tag1"))));
+                // Then: 결과 검증
+                assertNotNull(result);  // 결과가 null이 아님을 검증
+                assertEquals(2, result.getContent().size());  // 결과 페이지에 2개의 Gather가 있어야 함
+                assertTrue(result.getContent().stream().anyMatch(gather -> gather.getHashTagList().stream()
+                        .anyMatch(hashTag -> hashTag.getHashTagName().equals("Tag1"))));
 
-            assertTrue(result.getContent().stream().anyMatch(gather -> gather.getHashTagList().stream()
-                    .anyMatch(hashTag -> hashTag.getHashTagName().equals("Tag2"))));
+                assertTrue(result.getContent().stream().anyMatch(gather -> gather.getHashTagList().stream()
+                        .anyMatch(hashTag -> hashTag.getHashTagName().equals("Tag2"))));
 
-            // verify: gatherRepository.findByKeywords가 정확히 호출되었는지 확
-            verify(gatherRepository).findByKeywords(pageable, hashTagName);
-        }
-        @Test
-        @DisplayName("해시테그 검색- no result")
-        void search_no_result(){
-            List<String> emptyHashTagName = List.of();
-            Page<Gather> emptyPage = Page.empty();
-            when(gatherRepository.findByKeywords(pageable, emptyHashTagName)).thenReturn(emptyPage);
+                // verify: gatherRepository.findByKeywords가 정확히 호출되었는지 확
+                verify(gatherRepository).findByKeywords(pageable, hashTagName);
+            }
 
-            // When: findByHashTags 메서드 호출
-            Page<Gather> result = gatherService.findByHashTags(pageable, emptyHashTagName);
+            @Test
+            @DisplayName("해시테그 검색- no result")
+            void searchNoResult() {
+                List<String> emptyHashTagName = List.of();
+                Page<Gather> emptyPage = Page.empty();
+                when(gatherRepository.findByKeywords(pageable, emptyHashTagName)).thenReturn(emptyPage);
 
-            // Then: 결과가 비어 있어야 함
-            assertNotNull(result);  // 결과가 null이 아님을 검증
-            assertEquals(0, result.getContent().size());  // 결과가 빈 페이지여야 함
-        }
+                // When: findByHashTags 메서드 호출
+                Page<Gather> result = gatherService.findByHashTags(pageable, emptyHashTagName);
 
-        @Test
-        @DisplayName("카테고리 검색 - 성공")
-        void success_search_category(){
-            // Given: Mock 데이터와 초기 상태 설정
-            Long categoryId = 1L;
-            Pageable pageable = PageRequest.of(0, 10); // 페이지 0, 페이지당 10개 데이터
+                // Then: 결과가 비어 있어야 함
+                assertNotNull(result);  // 결과가 null이 아님을 검증
+                assertEquals(0, result.getContent().size());  // 결과가 빈 페이지여야 함
+            }
 
-            // 카테고리 설정 및 gather 객체 생성
-            Category category = new Category("운동", adminUser); // adminUser는 적절히 설정된 사용자
-            Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
-            Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
+            @Test
+            @DisplayName("카테고리 검색 - 성공")
+            void successSearchCategory() {
+                // Given: Mock 데이터와 초기 상태 설정
+                Long categoryId = 1L;
+                Pageable pageable = PageRequest.of(0, 10); // 페이지 0, 페이지당 10개 데이터
 
-            // 결과로 반환할 Page 객체
-            Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));  // mock된 결과 페이지
+                // 카테고리 설정 및 gather 객체 생성
+                Category category = new Category("운동", adminUser); // adminUser는 적절히 설정된 사용자
+                Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
+                Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
 
-            // gatherRepository.findByCategoryWithHashTags() 메서드 Mock 설정
-            when(gatherRepository.findByCategoryWithHashTags(pageable, categoryId)).thenReturn(gatherPage);
+                // 결과로 반환할 Page 객체
+                Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));  // mock된 결과 페이지
 
-            // When: gatherService.gathers() 호출
-            Page<Gather> result = gatherService.gathers(pageable, categoryId);
+                // gatherRepository.findByCategoryWithHashTags() 메서드 Mock 설정
+                when(gatherRepository.findByCategoryWithHashTags(pageable, categoryId)).thenReturn(gatherPage);
 
-            // Then: 결과 검증
-            assertNotNull(result);  // 결과가 null이 아님을 검증
-            assertEquals(2, result.getContent().size());  // 결과 페이지에 2개의 Gather가 있어야 함
-            assertTrue(result.getContent().stream().anyMatch(gather -> gather.getCategory().getCategoryName().equals("운동")));
+                // When: gatherService.gathers() 호출
+                Page<Gather> result = gatherService.gathers(pageable, categoryId);
 
-            // verify: gatherRepository.findByCategoryWithHashTags가 정확히 호출되었는지 확인
-            verify(gatherRepository).findByCategoryWithHashTags(pageable, categoryId);
-        }
+                // Then: 결과 검증
+                assertNotNull(result);  // 결과가 null이 아님을 검증
+                assertEquals(2, result.getContent().size());  // 결과 페이지에 2개의 Gather가 있어야 함
+                assertTrue(result.getContent().stream().anyMatch(gather -> gather.getCategory().getCategoryName().equals("운동")));
 
-        @Test
-        @DisplayName("카테고리 검색 - no result")
-        void search_category_no_result(){
-            Long categoryId = 1L;
-            Page<Gather> emptyPage = Page.empty();
-            when(gatherRepository.findByCategoryWithHashTags(pageable, categoryId)).thenReturn(emptyPage);
+                // verify: gatherRepository.findByCategoryWithHashTags가 정확히 호출되었는지 확인
+                verify(gatherRepository).findByCategoryWithHashTags(pageable, categoryId);
+            }
 
-            Page<Gather> result = gatherService.gathers(pageable, categoryId);
+            @Test
+            @DisplayName("카테고리 검색 - no result")
+            void searchCategoryNoResult() {
+                Long categoryId = 1L;
+                Page<Gather> emptyPage = Page.empty();
+                when(gatherRepository.findByCategoryWithHashTags(pageable, categoryId)).thenReturn(emptyPage);
 
-            assertNotNull(result);
-            assertEquals(0, result.getContent().size());
+                Page<Gather> result = gatherService.gathers(pageable, categoryId);
 
-            verify(gatherRepository).findByCategoryWithHashTags(pageable, categoryId);
-        }
+                assertNotNull(result);
+                assertEquals(0, result.getContent().size());
 
-        @Test
-        @DisplayName("title 검색")
-        void success_search_title(){
-            Pageable pageable = PageRequest.of(0, 10);
-            Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
-            Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
-            Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));
-            when(gatherRepository.findByTitle(pageable, gather.getTitle())).thenReturn(gatherPage);
+                verify(gatherRepository).findByCategoryWithHashTags(pageable, categoryId);
+            }
 
-            Page<Gather> result = gatherService.findByTitles(pageable, gather.getTitle());
-            assertNotNull(result);
-            assertEquals(2, result.getContent().size());
+            @Test
+            @DisplayName("title 검색")
+            void successSearchTitle() {
+                Pageable pageable = PageRequest.of(0, 10);
+                Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
+                Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
+                Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));
+                when(gatherRepository.findByTitle(pageable, gather.getTitle())).thenReturn(gatherPage);
 
-            assertTrue(result.getContent().stream().anyMatch(gather -> gather.getTitle().equals("모임1")));
-            assertTrue(result.getContent().stream().anyMatch(gather -> gather.getTitle().equals("모임2")));
+                Page<Gather> result = gatherService.findByTitles(pageable, gather.getTitle());
+                assertNotNull(result);
+                assertEquals(2, result.getContent().size());
 
-        }
-        @Test
-        @DisplayName("title 검색 - no result")
-        void search_title_no_result(){
-            Page<Gather> emptyPage = Page.empty();
-            Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
-            Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
-            Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));
-            when(gatherRepository.findByTitle(pageable, gather.getTitle())).thenReturn(emptyPage);
+                assertTrue(result.getContent().stream().anyMatch(gather -> gather.getTitle().equals("모임1")));
+                assertTrue(result.getContent().stream().anyMatch(gather -> gather.getTitle().equals("모임2")));
 
-            Page<Gather> result = gatherService.findByTitles(pageable, gather.getTitle());
-            assertNotNull(result);
-            assertEquals(0, result.getContent().size());
+            }
 
-            verify(gatherRepository).findByTitle(pageable, gather.getTitle());
+            @Test
+            @DisplayName("title 검색 - no result")
+            void searchTitleNoResult() {
+                Page<Gather> emptyPage = Page.empty();
+                Gather gather1 = new Gather("모임1", "내용1", category, List.of("Tag1", "Tag2"));
+                Gather gather2 = new Gather("모임2", "내용2", category, List.of("Tag2", "Tag3"));
+                Page<Gather> gatherPage = new PageImpl<>(List.of(gather1, gather2));
+                when(gatherRepository.findByTitle(pageable, gather.getTitle())).thenReturn(emptyPage);
+
+                Page<Gather> result = gatherService.findByTitles(pageable, gather.getTitle());
+                assertNotNull(result);
+                assertEquals(0, result.getContent().size());
+
+                verify(gatherRepository).findByTitle(pageable, gather.getTitle());
+            }
         }
     }
 }

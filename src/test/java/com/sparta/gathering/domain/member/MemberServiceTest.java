@@ -121,7 +121,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("멤버 신청 실패 - 본인이 매니저")
-        void registration_failed() {
+        void registrationFailed() {
             UUID userId = managerUser.getId(); // 매니저 ID
             long gatherId = gather.getId();
 
@@ -141,7 +141,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("유저가 없으면 예외 발생")
-        void user_not_found() {
+        void userNotFound() {
             // given
             UUID userId = UUID.randomUUID(); // 존재하지 않는 유저 ID
             long gatherId = gather.getId();
@@ -158,7 +158,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("모임이 없으면 예외 발생")
-        void gather_not_found() {
+        void gatherNotFound() {
             // given
             UUID userId = testUser.getId();
             long gatherId = 999L; // 존재하지 않는 모임 ID
@@ -180,7 +180,7 @@ public class MemberServiceTest {
     class check {
         @Test
         @DisplayName("모임 조회 성공 - 페이징 반환")
-        void success_check_gather() {
+        void successCheckGather() {
             //given
             List<Member> members = List.of(member);
             Page<Member> memberPage = new PageImpl<>(members, pageable, members.size());
@@ -208,7 +208,7 @@ public class MemberServiceTest {
     class approval {
         @Test
         @DisplayName("가입 승인")
-        void success_approval() {
+        void successApproval() {
             // given
             long memberId = member.getId();
             long gatherId = gather.getId();
@@ -228,7 +228,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("승인 실패 - 매니저 계정 아님 ")
-        void fail_approval() {
+        void failApproval() {
             // given
             long memberId = member.getId();
             long gatherId = gather.getId();
@@ -251,7 +251,7 @@ public class MemberServiceTest {
         class refusal {
             @Test
             @DisplayName("가입 거절완료")
-            void success_refusal() {
+            void successRefusal() {
                 // given
                 long memberId = member.getId();
                 long gatherId = gather.getId();
@@ -271,7 +271,7 @@ public class MemberServiceTest {
 
             @Test
             @DisplayName("가입 거절 실패-권한없음")
-            void fail_refusal() {
+            void failRefusal() {
                 // given
                 long memberId = member.getId();
                 long gatherId = gather.getId();
@@ -295,7 +295,7 @@ public class MemberServiceTest {
     class withdrawal {
         @Test
         @DisplayName("탈퇴 완료")
-        void success_withdrawal() {
+        void successWithdrawal() {
             //given
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
@@ -311,7 +311,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 존재하지 않는 멤버")
-        void fail_withdrawal_un_exist_member() {
+        void failWithdrawalUnExistMember() {
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
 
@@ -327,7 +327,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 존재하지 않는 유저")
-        void fail_withdrawal_un_exist_user() {
+        void failWithdrawalUnExistUser() {
             // given
             AuthenticatedUser user = new AuthenticatedUser(UUID.randomUUID(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = member.getId();
@@ -345,7 +345,7 @@ public class MemberServiceTest {
 
         @Test
         @DisplayName("탈퇴 실패 - 이미 탈퇴한 유저")
-        void fail_withdrawal_already_deleted_user() {
+        void failWithdrawalAlreadyDeletedUser() {
             // given
             AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = 1L;
