@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxOTIwOTkyLCJleHAiOjE3MzE5MjI3OTJ9.i3epid073V5P7zJhvV6fMysKHB819XH5IwEvrsYdUyI
+@jwt_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiNTY1ZTIwMS1iY2Q1LTRjMDYtODYzZS1mZmVkNzEwNWQzMTIiLCJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMyMDgxMjU0LCJleHAiOjE3MzIwODMwNTR9.lD16SI3REv4S9SAL1KzXVoGdKH59UqPdVuI7Ho58yZ0
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -107,7 +107,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
+  "email": "test2@example.com",
   "password": "password123A!"
 }
 
@@ -250,6 +250,11 @@ Authorization: Bearer {{jwt_token}}
 
 ### 동네 조회
 GET {{base_url}}/api/gathers/topRanking
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### 가입된 모임 조회
+GET {{base_url}}/api/gathers
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
