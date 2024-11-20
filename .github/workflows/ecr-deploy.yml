@@ -58,7 +58,7 @@ jobs:
       - name: Docker Compose로 이미지 빌드 및 푸시
         env:
           AWS_REGION: ap-northeast-2
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          ECR_REPOSITORY: gathering-21/monolog
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           # Docker Compose 를 사용하여 서비스 빌드
