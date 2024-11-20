@@ -6,7 +6,7 @@ spring:
     name: gathering
 
   datasource:
-    url: jdbc:mysql://database-gathering.cn0mq4gcet4o.ap-northeast-2.rds.amazonaws.com?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://database-gathering.cn0mq4gcet4o.ap-northeast-2.rds.amazonaws.com/gathering?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul
     username: admin
     password: gathering1!
     driver-class-name: com.mysql.cj.jdbc.Driver
