@@ -36,7 +36,7 @@ import static org.mockito.Mockito.times;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-public class gatherServiceRedisTest {
+public class GatherServiceRedisTest {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

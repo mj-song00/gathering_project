@@ -47,7 +47,7 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class gatherServiceTest {
+public class GatherServiceTest {
 
     @Mock
     private UserRepository userRepository;
