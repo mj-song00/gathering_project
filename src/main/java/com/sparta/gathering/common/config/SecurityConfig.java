@@ -34,6 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, SecurityContextHolderAwareRequestFilter.class)
                 .authorizeHttpRequests(auth -> {
                     if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
@@ -58,6 +59,7 @@ public class SecurityConfig {
                 )
                 .build();
     }
+
 
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {

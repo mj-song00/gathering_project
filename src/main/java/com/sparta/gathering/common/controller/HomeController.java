@@ -10,4 +10,9 @@ public class HomeController {
     public String home() {
         return "redirect:/login.html";  // 루트 경로 접근 시 login.html로 리다이렉트
     }
+
+    @GetMapping("/findGather")
+    public String findGather() {
+        return "/findGather";
+    }
 }

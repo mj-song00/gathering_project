@@ -1,13 +1,5 @@
 package com.sparta.gathering.domain.map.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.gathering.common.exception.BaseException;
-import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.map.dto.request.MapRequest;
 import com.sparta.gathering.domain.map.dto.response.AroundPlaceResponse;
 import com.sparta.gathering.domain.map.entity.Map;
@@ -34,10 +26,8 @@ public class KakaoService {
     private final RestTemplate restTemplate;
     private final HttpHeaders headers = new HttpHeaders();
     private final MapRepository mapRepository;
-    private final ObjectMapper objectMapper;
-    private final GatherRepository gatherRepository;
-    private final RedisTemplate redisTemplate;
-    private final GeoOperations geoOperations;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final GeoOperations<String, String> geoOperations;
 
     @Value("${kakao.map.api-key}")
     private String appKey;
@@ -55,38 +45,6 @@ public class KakaoService {
 
         return restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
     }
-
-
-    @Transactional
-    public void saveMap(MapRequest saveMap, Long gatherId) {
-
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", appKey);
-
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-        String rawURI = "https://dapi.kakao.com/v2/local/search/address.json?query=" + saveMap.getAddress();
-        ResponseEntity<String> response = restTemplate.exchange(rawURI, HttpMethod.GET, entity, String.class);
-        Gather gather = gatherRepository.findById(gatherId).orElseThrow(() ->
-                new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        try {
-            JsonNode mapData = objectMapper.readTree(response.getBody()); //String 을 json형태로 변환
-
-            //json에서 주소와 위경도를 뽑음
-            String addressName = mapData.get("documents").get(0).get("address_name").asText();
-            Double latitude = mapData.get("documents").get(0).get("y").asDouble();
-            Double longitude = mapData.get("documents").get(0).get("x").asDouble();
-
-            //entity에 저장
-            Map map = new Map(addressName, latitude, longitude);
-            mapRepository.save(map);
-
-        } catch (JsonMappingException e) {
-            throw new BaseException(ExceptionEnum.PERMISSION_DENIED_ROLE);
-        } catch (JsonProcessingException e) {
-            throw new BaseException(ExceptionEnum.JSON_TYPE_MISMATCH);
-        }
-    }
-
 
     @Transactional
     public List<AroundPlaceResponse> listMyMap(Double x, Double y, Integer d) {//경도 x lon,위도 y lat

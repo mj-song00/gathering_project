@@ -30,7 +30,7 @@ public class CommentService {
     @Transactional
     public void createComment(Long scheduleId, AuthenticatedUser authenticatedUser, CommentRequest request) {
 
-        Member member = isValidMember(authenticatedUser);//유저가 모임의 멤버 또는 매니저인지 확인
+        Member member = isValidMember(authenticatedUser);//유저가 모임의 멤버인지 확인
 
         Schedule schedule = findSchedule(scheduleId); //PathVariable 에서 scheduleId를 가져와서 일치하는 schedule 객체를 찾아 저장한다.
 
@@ -98,6 +98,7 @@ public class CommentService {
     }
 
     public Member isValidMember(AuthenticatedUser authenticatedUser) {
+        System.out.println(authenticatedUser.getUserId());
         return memberRepository.findByUserId(authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
     }

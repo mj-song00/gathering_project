@@ -87,12 +87,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void validateManager(long gatherId, AuthenticatedUser authenticatedUser) {
+        // gatherId에 대한 매니저 ID를 찾고, 없으면 예외를 던짐
         UUID managerId = memberRepository.findManagerIdByGatherId(gatherId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));  // Optional.empty()인 경우 예외 발생
 
+        // 매니저 권한 검증
         if (!managerId.equals(authenticatedUser.getUserId()) && authenticatedUser.getAuthorities().stream()
-                .noneMatch(authority ->
-                        authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
+                .noneMatch(authority -> authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
     }

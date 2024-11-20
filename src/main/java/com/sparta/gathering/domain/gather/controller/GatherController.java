@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/gathers")
+//@CrossOrigin(origins = "http://localhost:63342")
 public class GatherController {
 
     private final GatherService gatherService;
