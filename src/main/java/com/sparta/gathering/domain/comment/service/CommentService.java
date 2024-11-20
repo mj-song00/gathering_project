@@ -26,7 +26,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
-    private final GatherRepository gatherRepository;
 
     //댓글 생성
     @Transactional
