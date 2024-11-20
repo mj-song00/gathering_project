@@ -1,9 +1,12 @@
 package com.sparta.gathering.domain.schedule.service;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.member.entity.Member;
+import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.schedule.dto.request.ScheduleRequestDto;
 import com.sparta.gathering.domain.schedule.dto.response.ScheduleResponseDto;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
@@ -19,14 +22,17 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final GatherRepository gatherRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public ScheduleResponseDto createSchedule(Long gatherId,
-            ScheduleRequestDto scheduleRequestDto) {
+            ScheduleRequestDto scheduleRequestDto,
+            AuthenticatedUser authUser) {
+
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-
+        checkAuth(gatherId,authUser);
         // Schedule 엔티티 생성 및 Gather 엔티티 설정
         Schedule schedule = new Schedule(scheduleRequestDto.getScheduleTitle(),
                 scheduleRequestDto.getScheduleContent(), gather);
@@ -41,7 +47,10 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto updateSchedule(Long gatherId, Long scheduleId,
-            ScheduleRequestDto scheduleRequestDto) {
+            ScheduleRequestDto scheduleRequestDto, AuthenticatedUser authUser) {
+
+        checkAuth(gatherId,authUser);
+
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -64,7 +73,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deleteSchedule(Long gatherId, Long scheduleId) {
+    public void deleteSchedule(Long gatherId, Long scheduleId, AuthenticatedUser authUser) {
+
+        checkAuth(gatherId,authUser);
+
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -91,5 +103,14 @@ public class ScheduleService {
         responseDto.setScheduleTitle(schedule.getScheduleTitle());
         responseDto.setScheduleContent(schedule.getScheduleContent());
         return responseDto;
+    }
+
+    private void checkAuth(Long gatherId, AuthenticatedUser authUser) {
+
+        Member member = memberRepository.findByUserId(authUser.getUserId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
+        if (!member.getGather().getId().equals(gatherId)){
+            throw new BaseException(ExceptionEnum.MEMBER_NOT_ALLOWED);
+        }
     }
 }

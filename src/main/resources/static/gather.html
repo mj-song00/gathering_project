@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>이리모여 여기모여</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+    *{
+      font-family: "Gowun Dodum", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+    /* 구글 폰트 import url 넣어주세요. */
+    /* 구글 폰트 CSS rules를 전체 적용해 주세요. */
+
+    body {
+      background-color: white;
+      color: black;
+    }
+
+    .header {
+      background-size: cover;
+      background-position: right;
+      height: 650px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header>h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .header>div {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    .form-button {
+      width: 150px;
+      height: 40px;
+      background-color: transparent;
+      border: 1px solid ;
+      color: black;
+      font-size: 15px;
+      margin: 20px 10px 0px 0px;
+    }
+
+    .form-button:hover {
+      border: 2px solid black;
+    }
+
+    .info-button {
+      margin: 20px 0 0 15px;
+      height: 40px;
+      font-size: 14px;
+    }
+
+    .post {
+      width: 500px;
+      margin: 20px 0px 1px 20px;
+      padding: 20px;
+      box-shadow: 0px 0px 3px 0px transparent;
+      background-color: wheat;
+    }
+
+    .form-floating input,
+    .form-floating textarea {
+      color: black;
+      background-color: white;
+    }
+
+    .button2 {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+    }
+
+    .button2>button {
+      margin-right: 10px;
+    }
+
+    .mycards {
+      width: 1600px;
+      margin: 0px auto;
+
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .card {
+      border-radius: 30px;
+      background-color: white;
+      border: none;
+      color: black;
+      margin-left: 50px;
+    }
+
+    .card-img-top {
+      object-fit: cover;
+      height: 250px;
+      border-radius: 20px;
+    }
+
+    .card-title {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    .card-body {
+      border: blanchedalmond 2px solid;
+      border-radius: 20px;
+    }
+
+    .card-text {
+      color: black;
+    }
+
+    .comment {
+      color: black;
+    }
+
+    .play-button {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 15px;
+    }
+
+    a.nav-link {
+      color: #F17228;
+      font-size: large;
+    }
+
+    .icon {
+      height: 50px;
+    }
+
+    .card-button {
+      background-color: orange;
+      color: white;
+      text-align: center;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .card-title {
+      font-weight: bold;
+    }
+
+    .card-button> :hover {
+      background-color: darkorange;
+    }
+
+    #input-card {
+      width: 500px;
+      height: auto;
+      margin: 0px 0px 0px 0px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      float: left;
+    }
+
+    .form-floating input,
+    .form-floating textarea {
+      color: black;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .form-floating label {
+      color: #333;
+    }
+
+    .input-group button,
+    .input-group select {
+      background-color: rgb(168, 161, 161);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .input-group button:hover,
+    .input-group select:hover {
+      background-color: gray;
+    }
+
+    .button2 {
+      text-align: right;
+    }
+
+    .button2 button {
+      background-color: #F17228;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .button2 button:hover {
+      background-color: #f3620f;
+    }
+
+    .jumbotron-message {
+      margin-left: 150px;
+      font-size: 1500px;
+    }
+  </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<header class="p-3 text-bg-dark">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+      </a>
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="#" class="nav-link px-2 text-danger">이리모여 여기모여</a></li>
+        <li><a href="#" class="nav-link px-2 ">홈</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+<div class = "header">
+  <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+
+    <h1 class="title" id="title" style = 'font-family : Blank Han Sans'> </h1>
+    <p class="col-md-8 fs-4">title <br> subtitle</p>
+
+  </div>
+</div>
+<!-- 지도를 표시할 div 입니다 -->
+<div id="map" style="width:50%;height:350px;"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4c649ebf1a23a2767bc30728262f649d&libraries=services"></script>
+<script src="./js/gather.js"></script>
+
+<script>
+  var basicLat = 33;
+  var basicLng = 126.570667;
+  var container = document.getElementById('map');
+  var map;
+
+  init();
+
+  function init() {
+    var options = {
+      center: new kakao.maps.LatLng(basicLat, basicLng),
+      level: 3
+    };
+    map = new kakao.maps.Map(container, options);
+  }
+
+  logJsonData().then((res) => {
+    var title = res.data.title;
+    var address;
+    address = res.data.address;
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // Use the address variable for address search
+    geocoder.addressSearch(address, function(result, status) {
+      // Check if the search was successful
+      if (status === kakao.maps.services.Status.OK) {
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // Display the location as a marker
+        var marker = new kakao.maps.Marker({
+          map: map,
+          position: coords
+        });
+
+        // Show an info window with a description of the place
+        var infowindow = new kakao.maps.InfoWindow({
+          content: `<div style="width:150px;text-align:center;padding:6px 0;">${title}</div>`
+        });
+        infowindow.open(map, marker);
+
+        // Set the center of the map to the searched location
+        map.setCenter(coords);
+      }
+    });
+  });
+  // 주소-좌표 변환 객체를 생성합니다
+
+</script>
+<!-- 부트스트랩 카드 적용-->
+<div class="mycards">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title"></h5>
+          <p class = "card-star"></p>
+          <p class="card-text"></p>
+          <button class = 'card-button'></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container2">
+  <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
+    <div class="col mb-3">
+      <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+      </a>
+      <p class="text-body-secondary">@이리모여 여기모여</p>
+    </div>
+    <div class="col mb-3">
+    </div>
+    <div class="col mb-3">
+      <h5>Section</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+      </ul>
+    </div>
+
+    <div class="col mb-3">
+      <h5>Section</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+      </ul>
+    </div>
+
+    <div class="col mb-3">
+      <h5>Section</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Home</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Features</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+</body>
+
+</html>

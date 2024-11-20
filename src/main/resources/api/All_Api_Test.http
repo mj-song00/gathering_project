@@ -2,15 +2,21 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMTk5MzkxNCwiZXhwIjoxNzMxOTk1NzE0fQ.FqezHZQ16xd8yTArBwSJGo1cYyv8DGEjuKxj8SUjpRE
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMxOTIwOTkyLCJleHAiOjE3MzE5MjI3OTJ9.i3epid073V5P7zJhvV6fMysKHB819XH5IwEvrsYdUyI
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
-@memberId = 2
+@refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
 
-@category_Id = 2
+@expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
+
+@memberId = 1
+
+@category_Id = 1
 
 @gatherId = 1
+
+@scheduleId = 4
 
 @agreement_Id = 17a980dd-a53e-11ef-9770-00155dbf39e6
 
@@ -88,7 +94,7 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test4@example.com",
+  "email": "nbcteam21test@gmail.com",
   "nickName": "홍길동",
   "password": "password123A!",
   "identityProvider": "NONE",
@@ -103,7 +109,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "nbcteam21test@gmail.com",
   "password": "password123A!"
 }
 
@@ -250,12 +256,12 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 모임 상세페이지
-GET {{base_url}}/api/gathers/168/detail
+GET {{base_url}}/api/gathers/{{gatherId}}/detail
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 멤버 생성
-POST {{base_url}}/api/members/user/{{user_Id}}/gather/168
+POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -314,17 +320,36 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### 보드 생성
-POST {{base_url}}/api/gathers/168/boards
+POST {{base_url}}/api/gathers/{{gatherId}}/boards
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "boardTitle": "보드3",
-  "boardContent": "보드3 컨텐츠"
+  "boardTitle": "보드2",
+  "boardContent": "보드2 컨텐츠"
+}
+
+### 보드 수정
+@boardsId = 3
+PUT {{base_url}}/api/gathers/{{gatherId}}/boards/{{boardsId}}
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "boardTitle": "보드수정22",
+  "boardContent": "보드2 컨텐츠"
+}
+
+### 보드 삭제
+PATCH {{base_url}}/api/gathers/{{gatherId}}/boards/delete/2
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
 }
 
 ### 스케쥴 생성
-POST {{base_url}}/api/gathers/168/schedules
+POST {{base_url}}/api/gathers/1/schedules
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -334,14 +359,34 @@ Authorization: Bearer {{jwt_token}}
 }
 
 
-
-### 댓글생성
-POST {{base_url}}/api/schedule/1/comments
+### 스케쥴 수정
+PUT {{base_url}}/api/gathers/1/schedules/{{scheduleId}}
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 타이틀3"
+  "scheduleTitle": "스케쥴 수정",
+  "scheduleContent": "스케쥴2 컨텐츠"
+}
+
+
+### 스케쥴 삭제
+PATCH {{base_url}}/api/gathers/1/schedules/2/delete
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+}
+
+
+
+### 댓글생성
+POST {{base_url}}/api/schedule/{{scheduleId}}/comments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "comment": "댓글 타이틀4"
 }
 
 ### 댓글조회
@@ -350,7 +395,6 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 타이틀3"
 }
 
 
@@ -360,7 +404,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "comment": "보드 수정"
+  "comment": "댓글 수정"
 }
 
 
@@ -374,20 +418,16 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 지도검색
-GET {{base_url}}/api/kakaoMap
-Content-Type: application/json
-
-{
-  "address": "강원특별자치도 강릉시 용지로 176"
-}
-
-### 지도저장
-POST {{base_url}}/api/kakaoMap/2
+POST {{base_url}}/api/kakaoMap
 Content-Type: application/json
 
 {
   "address": "인천 석남1동"
 }
+
+
+
+
 
 ### 지도조회(래디스)
 GET {{base_url}}/api/kakaoMap/RedisSearch
@@ -396,6 +436,17 @@ Content-Type: application/json
 {
   "latitude": "37.51340296744142",
   "longitude": "126.94329053163528",
+  "distance": 175
+}
+
+
+### 지도조회
+POST {{base_url}}/api/kakaoMap/search
+Content-Type: application/json
+
+{
+  "latitude": 37.5134034035131,
+  "longitude": 126.943292835393,
   "distance": 175
 }
 

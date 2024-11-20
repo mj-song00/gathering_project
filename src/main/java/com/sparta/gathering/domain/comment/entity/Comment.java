@@ -43,6 +43,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "member_Id")
     private Member member;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "gather_id")
+//    private Gather gather;
 
     public Comment(String comment, Schedule schedule, Member member) {
         this.nickName = member.getUser().getNickName();

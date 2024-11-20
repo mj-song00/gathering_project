@@ -19,7 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m.user.id, m.permission FROM Member m WHERE m.gather.id = :gatherId and m.permission = com.sparta.gathering.domain.member.enums.Permission.MANAGER")
     Optional<UUID> findManagerIdByGatherId(@Param("gatherId") Long gatherId);
 
-
     Optional<Member> findByUserId(UUID id);
 
     Optional<Member> findByGatherIdAndPermission(long gatherId, Permission permission);

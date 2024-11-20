@@ -14,6 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+//@CrossOrigin(origins = "http://localhost:63342")
 public class KakaoMapController {
 
     private final KakaoService kakaoService;
@@ -23,23 +24,11 @@ public class KakaoMapController {
      *
      * @param searchMap 검색할 주소
      */
-    @GetMapping("/api/kakaoMap")
+    @PostMapping("/api/kakaoMap")
     public ResponseEntity<String> searchMap(@RequestBody MapRequest searchMap) {
         return kakaoService.searchMap(searchMap);
     }
 
-    /**
-     * @param gatherId 모임의 아이디
-     * @param saveMap
-     * @return
-     */
-    @PostMapping("/api/kakaoMap/{gatherId}")
-    public ResponseEntity<ApiResponse<Void>> saveMap(@PathVariable Long gatherId, @RequestBody MapRequest saveMap) {
-        kakaoService.saveMap(saveMap, gatherId);
-        ApiResponse<Void> response = ApiResponse.successWithOutData(
-                ApiResponseEnum.SAVED_MAP_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 
     /**
      * 위치기반 주변 모임추천 api
@@ -47,7 +36,7 @@ public class KakaoMapController {
      * @param request 위도 경도 위치를 받아서
      * @return 주변 반경 2km 모임을 추천 한다.
      */
-    @GetMapping("/api/kakaoMap/search")
+    @PostMapping("/api/kakaoMap/search")
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> myMapList(
             @RequestBody SearchGatherRequest request
     ) {
@@ -64,7 +53,7 @@ public class KakaoMapController {
      * @param request 사용자의 위경도 정보와 추천 범위를 지정할 distance 값을 받아온다.
      * @return 반경 distance 만큼 모임을 추천 받는다.
      */
-    @GetMapping("/api/kakaoMap/RedisSearch")
+    @PostMapping("/api/kakaoMap/RedisSearch")
     public ResponseEntity<ApiResponse<List<AroundPlaceResponse>>> redisSearch(
             @RequestBody SearchGatherRequest request
     ) {
