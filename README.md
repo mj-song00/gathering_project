@@ -25,7 +25,13 @@
 
 2024-10-21 ~ 2024-11-22
 
-송민지/조은형/김정현/고결/변영덕
+| 이름     | 역할  |   
+|----------|---------|
+| [송민지 ](https://github.com/mj-song00)   |  리더      |
+|  [조은형](https://github.com/eunhyeong99)    |  부리더   |        
+| [ 고  결 ](https://github.com/gyeol9012)   |   팀원     |        
+| [번영덕](github.com/zerodeok)     |   팀원     |        
+|  [이정현](https://github.com/LJH4987)      |   팀원     |      
 
 ---
 ### 💨 SWAGGER 사용
@@ -81,7 +87,7 @@
 3. 검색속도 저하와 함께 N+1의 문제도 함께 발생하였습니다. 
 
 `해결방안`
-1. pplication-dev.yml파일에 batch size = 100으로 설정하여 Eager Loding을 Lazy Loding으로 변경하였습니다.
+1. application-dev.yml파일에 batch size = 100으로 설정였습니다.
 2. map과 hashTag를 leftJoin().fetchJoin()으로 설정하였습니다.
 3. Gather table에 title로 새로운 인덱스를 생성하였습니다.
 
