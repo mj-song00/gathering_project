@@ -4,6 +4,22 @@
 
 같은 취미를 가진 사람들과 모임을 쉽게 만들고 관리할 수 있는 웹사이트입니다. 사용자는 모임을 생성하고, 멤버를 관리하며, 실시간 소통과 일정 관리를 할 수 있습니다.
 
+### 🛠️ 기술 스택
+![](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
+![](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+![](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
+![](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
+![](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=white)
+![](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
+![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+![](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
+​
 
 ---
 ### 🔍 개요
@@ -30,7 +46,7 @@
 | [송민지 ](https://github.com/mj-song00)   |  리더      |
 |  [조은형](https://github.com/eunhyeong99)    |  부리더   |        
 | [ 고  결 ](https://github.com/gyeol9012)   |   팀원     |        
-| [번영덕](github.com/zerodeok)     |   팀원     |        
+| [번영덕](https://github.com/zerodeok)     |   팀원     |        
 |  [이정현](https://github.com/LJH4987)      |   팀원     |      
 
 ---
@@ -63,12 +79,17 @@
 7.  **👍 좋아요 (CD)**
     - 소속된 모임에 좋아요/취소      ​
 ---
-### 🚀 추가 기능
+### 🔔 핵심 기능
 
 ### 1️⃣ 위치 기반 모임 추천 서비스
-- **추천 알고리즘**:  
-  사용자의 위치를 기준으로 **반경 10km 이내**의 모임을 추천합니다.  
-  프론트에서 사용자의 위치를 서버로 전송하면, 서버는 **Redis의 GeoOperation**을 통해 거리를 계산해 반경 내 모임을 리스트로 제공합니다.
+- **기능 설명**  
+  사용자의 위치를 기준으로 **이용자들이 원하는 거리에 맞게** 모임을 추천합니다.
+
+- **구현 방법**:  
+  사용자의 **위도와 경도** 정보를 받아 서버에서 **Redis에서 지원하는 GeoOperation**을 사용해 거리 계산을 수행합니다.
+
+<img width="389" alt="스크린샷 2024-11-06 오후 1 18 13" src="https://github.com/user-attachments/assets/fe573d87-3599-4a1e-8a9e-b3d005e4b9b9"> <br>
+<img width="389" alt="프론트 구현" src="https://github.com/user-attachments/assets/4139faf4-bd86-481d-a9ba-9410aa12f8c5">
 
 - **모임 랭킹**:
   zSetOperation자료구조를 이용하여 생성이 많이 된 지역 순으로 랭킹 확인을 할 수 있습니다.
@@ -77,6 +98,116 @@
 - **데이터 흐름**:  
   동일한 채팅방에 입장한 유저들의 대화 내용은 ChatController → ChatService 경로를 거쳐 **MySQL**에 저장됩니다. 이후 **Redis Publisher** 기능을 통해 대화 내용이 Redis 메모리에 저장되며, **Subscriber**들에게 실시간으로 전달됩니다.
 
+<img width="371" alt="스크린샷 2024-11-06 오후 1 18 26" src="https://github.com/user-attachments/assets/19feae42-8697-432b-bfeb-821fd5392610">
+
+- Redis는 빠른 인메모리 데이터 처리와 Pub/Sub 모델을 통해 실시간 메시지 전송을 지원하며, 대규모 트래픽을 효과적으로 분산할 수 있습니다.
+
+### 3️⃣ 쿠폰 발급 시스템
+
+**기능 설명**  
+사용자 요청에 따라 쿠폰을 발급하고, 재고를 실시간으로 관리하며, 발급 상태를 사용자별로 저장하는 시스템입니다.
+특징:
+- 대량의 쿠폰 발급 요청을 처리할 수 있는 병렬 처리 방식.
+- Redis를 활용한 빠른 데이터 접근과 TTL(Time-to-Live) 설정으로 데이터 만료 관리.
+- 실패한 요청을 별도 큐에 저장하여 안정적으로 재처리 가능.
+-
+**구현 방법**
+
+- Redis를 활용한 대기열 처리:
+
+  대기열 생성: Redis의 List 구조(LPUSH, RPUSH)를 사용하여 사용자 요청을 큐에 저장.
+  대기열 처리: @Scheduled를 활용해 Redis에서 데이터를 일정 간격으로 가져와(RPOP) 병렬로 처리.
+
+
+
+  `redisTemplate.opsForList().leftPush("couponQueue", jsonRequest);
+  List<Object> batch = redisTemplate.opsForList().rightPop("couponQueue", BATCH_SIZE);
+  `
+
+
+- Redisson 락을 통한 중복 처리 방지:
+
+  분산 환경에서 여러 인스턴스가 동시에 작업하지 않도록 Redisson의 분산 락을 사용.
+
+  락이 없을 경우 작업을 건너뛰도록 구현.
+
+
+  `RLock lock = redissonClient.getLock("couponQueueLock");
+  if (!lock.tryLock(10, TimeUnit.SECONDS)) {
+  log.info("다른 인스턴스가 락을 보유 중입니다. 이번 작업은 건너뜁니다.");
+  return;
+  }
+  `
+
+
+- 실시간 재고 관리:
+
+Redis의 DECR 명령어를 사용해 쿠폰 재고를 관리.
+
+재고 부족 시 요청을 실패 처리하고 대기열에서 제거.
+
+
+`Long remainingStock = redisTemplate.opsForValue().decrement("couponStock");
+if (remainingStock == null || remainingStock < 0) {
+redisTemplate.opsForValue().increment("couponStock"); // 재고 복구
+log.warn("쿠폰 발급 실패: 재고 부족");
+}
+`
+
+- 발급 상태 저장 및 TTL 설정:
+
+발급된 쿠폰의 상태(SUCCESS 또는 FAILED)를 사용자별로 Redis에 저장.
+
+TTL(Time-to-Live) 설정을 통해 발급 상태 데이터를 24시간 유지.
+
+`redisTemplate.opsForValue().set("couponIssued:" + userId, status, 86400, TimeUnit.SECONDS);
+`
+
+- 실패 데이터 재처리:
+
+처리 중 실패한 요청은 별도의 Redis 대기열(failureQueue)에 저장.
+
+주기적으로 실패 데이터를 재처리하는 스케줄러를 실행
+
+`redisTemplate.opsForList().leftPush("failureQueue", failedRequest);
+`
+
+- 병렬 처리:
+
+ExecutorService를 활용해 병렬 처리로 대량 요청을 효율적으로 처리.
+
+작업 큐가 초과되면 호출자 스레드에서 작업을 실행하도록 정책 설정.
+
+`private final ExecutorService executorService = new ThreadPoolExecutor(
+10, 100, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(500),
+new ThreadPoolExecutor.CallerRunsPolicy()
+);
+`
+
+**주요 사용 기술**
+
+Redis: List 구조, DECR 명령어, TTL 설정.
+Redisson: 분산 락을 통한 데이터 충돌 방지.
+Java: Spring Scheduler, ExecutorService를 활용한 병렬 처리.
+JSON: 요청 데이터 직렬화/역직렬화(ObjectMapper).
+
+**시스템 동작 흐름**
+
+사용자 요청이 들어오면 Redis 대기열(couponQueue)에 저장.
+@Scheduled를 통해 주기적으로 대기열 데이터를 가져옴.
+Redisson 락으로 작업 충돌을 방지하며, 병렬로 요청 처리.
+쿠폰 재고를 실시간으로 관리하며, 성공/실패 상태를 Redis에 저장.
+실패한 요청은 failureQueue로 이동하고, 별도의 스케줄러로 재처리.
+
+**장점**
+
+고속 처리: Redis의 메모리 기반 처리로 대량의 요청도 빠르게 처리 가능.
+확장성: Redisson 락과 병렬 처리를 통해 다중 인스턴스 환경에서도 안정적으로 동작.
+안정성: 실패 데이터를 관리하고 재처리하여 데이터 손실 방지.
+유연성: TTL 설정으로 불필요한 데이터 자동 삭제.
+
+![image](https://github.com/user-attachments/assets/58f3dcf1-e248-4843-95e9-9fc6020f0e2b)
+
 ---
 ### 💥 트러블 슈팅
 
@@ -84,7 +215,7 @@
 `문제점`
 1. Gather table에는 참조하는 테이블이 많습니다.
 2. map과 hashTag은 Eager Loding을 활용하였습니다.
-3. 검색속도 저하와 함께 N+1의 문제도 함께 발생하였습니다. 
+3. 검색속도 저하와 함께 N+1의 문제도 함께 발생하였습니다.
 
 `해결방안`
 1. application-dev.yml파일에 batch size = 100으로 설정였습니다.
@@ -95,8 +226,8 @@
 1.  map과 hashTag를 leftJoin().fetchJoin()으로 설정하자 N+1 문제가 해결되었습니다.
 2.  Gather table에 인덱스를 적용하고 검색하자 카테고리 검색 84.3%, 해시태그 검색 85%, 타이틀 검색 77.7% 개선 되었습니다.
 3.  일반검색 대비 Throughput 개선률이 **약 4배**이상 개선되었습니다.<br>
-![image](https://github.com/user-attachments/assets/7f8634eb-66a5-4d84-8756-3260f97e44f2)
-![image](https://github.com/user-attachments/assets/836bdcf6-9cda-4f38-8cb4-7d4cf62af00f)
+    ![image](https://github.com/user-attachments/assets/7f8634eb-66a5-4d84-8756-3260f97e44f2)
+    ![image](https://github.com/user-attachments/assets/836bdcf6-9cda-4f38-8cb4-7d4cf62af00f)
 
 | 검색 타입      | **Batch 적용 개선율** | **DB Index 적용 개선율** | **전체 개선율 (일반 → DB Index)** |
 |----------------|-----------------------|--------------------------|-----------------------------------|
@@ -110,12 +241,12 @@
 3. 느린 로딩 속도로 유저가 느끼는 불편함을 개선하고 운영 측면에서도 서버 비용을 감축할 필요가 있었습다.
 
 `해결방안`
-MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활용하여 주변 모임을 추천하였습니다. 
+MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활용하여 주변 모임을 추천하였습니다.
 
 `결과`
 개선전 **164ms**에서 개선후 **16ms**로 **약 90%** 검색속도가 개선되었습니다.
 ![image](https://github.com/user-attachments/assets/c8f1f622-bc9c-4f30-a267-30b94a61693c)
- 
+
 ### 3️⃣ Redis 자료구조를 활용한 서버 부하 최적화
 
 ### 기존 구조의 첫번째 문제점
@@ -149,6 +280,52 @@ MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활
 
   **설명**: MySQL에서 직접 데이터 정렬 및 집계하던 작업을 Redis ZSET으로 옮겨, 서버 부하를 줄이고 실시간 데이터 접근이 가능하도록 최적화하였습니다.
 
+
+### 3️⃣ 쿠폰 요청 시 불필요한 쿼리 발생
+
+`문제점`
+![image](https://github.com/user-attachments/assets/f328f544-dbce-4e79-99d1-5abb5ef39f1c)
+
+쿠폰 요청에서 member의 권한을 확인하는 로직 부분을 실행 시 쿼리가 추가적으로 연결되어있는 맵,모임,유저의 쿼리까지 같이 표시 되어 불필요한 쿼리가 조회되고 있었고
+동시에 100건이 넘는 경우를 처리할때 너무 길어지는 점이 거슬렸다
+
+`해결방안`
+1. 그 불편함을 해소하기 위하여 캐싱을 이용해보고자 하였다
+
+`@Cacheable(value = "memberPermissions", key = "#userId.toString()", unless = "#result == null")
+public Member getCachedMemberByUserId(UUID userId) {
+log.info("Fetching member from DB for userId: {}", userId);
+return memberRepository.findByUserId(userId)
+.orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+}`
+
+하지만 그래도 캐싱이 저장되지않아서 다른 방법을 생각해보았다
+
+2. 멤버 entity에 연관관계인 @ManyToOne(fetch = FetchType.LAZY) 으로 해서 지연로딩으로 필요한 쿼리만 조회되게 하기
+![image](https://github.com/user-attachments/assets/1d167848-a665-42bf-bda2-48a1f0fdfd4d)
+
+
+-> 이건 다른 팀원의 로직이라 다른 곳에 씌일 수 있으므로 보류
+
+3. yml파일의 show_sql,format_Sql을 false로 하여 표시되지 않게 하기
+   ![image](https://github.com/user-attachments/assets/f597068c-dc60-466f-be65-ea2fec6777fd)
+
+
+-> 다른 모든 로직들의 sql도 보이지 않으므로 반영하지않음
+
+4. MemberRepository에 query문으로 지정하여 원하는 부분만 표시 되게 반영하기
+   ![image](https://github.com/user-attachments/assets/a01c19f6-c530-4d1a-b086-e8e059c73521)
+-> 다른사람의 로직은 안건드리면서 필요한 부분만 표시 할 수 있다는 점으로 반영하여 표시하였다
+
+`결과`
+
+결국 멤버의 권한을 조회할 때 memberRepository와 userReporitory를 둘 다 조회하지 않고 memberRepository에서 User와 member를 함께 조회하여
+쿼리 단순화를 하게되었다
+
+![image](https://github.com/user-attachments/assets/c3fcc063-f467-4742-8901-bcdd49fc4a27)
+
+엄청난 양의 쿼리에서 필요한 부분만 조회될 수 있게 변경하였다!
+
 ---
 ### [API 명세서](https://www.notion.so/teamsparta/monolog-API-1262dc3ef51481bf83d9d18c9cf78a3b)
 
@@ -174,52 +351,3 @@ MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활
 
 
 ---
-
-### 🛠️ 기술 스택
-![](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) 
-![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) 
-![](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
-![](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
-![](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
-![](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
-![](https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
-![](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=white)
-![](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
-![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
-![](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-​
----
-### 🔔 핵심 기능
-
-### 1️⃣ 위치 기반 모임 추천 서비스
-
-- **기능 설명**  
-사용자의 위치를 기준으로 **이용자들이 원하는 거리에 맞게** 모임을 추천합니다.
-
-- **구현 방법**:  
-  사용자의 **위도와 경도** 정보를 받아 서버에서 **Redis에서 지원하는 GeoOperation**을 사용해 거리 계산을 수행합니다.
-
-<img width="389" alt="스크린샷 2024-11-06 오후 1 18 13" src="https://github.com/user-attachments/assets/fe573d87-3599-4a1e-8a9e-b3d005e4b9b9"> <br>
-<img width="389" alt="프론트 구현" src="https://github.com/user-attachments/assets/4139faf4-bd86-481d-a9ba-9410aa12f8c5">
-
-
-###  2️⃣ 실시간 채팅 서비스
-
-- **기능 설명**  
-동일한 채팅방에 입장한 유저들이 실시간으로 대화를 주고받을 수 있습니다.
-
-- **구현 방법**
-사용자가 채팅 메시지를 전송하면 ChatController에서 메세지를 수신합니다.<br>
-ChatService에서 메시지를 MySQL에 저장합니다.<br>
-Redis Publisher로 메시지를 Redis 메모리에 저장합니다.<br>
-
-<img width="371" alt="스크린샷 2024-11-06 오후 1 18 26" src="https://github.com/user-attachments/assets/19feae42-8697-432b-bfeb-821fd5392610">
-
-- Redis는 빠른 인메모리 데이터 처리와 Pub/Sub 모델을 통해 실시간 메시지 전송을 지원하며, 대규모 트래픽을 효과적으로 분산할 수 있습니다.
-
----
-
-
