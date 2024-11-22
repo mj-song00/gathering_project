@@ -4,6 +4,22 @@
 
 같은 취미를 가진 사람들과 모임을 쉽게 만들고 관리할 수 있는 웹사이트입니다. 사용자는 모임을 생성하고, 멤버를 관리하며, 실시간 소통과 일정 관리를 할 수 있습니다.
 
+### 🛠️ 기술 스택
+![](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) 
+![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) 
+![](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
+![](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
+![](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
+![](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
+![](https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=white)
+![](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
+![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
+![](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+​
 
 ---
 ### 🔍 개요
@@ -63,12 +79,17 @@
 7.  **👍 좋아요 (CD)**
     - 소속된 모임에 좋아요/취소      ​
 ---
-### 🚀 추가 기능
+### 🔔 핵심 기능
 
 ### 1️⃣ 위치 기반 모임 추천 서비스
-- **추천 알고리즘**:  
-  사용자의 위치를 기준으로 **반경 10km 이내**의 모임을 추천합니다.  
-  프론트에서 사용자의 위치를 서버로 전송하면, 서버는 **Redis의 GeoOperation**을 통해 거리를 계산해 반경 내 모임을 리스트로 제공합니다.
+- **기능 설명**  
+사용자의 위치를 기준으로 **이용자들이 원하는 거리에 맞게** 모임을 추천합니다.
+
+- **구현 방법**:  
+  사용자의 **위도와 경도** 정보를 받아 서버에서 **Redis에서 지원하는 GeoOperation**을 사용해 거리 계산을 수행합니다.
+
+<img width="389" alt="스크린샷 2024-11-06 오후 1 18 13" src="https://github.com/user-attachments/assets/fe573d87-3599-4a1e-8a9e-b3d005e4b9b9"> <br>
+<img width="389" alt="프론트 구현" src="https://github.com/user-attachments/assets/4139faf4-bd86-481d-a9ba-9410aa12f8c5">
 
 - **모임 랭킹**:
   zSetOperation자료구조를 이용하여 생성이 많이 된 지역 순으로 랭킹 확인을 할 수 있습니다.
@@ -76,6 +97,10 @@
 ### 2️⃣ 실시간 채팅 서비스
 - **데이터 흐름**:  
   동일한 채팅방에 입장한 유저들의 대화 내용은 ChatController → ChatService 경로를 거쳐 **MySQL**에 저장됩니다. 이후 **Redis Publisher** 기능을 통해 대화 내용이 Redis 메모리에 저장되며, **Subscriber**들에게 실시간으로 전달됩니다.
+
+<img width="371" alt="스크린샷 2024-11-06 오후 1 18 26" src="https://github.com/user-attachments/assets/19feae42-8697-432b-bfeb-821fd5392610">
+
+- Redis는 빠른 인메모리 데이터 처리와 Pub/Sub 모델을 통해 실시간 메시지 전송을 지원하며, 대규모 트래픽을 효과적으로 분산할 수 있습니다.
 
 ---
 ### 💥 트러블 슈팅
@@ -175,51 +200,6 @@ MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활
 
 ---
 
-### 🛠️ 기술 스택
-![](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white) 
-![](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) 
-![](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
-![](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
-![](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white)
-![](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
-![](https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
-![](https://img.shields.io/badge/Kakao-FFCD00?style=for-the-badge&logo=Kakao&logoColor=white)
-![](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
-![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white) 
-![](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-​
----
-### 🔔 핵심 기능
 
-### 1️⃣ 위치 기반 모임 추천 서비스
-
-- **기능 설명**  
-사용자의 위치를 기준으로 **이용자들이 원하는 거리에 맞게** 모임을 추천합니다.
-
-- **구현 방법**:  
-  사용자의 **위도와 경도** 정보를 받아 서버에서 **Redis에서 지원하는 GeoOperation**을 사용해 거리 계산을 수행합니다.
-
-<img width="389" alt="스크린샷 2024-11-06 오후 1 18 13" src="https://github.com/user-attachments/assets/fe573d87-3599-4a1e-8a9e-b3d005e4b9b9"> <br>
-<img width="389" alt="프론트 구현" src="https://github.com/user-attachments/assets/4139faf4-bd86-481d-a9ba-9410aa12f8c5">
-
-
-###  2️⃣ 실시간 채팅 서비스
-
-- **기능 설명**  
-동일한 채팅방에 입장한 유저들이 실시간으로 대화를 주고받을 수 있습니다.
-
-- **구현 방법**
-사용자가 채팅 메시지를 전송하면 ChatController에서 메세지를 수신합니다.<br>
-ChatService에서 메시지를 MySQL에 저장합니다.<br>
-Redis Publisher로 메시지를 Redis 메모리에 저장합니다.<br>
-
-<img width="371" alt="스크린샷 2024-11-06 오후 1 18 26" src="https://github.com/user-attachments/assets/19feae42-8697-432b-bfeb-821fd5392610">
-
-- Redis는 빠른 인메모리 데이터 처리와 Pub/Sub 모델을 통해 실시간 메시지 전송을 지원하며, 대규모 트래픽을 효과적으로 분산할 수 있습니다.
-
----
 
 
