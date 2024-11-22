@@ -103,6 +103,9 @@ dependencies {
 
     // embedded Redis
     implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
+    // Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.39.0'
 }
 
 jacoco {

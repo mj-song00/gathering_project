@@ -90,7 +90,7 @@ class CouponServiceTest {
         UUID userId = UUID.randomUUID();
         when(memberRepository.findPermissionByUserId(userId)).thenReturn(Permission.MANAGER);
         when(valueOperations.get("couponIssued:" + userId)).thenReturn(null);
-        when(valueOperations.increment("couponCount", 1)).thenReturn(101L);
+        when(valueOperations.increment("couponCount", 1)).thenReturn(10001L);
 
         // When & Then
         BaseException exception = assertThrows(BaseException.class, () -> couponService.requestCoupon(userId));

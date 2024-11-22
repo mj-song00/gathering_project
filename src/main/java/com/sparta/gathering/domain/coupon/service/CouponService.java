@@ -8,11 +8,11 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.coupon.dto.CouponRequest;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,12 +20,13 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class CouponService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper(); // ObjectMapper 를 추가하여 JSON 직렬화 사용
 
-    private static final int MAX_COUPON_COUNT = 100;
+    private static final int MAX_COUPON_COUNT = 10000;
 
     @Transactional
     public void requestCoupon(UUID userId) throws JsonProcessingException {
