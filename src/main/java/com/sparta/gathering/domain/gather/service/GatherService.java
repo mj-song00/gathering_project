@@ -2,6 +2,7 @@ package com.sparta.gathering.domain.gather.service;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
@@ -30,4 +31,6 @@ public interface GatherService {
     List<NewGatherResponse> newCreatedGatherList();
 
     Page<Gather> findByTitles(Pageable pageable, String title);
+
+    List<GatherListResponse> getGatherList(AuthenticatedUser authenticatedUser);
 }
