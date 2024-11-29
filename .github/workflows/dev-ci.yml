@@ -18,8 +18,6 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_PASS }}
-          MYSQL_USER: ${{ secrets.DEV_DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.DEV_DB_PASS }}
           MYSQL_DATABASE: ${{ secrets.DEV_DB_NAME }}
         options: >-
           --health-cmd="mysqladmin ping --silent"
