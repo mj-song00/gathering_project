@@ -65,7 +65,7 @@ jobs:
           echo "${{ secrets.ENV_DEV }}" > ./.env.dev
         shell: bash
 
-      - name: .env.dev 파일 읽기 및 환경 변수 설정
+      - name: .env.dev 파일 읽기 및 환경 변수
         run: |
           set -a
           source ./.env.dev
