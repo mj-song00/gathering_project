@@ -75,7 +75,7 @@ jobs:
 
       # Step 8: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
-        run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache --env-file ./.env.dev
+        run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
       # Step 9: JaCoCo 커버리지 리포트 저장
       - name: JaCoCo 커버리지 리포트 저장
