@@ -18,6 +18,8 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DEV_DB_PASS }}
+          MYSQL_USER: ${{ secrets.DEV_DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DEV_DB_PASS }}
           MYSQL_DATABASE: ${{ secrets.DEV_DB_NAME }}
         options: >-
           --health-cmd="mysqladmin ping --silent"
@@ -67,9 +69,14 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
+      # Step 6: .env.dev 파일 생성
+      - name: .env.dev 파일 생성
+        run: |
+          echo "${{ secrets.ENV_DEV }}" > ./.env.dev
+        shell: bash
+
       # Step 7: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
-        env: ${{ secrets.ENV_DEV }}
         run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
       # Step 8: JaCoCo 커버리지 리포트 저장
