@@ -3,10 +3,10 @@ name: dev CI Workflow
 on:
   push:
     branches:
-      - dev  # dev 브랜치에 푸시될 때
+      - dev  # dev 브랜치에 푸시될 때 실행
   pull_request:
     branches:
-      - dev  # dev 브랜치에 대한 PR 생성 시
+      - dev  # dev 브랜치에 대한 PR 생성 시 실행
 
 jobs:
 
@@ -67,7 +67,7 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      # Step 7: env 생성
+      # Step 7: env.dev 생성
       - name: env 파일 생성
         run: |
           echo "${{ secrets.ENV_DEV }}" > ./.env.dev
@@ -75,7 +75,7 @@ jobs:
 
       # Step 8: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
-        run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
+        run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache --env-file ./.env.dev
 
       # Step 9: JaCoCo 커버리지 리포트 저장
       - name: JaCoCo 커버리지 리포트 저장
