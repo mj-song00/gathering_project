@@ -21,7 +21,7 @@
       <property name="format" value="^[a-z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
     </module>
     <module name="MethodName">
-      <property name="format" value="^[a-zA-Z][a-zA-Z0-9]*$"/> <!-- 대문자 시작 허용 -->
+      <property name="format" value="^[a-zA-Z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
     </module>
     <module name="PackageName">
       <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/> <!-- 패키지 경로에 대문자 금지 -->
@@ -30,7 +30,7 @@
       <property name="format" value="^[a-z][a-zA-Z0-9]*$"/> <!-- camelCase 형식 -->
     </module>
     <module name="TypeName"/>
-    <module name="ConstantName">
+    <module name="ConstantName"> <!-- 상수 이름 규칙 -->
       <property name="format" value="^[A-Z][A-Z0-9_]*$"/> <!-- 상수는 UPPER_CASE 형식 -->
     </module>
     <!-- Indentation 설정 -->
