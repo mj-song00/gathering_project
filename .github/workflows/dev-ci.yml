@@ -67,17 +67,24 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      # Step 6: .env.dev 파일 생성
+      # Step 7: .env.dev 파일 생성
       - name: .env.dev 파일 생성
         run: |
           echo "${{ secrets.ENV_DEV }}" > ./.env.dev
         shell: bash
 
-      # Step 7: Gradle 빌드 및 테스트 실행
+      # Step 8: .env.dev 파일 읽기 및 환경 변수 설정
+      - name: .env.dev 파일 읽기 및 환경 변수 설정
+        run: |
+          set -a
+          source ./.env.dev
+          set +a
+
+      # Step 9: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
         run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
-      # Step 8: JaCoCo 커버리지 리포트 저장
+      # Step 10: JaCoCo 커버리지 리포트 저장
       - name: JaCoCo 커버리지 리포트 저장
         uses: actions/upload-artifact@v4
         if: always()
