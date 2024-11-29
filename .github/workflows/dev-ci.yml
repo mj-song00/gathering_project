@@ -55,17 +55,29 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Step 5: dev.yml 생성
-      - name: dev yml 파일 생성
+      # Step 5: .yml 생성
+      - name: yml 파일 생성
         run: |
-          echo "${{ secrets.APPLICATION_DEV_YML }}" > ./application-dev.yml
+          echo "${{ secrets.ACTIVE_DEV }}" > ./src/main/resources/application.yml
         shell: bash
 
-      # Step 6: Gradle 빌드 및 테스트 실행
+      # Step 6: dev.yml 생성
+      - name: dev.yml 파일 생성
+        run: |
+          echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
+        shell: bash
+
+      # Step 7: env.dev 생성
+      - name: env 파일 생성
+        run: |
+          echo "${{ secrets.ENV_DEV }}" > ./.env.dev
+        shell: bash
+
+      # Step 8: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
         run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
-      # Step 7: JaCoCo 커버리지 리포트 저장
+      # Step 9: JaCoCo 커버리지 리포트 저장
       - name: JaCoCo 커버리지 리포트 저장
         uses: actions/upload-artifact@v4
         if: always()

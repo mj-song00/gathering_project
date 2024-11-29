@@ -36,6 +36,4 @@ public class ThymeleafConfig {
         templateEngine.addTemplateResolver(staticTemplateResolver()); // 두 번째 리졸버 추가
         return templateEngine;
     }
-    
 }
-

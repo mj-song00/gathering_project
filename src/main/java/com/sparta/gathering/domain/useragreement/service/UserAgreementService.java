@@ -27,7 +27,6 @@ public class UserAgreementService {
     private final UserAgreementHistoryRepository userAgreementHistoryRepository;
     private final UserRepository userRepository;
     private final AgreementRepository agreementRepository;
-    private final UserAgreementNotificationService notificationService;
 
     // 사용자의 동의 상태 조회
     @Transactional(readOnly = true)

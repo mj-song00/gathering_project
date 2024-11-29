@@ -11,13 +11,13 @@ import software.amazon.awssdk.services.sqs.SqsClient;
 @Configuration
 public class SQSConfig {
 
-    @Value("${aws.sqs.region}")
+    @Value("${aws.region}")
     private String region;
 
-    @Value("${aws.sqs.access-key}")
+    @Value("${aws.access-key}")
     private String accessKey;
 
-    @Value("${aws.sqs.secret-key}")
+    @Value("${aws.secret-key}")
     private String secretKey;
 
     @Bean

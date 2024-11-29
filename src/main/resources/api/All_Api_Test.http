@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3MjM1OTMxMi01YjljLTQ4ZjAtYmNjNC0zOWU0ZWUxYTJkYWQiLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMyMDY1NTY0LCJleHAiOjE3MzIwNjczNjR9.5HxoUKQBWZqZOOk9kMqei_LLvwJ139dFHp_-Bs0hLPM
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmNjBiODFhYy1iMjIzLTQzNDAtYmU4Yi0yODYyMWJmMTRiZTciLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMyNTM1MTg3LCJleHAiOjE3MzI1MzY5ODd9.wtTAxz3Iav6gZ5MKg6fCMQJ1Kq_VbxmxkfKANLUM6B4
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -129,7 +129,7 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "password": "password123A!"
+  "password": "skwkdrns365!A"
 }
 
 ### 리프레시 토큰으로 액세스 토큰 재발급
