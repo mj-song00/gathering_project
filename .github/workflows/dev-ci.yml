@@ -3,10 +3,10 @@ name: dev CI Workflow
 on:
   push:
     branches:
-      - dev  # dev 브랜치에 푸시될 때 실행
+      - dev  # dev 브랜치에 푸시될 때
   pull_request:
     branches:
-      - dev  # dev 브랜치에 대한 PR 생성 시 실행
+      - dev  # dev 브랜치에 대한 PR 생성 시
 
 jobs:
 
