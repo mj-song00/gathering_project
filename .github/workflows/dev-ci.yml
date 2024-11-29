@@ -60,17 +60,6 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      - name: .env 파일 생성
-        run: |
-          echo "${{ secrets.ENV_DEV }}" > ./.env.dev
-        shell: bash
-
-      - name: .env.dev 파일 읽기 및 환경 변수 설정
-        run: |
-          set -a
-          source ./.env.dev
-          set +a
-
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
         run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
