@@ -60,7 +60,7 @@ jobs:
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      - name: .env.dev 파일 생성
+      - name: .env 파일 생성
         run: |
           echo "${{ secrets.ENV_DEV }}" > ./.env.dev
         shell: bash
