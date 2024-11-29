@@ -9,7 +9,6 @@ on:
       - dev  # dev 브랜치에 대한 PR 생성 시 실행
 
 jobs:
-
   build-and-test:
     name: 빌드 및 테스트
     runs-on: ubuntu-latest
@@ -31,15 +30,12 @@ jobs:
         ports:
           - 6379:6379
     steps:
-      # Step 1: 코드 체크아웃
       - name: 코드 체크아웃
         uses: actions/checkout@v4
 
-      # Step 2: Gradle Wrapper 실행 권한 부여
       - name: Gradle Wrapper 실행 권한 부여
         run: chmod +x ./gradlew
 
-      # Step 3: Gradle 의존성 캐시
       - name: Gradle 의존성 캐시
         uses: actions/cache@v4
         with:
@@ -48,43 +44,36 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle
 
-      # Step 4: JDK 설정
       - name: JDK 설정
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # Step 5: yml 생성
       - name: yml 파일 생성
         run: |
           echo "${{ secrets.ACTIVE_DEV }}" > ./src/main/resources/application.yml
         shell: bash
 
-      # Step 6: dev.yml 생성
       - name: dev.yml 파일 생성
         run: |
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./src/main/resources/application-dev.yml
         shell: bash
 
-      # Step 7: .env.dev 파일 생성
       - name: .env.dev 파일 생성
         run: |
           echo "${{ secrets.ENV_DEV }}" > ./.env.dev
         shell: bash
 
-      # Step 8: .env.dev 파일 읽기 및 환경 변수 설정
       - name: .env.dev 파일 읽기 및 환경 변수 설정
         run: |
           set -a
           source ./.env.dev
           set +a
 
-      # Step 9: Gradle 빌드 및 테스트 실행
       - name: Gradle 빌드, 테스트 및 JaCoCo 실행
         run: ./gradlew clean build jacocoTestReport --no-daemon --build-cache
 
-      # Step 10: JaCoCo 커버리지 리포트 저장
       - name: JaCoCo 커버리지 리포트 저장
         uses: actions/upload-artifact@v4
         if: always()
