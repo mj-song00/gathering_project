@@ -12,16 +12,16 @@ public class CategoryListResponseItem {
     private final Long id; // Gather ID
     private final String title; // Gather 제목
     private final String description;
-    private final List<String> hashtags;
+   // private final List<String> hashtags;
     private final String category;
 
     public CategoryListResponseItem(Gather gather){
         this.id = gather.getId();
         this.title = gather.getTitle();
         this.description = gather.getDescription();
-        this.hashtags =  gather.getHashTagList().stream()
-                .map(HashTag::getHashTagName)
-                .collect(Collectors.toList());
+//        this.hashtags =  gather.getHashTagList().stream()
+//                .map(HashTag::getHashTagName)
+//                .collect(Collectors.toList());
         this.category = gather.getCategory().getCategoryName();
     }
 }

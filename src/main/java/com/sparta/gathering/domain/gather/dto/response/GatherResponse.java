@@ -14,7 +14,7 @@ public class GatherResponse {
     private final Long id; // Gather ID
     private final String title; // Gather 제목
     private final String description;
-    private final List<String> hashtags;
+ //   private final List<String> hashtags;
     private final String category;
     private final String address;
 
@@ -52,7 +52,7 @@ public class GatherResponse {
         this.id = gather.getId(); // Gather ID
         this.title = gather.getTitle(); // Gather 제목
         this.description = gather.getDescription();
-        this.hashtags = gather.getHashTagList().stream().map(HashTag::getHashTagName).collect(Collectors.toList());
+     //   this.hashtags = gather.getHashTagList().stream().map(HashTag::getHashTagName).collect(Collectors.toList());
         this.scheduleInfos = gather.getScheduleList().isEmpty() ? null :
                 gather.getScheduleList().stream()
                         .map(schedule -> new ScheduleInfo(schedule.getId(), schedule.getScheduleTitle(), schedule.getScheduleContent())).sorted(Comparator.comparing(ScheduleInfo::getId).reversed()) // ID 기준 내림차순 정렬

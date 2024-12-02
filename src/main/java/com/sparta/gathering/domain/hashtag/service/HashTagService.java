@@ -35,29 +35,34 @@ public class HashTagService {
         // 멤버 권한 확인
         isValidMember(authenticatedUser);
 
-        // 모임별 해시태그 확인
-        if (!hashTagRepository.findByGatherIdAndHashTagNameIn(gather.getId(), hashTagReq.getHashTagName()).isEmpty()) {
-            throw new BaseException(ExceptionEnum.ALREADY_HAVE_HASHTAG);
+        List<String> hashTagNames = hashTagReq.getHashTagName();
+
+        // 해시태그 저장 또는 기존 데이터 확인
+        List<HashTag> hashTags = new ArrayList<>();
+        for (String hashTagName : hashTagNames) {
+            HashTag existingHashTag = hashTagRepository.findByHashTagNameAndDeletedAtIsNull(hashTagName)
+                    .orElseGet(() -> hashTagRepository.save(new HashTag(hashTagName)));
+
+            // Gather와 HashTag 연결
+            hashTags.add(HashTag.of(existingHashTag.getHashTagName(), gather));
         }
 
-        List<HashTag> hashTag = new ArrayList<>();
-        for (String hashTagName : hashTagReq.getHashTagName()) {
-            hashTag.add(HashTag.of(hashTagName, gather));
-        }
-        List<HashTag> savedHashTag = hashTagRepository.saveAll(hashTag);
-        return HashTagRes.from(savedHashTag);
+        // 해시태그 저장
+        List<HashTag> savedHashTags = hashTagRepository.saveAll(hashTags);
 
+        // 응답 생성
+        return HashTagRes.from(savedHashTags);
     }
 
 
     // 해시태그 조회
-    public List<HashTagRes> getHashTagList(Gather gather) {
-        Gather newgather = isValidGather(gather);
-        return hashTagRepository.findByGatherIdAndDeletedAtIsNull(newgather.getId())
-                .stream()
-                .map(HashTagRes::from)
-                .toList();
-    }
+//    public List<HashTagRes> getHashTagList(Gather gather) {
+//        Gather newgather = isValidGather(gather);
+//        return hashTagRepository.findByGatherIdAndDeletedAtIsNull(newgather.getId())
+//                .stream()
+//                .map(HashTagRes::from)
+//                .toList();
+//    }
 
 
     // 해시태그 삭제

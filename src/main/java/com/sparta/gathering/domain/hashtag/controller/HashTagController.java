@@ -39,15 +39,15 @@ public class HashTagController {
     }
 
     // 해시태그 조회
-    @Operation(summary = "해시태그 조회", description = "모임의 모든 해시태그 조회입니다.")
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<HashTagRes>>> getHashTagList(
-            @PathVariable Gather gatherId) {
-        List<HashTagRes> list = hashTagService.getHashTagList(gatherId);
-        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(list,
-                ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @Operation(summary = "해시태그 조회", description = "모임의 모든 해시태그 조회입니다.")
+//    @GetMapping
+//    public ResponseEntity<ApiResponse<List<HashTagRes>>> getHashTagList(
+//            @PathVariable Gather gatherId) {
+//        List<HashTagRes> list = hashTagService.getHashTagList(gatherId);
+//        ApiResponse<List<HashTagRes>> response = ApiResponse.successWithData(list,
+//                ApiResponseEnum.CREATED_CATEGORY_SUCCESS);
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
     // 해시태그 삭제
     @Operation(summary = "해시태그 삭제", description = "모임의 MANAGER 만 삭제 가능합니다.")

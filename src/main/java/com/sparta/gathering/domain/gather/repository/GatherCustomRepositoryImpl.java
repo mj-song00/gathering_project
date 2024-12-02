@@ -33,8 +33,8 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName) {
         List<Gather> result = q.selectFrom(gather)
-                .leftJoin(gather.hashTagList, hashTag).fetchJoin()
-                .where(hashtagCondition(hashTagName).and(gather.deletedAt.isNull())) // 동일한 메서드로 적용
+  //              .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+        //        .where(hashtagCondition(hashTagName).and(gather.deletedAt.isNull())) // 동일한 메서드로 적용
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -42,7 +42,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         // count 쿼리
         Long count = q.select(gather.count())
                 .from(gather)
-                .where(gather.hashTagList.any().hashTagName.in(hashTagName))  // hashtag list 전체 에서 해시태그name안에 HashTagName이 있는지 확인
+        //        .where(gather.hashTagList.any().hashTagName.in(hashTagName))  // hashtag list 전체 에서 해시태그name안에 HashTagName이 있는지 확인
                 .fetchOne();
 
 
@@ -54,7 +54,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByTitle(Pageable pageable, String title) {
         List<Gather> result = q.selectFrom(gather)
-                .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+        //        .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .leftJoin(gather.map).fetchJoin()
                 .where(
                         CustomFunction.match(gather.title, title)
@@ -79,7 +79,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId) {
         List<Gather> result = q.selectFrom(gather)
-                .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+        //        .leftJoin(gather.hashTagList, hashTag).fetchJoin()
                 .leftJoin(gather.category).fetchJoin()
                 .leftJoin(gather.map).fetchJoin()
                 .where(
@@ -103,7 +103,7 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-    private BooleanExpression hashtagCondition(List<String> hashTagNames) {
-        return hashTagNames == null ? null : hashTag.hashTagName.in(hashTagNames);
-    }
+//    private BooleanExpression hashtagCondition(List<String> hashTagNames) {
+//        return hashTagNames == null ? null : hashTag.hashTagName.in(hashTagNames);
+//    }
 }
