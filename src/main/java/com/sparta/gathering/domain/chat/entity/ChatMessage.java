@@ -20,7 +20,7 @@ public class ChatMessage implements Serializable { // Serializable 구현
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long gatheringId;
+    private Long gatherId;
     private String content;
     private String sender;
     private MessageType type;

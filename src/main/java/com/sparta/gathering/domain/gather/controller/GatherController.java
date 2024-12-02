@@ -4,12 +4,18 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.*;
+import com.sparta.gathering.domain.gather.dto.response.CategoryListResponse;
+import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
+import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
+import com.sparta.gathering.domain.gather.dto.response.RankResponse;
+import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,11 +23,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
-@Tag(name = "Gather", description = "소모임 API")
+@Tag(name = "Gather", description = "소모임 / 송민지")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/gathers")
@@ -84,7 +96,8 @@ public class GatherController {
                 gatherList.getTotalPages(), // 총 페이지 수
                 gatherList.getTotalElements() // 총 요소 수
         );
-        ApiResponse<CategoryListResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<CategoryListResponse> apiResponse = ApiResponse.successWithData(response,
+                ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
@@ -157,7 +170,8 @@ public class GatherController {
 
     @Operation(summary = "멤버로 있는 모임 조회", description = "본인이 가입되어있는 모임이 조회 됩니다.")
     @GetMapping
-    public ResponseEntity<ApiResponse<List<GatherListResponse>>> getGatherList(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<ApiResponse<List<GatherListResponse>>> getGatherList(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         List<GatherListResponse> list = gatherService.getGatherList(authenticatedUser);
         return ResponseEntity.ok(ApiResponse.successWithData(list, ApiResponseEnum.GET_SUCCESS));
     }

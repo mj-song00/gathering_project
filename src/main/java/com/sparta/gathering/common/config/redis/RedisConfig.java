@@ -9,7 +9,6 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
@@ -26,8 +25,8 @@ public class RedisConfig {
     // RedisMessageListenerContainer Bean 설정 (Redis 구독 설정)
     @Bean
     public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory,
-                                                        MessageListenerAdapter listenerAdapter,
-                                                        ChannelTopic topic) {
+            MessageListenerAdapter listenerAdapter,
+            ChannelTopic topic) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.addMessageListener(listenerAdapter, topic); // 구독할 주제 설정
@@ -37,15 +36,14 @@ public class RedisConfig {
     // MessageListenerAdapter Bean 설정 (RedisSubscriber와 연결)
     @Bean
     public MessageListenerAdapter listenerAdapter(WebSocketRedisSubscriber webSocketRedisSubscriber) {
-        return new MessageListenerAdapter(webSocketRedisSubscriber, "handleMessage"); // RedisSubscriber의 handleMessage 메서드 호출
+        return new MessageListenerAdapter(webSocketRedisSubscriber,
+                "handleMessage"); // RedisSubscriber의 handleMessage 메서드 호출
     }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 
@@ -53,8 +51,9 @@ public class RedisConfig {
     public ZSetOperations<String, Object> zSetOperations(RedisTemplate<String, Object> redisTemplate) {
         return redisTemplate.opsForZSet();
     }
+
     @Bean
-    public GeoOperations<String, String> geoOperations(RedisTemplate<String, String> template){
+    public GeoOperations<String, String> geoOperations(RedisTemplate<String, String> template) {
         return template.opsForGeo();
     }
 }

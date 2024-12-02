@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "UserAgreement", description = "사용자 약관 동의 API")
+@Tag(name = "UserAgreement", description = "사용자 약관 동의 API / 이정현")
 @RequestMapping("/api/user-agreements")
 @RequiredArgsConstructor
 public class UserAgreementController {

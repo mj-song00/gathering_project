@@ -44,7 +44,8 @@ public class SecurityConfig {
                     }
                     auth
                             .requestMatchers(
-                                    "/**"
+                                    "/**",
+                                    "/actuator/health"
                             ).permitAll()
                             .anyRequest().authenticated();
                 })

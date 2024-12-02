@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    // 약관 동의 상태 확인 메서드
     private static AgreementStatus getStatus(Agreement agreement, List<UUID> agreedIds) {
         AgreementStatus status;
 
@@ -123,7 +124,7 @@ public class UserServiceImpl implements UserService {
         return status;
     }
 
-
+    // 사용자 프로필 조회
     @Transactional(readOnly = true)
     @Override
     public UserProfileResponse getUserProfile(AuthenticatedUser authenticatedUser) {
@@ -147,6 +148,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    // 비밀번호 변경
     @Transactional
     @Override
     public void changePassword(AuthenticatedUser authenticatedUser, String oldPassword, String newPassword) {
@@ -175,6 +177,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    // 닉네임 변경
     @Transactional
     @Override
     public void changeNickName(AuthenticatedUser authenticatedUser, String newNickName) {
@@ -198,6 +201,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    // 회원탈퇴
     @Transactional
     @Override
     public void deleteUser(AuthenticatedUser authenticatedUser, String refreshToken, HttpServletResponse response) {

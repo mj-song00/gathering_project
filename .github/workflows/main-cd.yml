@@ -1,0 +1,48 @@
+name: main CD Workflow
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시될 때 실행
+
+jobs:
+  deploy-to-ecs:
+    name: CD - ECS 배포
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Actions 보안설정(이미지 스캔)
+        run: |
+          docker build -t my-image:latest .
+          docker run --rm aquasec/trivy:latest --image my-image:latest
+
+      - name: Java 17 버전 설정
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: AWS 로그인
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Docker 로그인
+        run: aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin <ECR-URI>
+
+      - name: Docker 빌드 및 푸시
+        run: |
+          docker build -t gathering-app .
+          docker tag gathering-app:latest <ECR-URI>/gathering-app:latest
+          docker push <ECR-URI>/gathering-app:latest
+
+      - name: ECS 서비스 업데이트
+        run: |
+          aws ecs update-service \
+            --cluster gathering-cluster \
+            --service gathering-service \
+            --force-new-deployment

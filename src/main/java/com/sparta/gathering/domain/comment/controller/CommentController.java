@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "Comment", description = "댓글 API")
+@Tag(name = "Comment", description = "댓글 API / 변영덕")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/schedule")
