@@ -34,16 +34,24 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByKeywords(Pageable pageable, List<String> hashTagName) {
         List<Gather> result = q.selectFrom(gather)
-  //              .leftJoin(gather.hashTagList, hashTag).fetchJoin()
-        //        .where(hashtagCondition(hashTagName).and(gather.deletedAt.isNull())) // 동일한 메서드로 적용
+                .leftJoin(gather.gatherHashtags, gatherHashtag).fetchJoin() // GatherHashtag 조인
+                .leftJoin(gatherHashtag.hashTag, hashTag).fetchJoin()       // HashTag 조인
+                .where(
+                        hashtagCondition(hashTagName) // HashTag 조건
+                                .and(gather.deletedAt.isNull()) // Soft delete 필터링
+                )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
         // count 쿼리
         Long count = q.select(gather.count())
                 .from(gather)
-        //        .where(gather.hashTagList.any().hashTagName.in(hashTagName))  // hashtag list 전체 에서 해시태그name안에 HashTagName이 있는지 확인
+                .leftJoin(gather.gatherHashtags, gatherHashtag) // Count 쿼리에서도 Join 필요
+                .leftJoin(gatherHashtag.hashTag, hashTag)
+                .where(
+                        hashtagCondition(hashTagName)
+                                .and(gather.deletedAt.isNull())
+                )
                 .fetchOne();
 
 
@@ -55,10 +63,11 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByTitle(Pageable pageable, String title) {
         List<Gather> result = q.selectFrom(gather)
-        //        .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .leftJoin(gather.gatherHashtags, gatherHashtag).fetchJoin() // GatherHashtag 조인
+                .leftJoin(gatherHashtag.hashTag, hashTag).fetchJoin()       // HashTag 조인
                 .leftJoin(gather.map).fetchJoin()
                 .where(
-                        CustomFunction.match(gather.title, title)
+                        gather.title.contains(title)
                         , (gather.deletedAt.isNull())
 
                 )
@@ -105,7 +114,9 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-//    private BooleanExpression hashtagCondition(List<String> hashTagNames) {
-//        return hashTagNames == null ? null : hashTag.hashTagName.in(hashTagNames);
-//    }
+    private BooleanExpression hashtagCondition(List<String> hashTagNames) {
+        return (hashTagNames != null && !hashTagNames.isEmpty())
+                ? hashTag.hashTagName.in(hashTagNames)
+                : null;
+    }
 }

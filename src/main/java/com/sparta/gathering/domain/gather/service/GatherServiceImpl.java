@@ -127,8 +127,6 @@ public class GatherServiceImpl implements GatherService {
     @Override
     public void deleteGather(Long id, AuthenticatedUser authenticatedUser) {
         //매니저 검증
-
-
         Gather gather = findGatherById(id);
         validateManager(id, authenticatedUser);
         //  redis 기존 score -1
