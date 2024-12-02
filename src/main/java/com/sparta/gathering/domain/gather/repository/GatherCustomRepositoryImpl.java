@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sparta.gathering.domain.gather.entity.QGather.gather;
+import static com.sparta.gathering.domain.gatherHashtag.entity.QGatherHashtag.gatherHashtag;
 import static com.sparta.gathering.domain.hashtag.entity.QHashTag.hashTag;
 
 @Repository
@@ -79,7 +80,8 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     @Override
     public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId) {
         List<Gather> result = q.selectFrom(gather)
-        //        .leftJoin(gather.hashTagList, hashTag).fetchJoin()
+                .leftJoin(gather.gatherHashtags, gatherHashtag).fetchJoin()
+                .leftJoin(gatherHashtag.hashTag).fetchJoin()
                 .leftJoin(gather.category).fetchJoin()
                 .leftJoin(gather.map).fetchJoin()
                 .where(
