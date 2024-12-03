@@ -1,4 +1,4 @@
-package com.sparta.gathering.domain.gatherHashtag.entity;
+package com.sparta.gathering.domain.gatherhashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
@@ -30,11 +30,11 @@ public class GatherHashtag extends Timestamped {
 
     private LocalDateTime createdAt;
 
-   public GatherHashtag(Gather gather, HashTag hashTag){
-       this.gather = gather;
-       this.hashTag = hashTag;
-       this.createdAt = LocalDateTime.now();
-   }
+    public GatherHashtag(Gather gather, HashTag hashTag) {
+        this.gather = gather;
+        this.hashTag = hashTag;
+        this.createdAt = LocalDateTime.now();
+    }
 
     public static GatherHashtag of(Gather gather, HashTag hashTag) {
         return new GatherHashtag(gather, hashTag);

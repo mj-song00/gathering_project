@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.category.entity.Category;
-import com.sparta.gathering.domain.gatherHashtag.entity.GatherHashtag;
+import com.sparta.gathering.domain.gatherhashtag.entity.GatherHashtag;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.schedule.entity.Schedule;

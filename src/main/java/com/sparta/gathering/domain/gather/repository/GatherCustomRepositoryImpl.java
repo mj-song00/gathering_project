@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.sparta.gathering.domain.gather.entity.QGather.gather;
-import static com.sparta.gathering.domain.gatherHashtag.entity.QGatherHashtag.gatherHashtag;
+import static com.sparta.gathering.domain.gatherhashtag.entity.QGatherHashtag.gatherHashtag;
 import static com.sparta.gathering.domain.hashtag.entity.QHashTag.hashTag;
 
 @Repository

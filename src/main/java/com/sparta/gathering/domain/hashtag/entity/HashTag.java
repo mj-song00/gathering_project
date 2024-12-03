@@ -2,7 +2,7 @@ package com.sparta.gathering.domain.hashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.gatherHashtag.entity.GatherHashtag;
+import com.sparta.gathering.domain.gatherhashtag.entity.GatherHashtag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
