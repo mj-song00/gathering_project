@@ -13,7 +13,6 @@ import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
-import com.sparta.gathering.domain.gatherHashtag.repository.GatherHashtagRepository;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.map.entity.Map;

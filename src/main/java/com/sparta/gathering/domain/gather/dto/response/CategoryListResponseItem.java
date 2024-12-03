@@ -1,13 +1,10 @@
 package com.sparta.gathering.domain.gather.dto.response;
 
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.sparta.gathering.domain.gatherHashtag.entity.QGatherHashtag.gatherHashtag;
 
 @Getter
 public class CategoryListResponseItem {

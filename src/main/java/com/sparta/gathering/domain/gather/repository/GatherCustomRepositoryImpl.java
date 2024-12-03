@@ -2,7 +2,6 @@ package com.sparta.gathering.domain.gather.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.gathering.common.contributor.CustomFunction;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
