@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "Agreement", description = "약관 API")
+@Tag(name = "Agreement", description = "약관 API / 이정현")
 @RequestMapping("/api/agreements")
 @RequiredArgsConstructor
 public class AgreementController {

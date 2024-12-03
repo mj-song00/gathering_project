@@ -6,6 +6,7 @@ import com.sparta.gathering.domain.chat.service.ChatService;
 import com.sparta.gathering.domain.member.service.MemberServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,11 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Controller
-@Tag(name = "실시간채팅 API", description = "실시간채팅 API")
+@Tag(name = "Chat", description = "채팅 API / 조은형,고결")
 public class ChatController {
 
 
@@ -33,7 +32,7 @@ public class ChatController {
     @GetMapping("/api/checkMembership")
     @Operation(summary = "맴버십 확인", description = "맴버십 확인")
     public boolean checkMembership(@RequestParam Long gatheringId,
-                                   @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         // 사용자와 모임 ID를 통해 멤버십 확인
         return memberService.isUserInGathering(gatheringId, authenticatedUser);
     }
@@ -42,7 +41,7 @@ public class ChatController {
     @SendTo("/topic/gathering/{gatheringId}")
     @Operation(summary = "메시지 전송", description = "메시지 전송")
     public ChatMessage sendMessage(@DestinationVariable Long gatheringId, ChatMessage chatMessage) {
-        chatMessage.setGatheringId(gatheringId);
+        chatMessage.setGatherId(gatheringId);
         return chatService.saveAndPublishMessage(chatMessage, topic);  // 메시지 저장 및 퍼블리시
     }
 

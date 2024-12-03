@@ -5,62 +5,38 @@ async function login(event) {
   const password = document.getElementById("password").value;
   const errorMessage = document.getElementById("errorMessage");
 
-  errorMessage.style.display = "none";
+  errorMessage.classList.add("hidden");
   errorMessage.textContent = "";
 
   try {
     const response = await fetch("/api/auth/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({email, password})
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({email, password}),
     });
 
     if (response.ok) {
-      let token = response.headers.get("Authorization"); // Authorization 헤더에서 Bearer 토큰 추출
-      if (token && token.startsWith("Bearer ")) {
-        token = token.substring(7); // "Bearer " 부분을 제거하여 순수한 토큰만 남김
-        localStorage.setItem("token", token); // JWT 토큰을 로컬 스토리지에 저장
-        window.location.href = "/home.html";  // 로그인 성공 후 홈 페이지로 이동
-      }
+      const token = response.headers.get("Authorization").replace("Bearer ",
+          "");
+      localStorage.setItem("token", token);
+      window.location.href = "/home.html";
     } else {
-      const errorData = await response.json();
-      errorMessage.style.display = "block";
-      errorMessage.textContent = errorData.message || "로그인에 실패했습니다.";
+      const result = await response.json();
+      errorMessage.textContent = result.message || "로그인에 실패했습니다.";
+      errorMessage.classList.remove("hidden");
     }
   } catch (error) {
-    errorMessage.style.display = "block";
     errorMessage.textContent = "서버와 연결할 수 없습니다.";
+    errorMessage.classList.remove("hidden");
   }
 }
 
-// 에러 메시지 표시 로직
-function showErrorIfExists() {
-  const errorMessage = document.getElementById("errorMessage");
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('error')) {
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "로그인에 실패했습니다. 다시 시도해주세요.";
-  }
-}
-
-// 카카오 소셜 로그인 함수
+// 카카오 로그인
 function kakaoLogin() {
   window.location.href = "/oauth2/authorization/kakao";
 }
 
-// 페이지 로드 후 응답 헤더에서 JWT 토큰 저장
-document.addEventListener("DOMContentLoaded", async function () {
-  const token = localStorage.getItem("token");
-  if (token) {
-  }
-});
-// 이벤트 리스너 설정
+// 페이지 로드 시 이벤트 리스너 추가
 document.addEventListener("DOMContentLoaded", function () {
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", login);
-  }
-  showErrorIfExists();  // 페이지 로드 시 에러 메시지 표시 여부 확인
+  document.getElementById("loginForm").addEventListener("submit", login);
 });

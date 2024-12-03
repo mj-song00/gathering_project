@@ -7,35 +7,69 @@
         rel="stylesheet">
   <script defer src="/js/signup.js"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-<div class="bg-white p-6 rounded shadow-md text-center max-w-sm">
-  <h1 class="text-2xl font-bold mb-4 text-gray-800">회원가입</h1>
+<body class="bg-gray-100">
+<nav class="bg-blue-500 p-4">
+  <div class="container mx-auto flex justify-between">
+    <a href="/" class="text-white text-lg font-bold">Monolog</a>
+    <div>
+      <a href="/login.html" class="text-white px-4">로그인</a>
+      <a href="/signup.html" class="text-white px-4">회원가입</a>
+    </div>
+  </div>
+</nav>
+<div class="flex items-center justify-center h-screen">
+  <div class="bg-white p-6 rounded shadow-md text-center max-w-sm w-full">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">회원가입</h1>
+    <form id="signupForm" class="space-y-4">
+      <!-- 이메일 입력 -->
+      <div>
+        <input type="email" id="email" placeholder="이메일을 입력해주세요."
+               class="w-full px-3 py-2 border rounded">
+        <span id="emailError" class="text-red-500 text-sm hidden"></span>
+      </div>
+      <!-- 이메일 인증 -->
+      <div id="verificationContainer">
+        <button type="button" onclick="sendVerificationCode()"
+                class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
+          이메일 인증 코드 발송
+        </button>
+      </div>
+      <!-- 닉네임 입력 -->
+      <div>
+        <input type="text" id="nickName" placeholder="닉네임을 입력해주세요."
+               class="w-full px-3 py-2 border rounded">
+        <span id="nickNameError" class="text-red-500 text-sm hidden"></span>
+      </div>
+      <!-- 비밀번호 입력 -->
+      <div>
+        <input type="password" id="password" placeholder="비밀번호를 입력해주세요."
+               class="w-full px-3 py-2 border rounded">
+        <span id="passwordError" class="text-red-500 text-sm hidden"></span>
+      </div>
+      <!-- 약관 동의 -->
+      <div id="termsContainer" class="text-left">
+        <p>약관을 불러오는 중...</p>
+      </div>
+      <span id="termsError" class="text-red-500 text-sm hidden">필수 약관에 동의해주세요.</span>
+      <!-- 가입 버튼 -->
+      <button type="submit"
+              class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded hover:bg-green-600">
+        가입 완료
+      </button>
+    </form>
+  </div>
+</div>
 
-  <!-- 회원가입 폼 -->
-  <form id="signupForm" class="space-y-4">
-    <div>
-      <input type="email" id="email" placeholder="이메일을 입력해주세요."
-             class="w-full px-3 py-2 border rounded">
-      <span id="emailError" class="text-red-500 text-sm" style="display: none;"></span>
-      <!-- 이메일 오류 메시지 -->
-    </div>
-    <div>
-      <input type="text" id="nickName" placeholder="닉네임을 입력해주세요."
-             class="w-full px-3 py-2 border rounded">
-      <span id="nickNameError" class="text-red-500 text-sm" style="display: none;"></span>
-      <!-- 닉네임 오류 메시지 -->
-    </div>
-    <div>
-      <input type="password" id="password" placeholder="비밀번호를 입력해주세요."
-             class="w-full px-3 py-2 border rounded">
-      <span id="passwordError" class="text-red-500 text-sm" style="display: none;"></span>
-      <!-- 비밀번호 오류 메시지 -->
-    </div>
-    <button type="submit"
-            class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded hover:bg-green-600 transition">
-      가입 완료
+<!-- 모달 -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+  <div class="bg-white p-6 rounded shadow-md max-w-md w-full">
+    <h2 id="modalTitle" class="text-lg font-bold mb-4"></h2>
+    <div id="modalContent" class="text-sm text-gray-700 overflow-y-auto max-h-64"></div>
+    <button onclick="closeModal()"
+            class="mt-4 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600">
+      닫기
     </button>
-  </form>
+  </div>
 </div>
 </body>
 </html>

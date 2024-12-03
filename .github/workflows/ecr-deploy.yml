@@ -31,7 +31,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
           AWS_REGION: ap-northeast-2
 
-      - name: .env 파일 생성
+      - name: .env.dev 파일 생성
         run: |
           echo "DEV_SERVER_PORT=${{ secrets.DEV_SERVER_PORT }}" >> .env
           echo "DEV_DB_HOST=${{ secrets.DEV_DB_HOST }}" >> .env

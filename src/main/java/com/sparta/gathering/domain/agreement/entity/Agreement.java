@@ -34,15 +34,11 @@ public class Agreement extends Timestamped {
     @Column(nullable = false)
     private AgreementType type;  // 약관 유형 추가
 
-    public Agreement(String content, String version, AgreementType type) {
+    public Agreement(UUID id, String content, String version, AgreementType type) {
+        this.id = id;
         this.content = content;
         this.version = version;
         this.type = type;
-    }
-
-    // 테스트용 생성자
-    public Agreement(UUID agreementId) {
-        this.id = agreementId;
     }
 
     public void updateContentAndVersion(String content, String version) {
