@@ -118,7 +118,10 @@ public enum ExceptionEnum {
 
 
     // 좋아요 관련
-    LIKE_NOT_ALLOWED(HttpStatus.CONFLICT,"LIKE_NOT_ALLOWED","이미 좋아요를 눌렀습니다.");
+    LIKE_NOT_ALLOWED(HttpStatus.CONFLICT,"LIKE_NOT_ALLOWED","이미 좋아요를 눌렀습니다."),
+    NOT_FOUND_AVAILABLE_PORT(HttpStatus.BAD_REQUEST,"PORT_NOT_FOUND","포트를 찾지 못했습니다." ),
+    ERROR_EXECUTING_EMBEDDED_REDIS(HttpStatus.BAD_REQUEST,"ERROR_EXECUTING_EMBEDDED_REDIS" ,"포트를 찾을 수 없습니다" ),
+    REDIS_SERVER_EXCUTABLE_NOT_FOUND(HttpStatus.BAD_REQUEST,"REDIS_SERVER_EXCUTABLE_NOT_FOUND" , "서버를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String errorCode;

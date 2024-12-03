@@ -63,7 +63,7 @@
 //        manager = User.builder().id(UUID.randomUUID()).email("manager@example.com").password("password123A!").nickName("managerUser").userRole(UserRole.ROLE_USER).identityProvider(IdentityProvider.NONE).profileImage(null).build();
 //
 //        // Redis 초기화
-//        //redisTemplate.getConnectionFactory().getConnection().flushAll();
+//        redisTemplate.getConnectionFactory().getConnection().flushAll();
 //        gather = new Gather("모임 제목", "모임 내용", category, List.of("Tag1", "Tag2"));
 //        member = new Member(manager, gather, Permission.MANAGER);
 //    }

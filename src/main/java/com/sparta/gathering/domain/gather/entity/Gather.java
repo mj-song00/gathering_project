@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.board.entity.Board;
 import com.sparta.gathering.domain.category.entity.Category;
+import com.sparta.gathering.domain.gatherhashtag.entity.GatherHashtag;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
@@ -47,11 +48,12 @@ public class Gather extends Timestamped {
     private List<Schedule> scheduleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HashTag> hashTagList = new ArrayList<>();
+    private List<GatherHashtag> gatherHashtags = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "map_id", unique = true)
     private Map map;
+
 
     private int likeCount;
 
@@ -64,17 +66,24 @@ public class Gather extends Timestamped {
         this.description = description;
         this.category = category;
         // 해시태그 객체 생성 및 양방향 관계 설정
-        for (String hashTagName : hashtags) {
-            this.hashTagList.add(HashTag.of(hashTagName, this));
-        }
+//        for (String hashTagName : hashtags) {
+//            this.hashTagList.add(HashTag.of(hashTagName, this));
+//        }
     }
+
+    public void addHashTag(HashTag hashTag){
+        GatherHashtag gatherHashTag = GatherHashtag.of(this, hashTag);
+        this.gatherHashtags.add(gatherHashTag);
+    }
+
+
 
     public void updateGather(String title, String description, List<String> hashtags, Map map) {
         this.title = title;
         this.description = description;
-        for (String hashTagName : hashtags) {
-            this.hashTagList.add(HashTag.of(hashTagName, this));
-        }
+//        for (String hashTagName : hashtags) {
+//            this.hashTagList.add(HashTag.of(hashTagName, this));
+//        }
         this.map = map;
     }
 
