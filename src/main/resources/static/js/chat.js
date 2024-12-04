@@ -25,7 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderMessages(messages, prepend = false) {
     if (!Array.isArray(messages)) {
       console.error("Expected an array of messages, got:", messages);
-      messages = []; // Replace with empty array
+      messages = []; // 빈 배열로 교체
+    }
+
+    // 메시지 배열을 뒤집기
+    if (prepend) {
+      messages.reverse();
     }
 
     messages.forEach(msg => {
@@ -38,12 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
         messageElement.classList.add("bg-gray-100", "p-3", "rounded");
       }
 
-      const formattedDate = new Date(msg.createdAt).toLocaleString([], {
+      const formattedDate = new Date(msg.createdAt).toLocaleString('ko-KR', {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
         hour: "2-digit",
         minute: "2-digit",
+        hour12: true,
       });
 
       messageElement.innerHTML = `
