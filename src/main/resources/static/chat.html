@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>WebSocket Chat Test</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script>
-        let stompClient = null;
-        let username = null;
-        let gatheringId = 1; // 기본 gatheringId
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>채팅</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+        rel="stylesheet">
+  <style>
+    /* 채팅 버블 스타일 */
+    .chat-bubble {
+      max-width: 70%;
+      padding: 0.5rem;
+      border-radius: 1rem;
+      margin-bottom: 0.5rem;
+    }
 
-        function connect() {
-            username = document.getElementById("username").value.trim();
-            gatheringId = document.getElementById("gatheringId").value.trim() || gatheringId;
+    .chat-bubble.sent {
+      background-color: #e1ffc7; /* 보낸 메시지 - 연한 초록색 */
+      align-self: flex-end;
+    }
 
-            if (!username) {
-                alert("사용자 이름을 입력하세요.");
-                return;
-            }
+    .chat-bubble.received {
+      background-color: #ffffff; /* 받은 메시지 - 흰색 */
+      align-self: flex-start;
+    }
 
-            const socket = new SockJS('/ws/chat');
-            stompClient = Stomp.over(socket);
+    .chat-bubble.system {
+      color: #999999; /* 시스템 메시지 - 회색 */
+      font-style: italic;
+      text-align: center;
+    }
 
-            stompClient.connect({}, function (frame) {
-                console.log('Connected: ' + frame);
+    #chatContainer {
+      max-height: 500px;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+  </style>
 
-                stompClient.subscribe(`/topic/gathering/${gatheringId}`, function (message) {
-                    const chatMessage = JSON.parse(message.body);
-                    showMessage(chatMessage); // JSON 파싱 후 표시
-                });
-
-                addUser();
-            }, function (error) {
-                console.error('WebSocket error: ', error);
-            });
-        }
-
-        function sendMessage() {
-            const content = document.getElementById("message").value.trim();
-            if (content && stompClient) {
-                stompClient.send(`/app/chat.sendMessage/${gatheringId}`, {}, JSON.stringify({ sender: username, content: content, type: "CHAT" }));
-                document.getElementById("message").value = "";
-            }
-        }
-
-        function addUser() {
-            if (stompClient) {
-                stompClient.send(`/app/chat.addUser/${gatheringId}`, {}, JSON.stringify({ sender: username, type: "JOIN" }));
-            }
-        }
-
-        function leaveUser() {
-            if (stompClient) {
-                stompClient.send(`/app/chat.leaveUser/${gatheringId}`, {}, JSON.stringify({ sender: username, type: "LEAVE" }));
-                stompClient.disconnect();
-            }
-        }
-
-        function showMessage(message) {
-            const response = document.getElementById("response");
-            const p = document.createElement("p");
-            p.textContent = `${message.sender}: ${message.content}`; // 보낸 사람과 내용을 표시
-            response.appendChild(p);
-        }
-    </script>
 </head>
-<body>
-<h2>WebSocket Chat Test</h2>
-<div>
-    <input type="text" id="username" placeholder="Enter your name" />
-    <input type="text" id="gatheringId" placeholder="Gathering ID (default: 1)" />
-    <button onclick="connect()">Connect</button>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+<nav class="bg-blue-500 p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="/home.html" class="text-white text-lg font-bold">← 뒤로</a>
+    <h1 id="chatRoomTitle" class="text-white text-lg font-semibold">모임 채팅</h1>
+  </div>
+</nav>
+
+<div class="container mx-auto mt-auto max-w-2xl">
+  <div class="bg-white rounded-lg shadow-md h-[600px] flex flex-col">
+    <!-- 이전 메시지 로드 버튼 -->
+    <div id="loadMoreButtonContainer" class="text-center p-2">
+      <button id="loadMoreButton"
+              class="text-blue-500 text-sm hover:underline">이전 메시지 불러오기
+      </button>
+    </div>
+
+    <!-- 채팅 메시지 컨테이너 -->
+    <div id="chatContainer" class="flex flex-col space-y-3">
+      <div id="chatMessages" class="flex flex-col space-y-3">
+        <!-- 메시지들이 동적으로 추가됩니다 -->
+      </div>
+    </div>
+
+    <!-- 입력 칸 -->
+    <div class="border-t p-4 flex space-x-2">
+      <input type="text" id="messageInput" placeholder="메시지를 입력하세요"
+             class="flex-grow p-2 border rounded">
+      <button id="sendMessageButton"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">전송
+      </button>
+    </div>
+  </div>
 </div>
-<div>
-    <input type="text" id="message" placeholder="Message">
-    <button onclick="sendMessage()">Send Message</button>
-    <button onclick="leaveUser()">Leave Chat</button>
-</div>
-<div id="response"></div>
+
+<footer class="bg-blue-500 text-white text-center py-4 mt-auto">
+  <div class="container mx-auto">
+    &copy; 2024 Monolog. All rights reserved.
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script src="/js/chat.js"></script>
 </body>
 </html>

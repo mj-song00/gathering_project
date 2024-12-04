@@ -284,7 +284,6 @@ POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
-
 ### 멤버 승인
 PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}
 Content-Type: application/json

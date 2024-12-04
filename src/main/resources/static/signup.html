@@ -7,7 +7,7 @@
         rel="stylesheet">
   <script defer src="/js/signup.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 <nav class="bg-blue-500 p-4">
   <div class="container mx-auto flex justify-between">
     <a href="/" class="text-white text-lg font-bold">Monolog</a>
@@ -17,7 +17,7 @@
     </div>
   </div>
 </nav>
-<div class="flex items-center justify-center h-screen">
+<div class="flex items-center justify-center flex-grow">
   <div class="bg-white p-6 rounded shadow-md text-center max-w-sm w-full">
     <h1 class="text-2xl font-bold mb-4 text-gray-800">회원가입</h1>
     <form id="signupForm" class="space-y-4">
@@ -71,5 +71,12 @@
     </button>
   </div>
 </div>
+
+<!-- 푸터 -->
+<footer class="bg-blue-500 text-white text-center py-4 mt-auto">
+  <div class="container mx-auto">
+    &copy; 2024 Monolog. All rights reserved.
+  </div>
+</footer>
 </body>
 </html>

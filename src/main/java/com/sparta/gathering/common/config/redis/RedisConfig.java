@@ -1,49 +1,36 @@
 package com.sparta.gathering.common.config.redis;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.GeoOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
 
-    private static final String TOPIC_NAME = "chatroom";
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
 
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
 
-    // ChannelTopic Bean 설정 (채팅 주제명 설정)
+    // Redis 연결 팩토리 설정
     @Bean
-    public ChannelTopic topic() {
-        return new ChannelTopic(TOPIC_NAME);
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
-    // RedisMessageListenerContainer Bean 설정 (Redis 구독 설정)
+    // Redis 템플릿 설정 (+채팅 메시지 직렬화)
     @Bean
-    public RedisMessageListenerContainer redisContainer(RedisConnectionFactory connectionFactory,
-            MessageListenerAdapter listenerAdapter,
-            ChannelTopic topic) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, topic); // 구독할 주제 설정
-        return container;
-    }
-
-    // MessageListenerAdapter Bean 설정 (RedisSubscriber와 연결)
-    @Bean
-    public MessageListenerAdapter listenerAdapter(WebSocketRedisSubscriber webSocketRedisSubscriber) {
-        return new MessageListenerAdapter(webSocketRedisSubscriber,
-                "handleMessage"); // RedisSubscriber의 handleMessage 메서드 호출
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
         return redisTemplate;
     }
 
@@ -56,4 +43,5 @@ public class RedisConfig {
     public GeoOperations<String, String> geoOperations(RedisTemplate<String, String> template) {
         return template.opsForGeo();
     }
+
 }

@@ -1,5 +1,15 @@
 package com.sparta.gathering.domain.member;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
@@ -14,6 +24,10 @@ import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,15 +41,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
@@ -96,7 +101,8 @@ public class MemberServiceTest {
 
     @Nested
     @DisplayName("모임가입 신청 관련")
-    class Apply{
+    class Apply {
+
         @Test
         @DisplayName("모임 가입 신청 성공")
         void testApplyForGather() {
@@ -124,7 +130,6 @@ public class MemberServiceTest {
         void registrationFailed() {
             UUID userId = managerUser.getId(); // 매니저 ID
             long gatherId = gather.getId();
-
 
             when(userRepository.findById(userId)).thenReturn(Optional.of(managerUser));
             when(gatherRepository.findById(gatherId)).thenReturn(Optional.of(gather));
@@ -178,6 +183,7 @@ public class MemberServiceTest {
     @Nested
     @DisplayName("모임조회 관련")
     class Check {
+
         @Test
         @DisplayName("모임 조회 성공 - 페이징 반환")
         void successCheckGather() {
@@ -206,6 +212,7 @@ public class MemberServiceTest {
     @Nested
     @DisplayName("모임승인 관련")
     class Approval {
+
         @Test
         @DisplayName("가입 승인")
         void successApproval() {
@@ -214,7 +221,8 @@ public class MemberServiceTest {
             long gatherId = gather.getId();
 
             // 매니저 ID를 반환하도록 설정
-            when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.of(authenticatedUser.getUserId()));
+            when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(
+                    Optional.of(authenticatedUser.getUserId()));
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
             // when
@@ -249,6 +257,7 @@ public class MemberServiceTest {
         @Nested
         @DisplayName("멤버 거절")
         class Refusal {
+
             @Test
             @DisplayName("가입 거절완료")
             void successRefusal() {
@@ -257,7 +266,8 @@ public class MemberServiceTest {
                 long gatherId = gather.getId();
 
                 // 매니저 ID를 반환하도록 설정
-                when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.of(authenticatedUser.getUserId()));
+                when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(
+                        Optional.of(authenticatedUser.getUserId()));
                 when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
                 //when
@@ -275,7 +285,8 @@ public class MemberServiceTest {
                 // given
                 long memberId = member.getId();
                 long gatherId = gather.getId();
-                AuthenticatedUser nonManagerUser = new AuthenticatedUser(UUID.randomUUID(), "nonmanager@example.com", null);
+                AuthenticatedUser nonManagerUser = new AuthenticatedUser(UUID.randomUUID(), "nonmanager@example.com",
+                        null);
 
                 // memberRepository에서 findManagerIdByGatherId 호출 시 Optional.empty()를 반환하도록 설정
                 when(memberRepository.findManagerIdByGatherId(gatherId)).thenReturn(Optional.empty());
@@ -293,11 +304,13 @@ public class MemberServiceTest {
     @Nested
     @DisplayName("멤버 탈퇴")
     class Withdrawal {
+
         @Test
         @DisplayName("탈퇴 완료")
         void successWithdrawal() {
             //given
-            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
+            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com",
+                    null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
@@ -312,7 +325,8 @@ public class MemberServiceTest {
         @Test
         @DisplayName("탈퇴 실패 - 존재하지 않는 멤버")
         void failWithdrawalUnExistMember() {
-            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // member의 userId와 일치하도록 설정
+            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com",
+                    null);  // member의 userId와 일치하도록 설정
             long memberId = member.getId();
 
             when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
@@ -329,7 +343,8 @@ public class MemberServiceTest {
         @DisplayName("탈퇴 실패 - 존재하지 않는 유저")
         void failWithdrawalUnExistUser() {
             // given
-            AuthenticatedUser user = new AuthenticatedUser(UUID.randomUUID(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
+            AuthenticatedUser user = new AuthenticatedUser(UUID.randomUUID(), "test@example.com",
+                    null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = member.getId();
 
             // member.getUser().getId()와 일치하지 않는 userId를 설정하여 유저가 존재하지 않도록 설정
@@ -347,7 +362,8 @@ public class MemberServiceTest {
         @DisplayName("탈퇴 실패 - 이미 탈퇴한 유저")
         void failWithdrawalAlreadyDeletedUser() {
             // given
-            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com", null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
+            AuthenticatedUser user = new AuthenticatedUser(member.getUser().getId(), "test@example.com",
+                    null);  // authenticatedUser의 ID는 member.getUser().getId()와 다르게 설정
             long memberId = 1L;
             member.setDeletedAt(LocalDateTime.now());  // 삭제된 상태로 설정
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
