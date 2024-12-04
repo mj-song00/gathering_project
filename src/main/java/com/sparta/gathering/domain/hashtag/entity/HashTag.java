@@ -2,6 +2,7 @@ package com.sparta.gathering.domain.hashtag.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
 import com.sparta.gathering.domain.gather.entity.Gather;
+import com.sparta.gathering.domain.gatherhashtag.entity.GatherHashtag;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -27,18 +30,17 @@ public class HashTag extends Timestamped {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GatherHashtag> gatherHashTags = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gather_id")
-    private Gather gather;
-
-    private HashTag(String hashTagName, Gather gather) {
+    public HashTag(String hashTagName) {
         this.hashTagName = hashTagName;
-        this.gather = gather;
     }
 
     public static HashTag of(String hashTagName, Gather gather) {
-        return new HashTag(hashTagName, gather);
+        HashTag hashTag = new HashTag();
+        hashTag.hashTagName = hashTagName;
+        return hashTag;
     }
 
     public void updateDeleteAt() {

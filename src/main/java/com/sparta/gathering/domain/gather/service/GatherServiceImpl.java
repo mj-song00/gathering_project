@@ -13,6 +13,8 @@ import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.hashtag.entity.HashTag;
+import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
 import com.sparta.gathering.domain.member.entity.Member;
@@ -49,6 +51,7 @@ public class GatherServiceImpl implements GatherService {
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
+    private final HashTagRepository hashTagRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, String> rediusTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
@@ -74,6 +77,11 @@ public class GatherServiceImpl implements GatherService {
 
         // Gather, Member 저장
         saveGatherAndMember(gather, member);
+
+        // 해시태그 연결
+        List<String> hashTagNames = request.getHashtags(); // 요청에서 해시태그 목록 가져오기
+        connectHashTagsToGather(gather, hashTagNames);
+
 
         // Redis ZSet 값 갱신
         updateRedisZSet(gather);
@@ -118,8 +126,6 @@ public class GatherServiceImpl implements GatherService {
     @Override
     public void deleteGather(Long id, AuthenticatedUser authenticatedUser) {
         //매니저 검증
-
-
         Gather gather = findGatherById(id);
         validateManager(id, authenticatedUser);
         //  redis 기존 score -1
@@ -277,5 +283,20 @@ public class GatherServiceImpl implements GatherService {
     public void sendSlackNotification(Category category, GatherRequest request) {
         slackNotifierService.sendNotification("[모임이 생성되었습니다] \n 카테고리명 : " + category.getCategoryName() +
                 "\n 모임명 : " + request.getTitle());
+    }
+
+    private void connectHashTagsToGather(Gather gather,List<String> hashTagNames) {
+        if (hashTagNames == null || hashTagNames.isEmpty()) {
+            return; // 해시태그가 없으면 처리 생략
+        }
+
+        for (String hashTagName : hashTagNames) {
+            // 해시태그 조회 및 저장
+            HashTag hashTag = hashTagRepository.findByHashTagName(hashTagName)
+                    .orElseGet(() -> hashTagRepository.save(new HashTag(hashTagName)));
+
+            // Gather와 HashTag 연결
+            gather.addHashTag(hashTag);
+        }
     }
 }
