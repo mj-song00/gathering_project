@@ -39,7 +39,6 @@ out/
 ## env ##
 .env
 .env.dev
-.env
 
 ## application.yml ##
 /src/main/resources/application.yml
