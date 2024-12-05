@@ -3,13 +3,9 @@ package com.sparta.gathering.domain.gather.controller;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.gather.document.GatherDocument;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.CategoryListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
-import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
-import com.sparta.gathering.domain.gather.dto.response.RankResponse;
-import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
+import com.sparta.gathering.domain.gather.dto.response.*;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -125,19 +121,20 @@ public class GatherController {
     @Operation(summary = "title 검색", description = "contain 검색 방식입니다." +
             "page size는 10입니다.")
     @GetMapping("/title")
-    public ResponseEntity<ApiResponse<SearchResponse>> searchTitles(
-            @RequestParam(value = "title") String title,
+    public ResponseEntity<ApiResponse<ElasticRespones>> searchTitles(
+           @RequestParam(value = "title") String title,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> titleList = gatherService.findByTitles(pageable, title);
-        SearchResponse response = new SearchResponse(
+            @RequestParam(defaultValue = "10") int size)
+    {
+       Pageable pageable = PageRequest.of(page - 1, size);
+        Page<GatherDocument> titleList = gatherService.findByTitle(pageable, title);
+        ElasticRespones response = new ElasticRespones(
                 titleList.getContent(), // Gather 리스트
                 titleList.getNumber(), // 현재 페이지 번호
                 titleList.getTotalPages(), // 총 페이지 수
                 titleList.getTotalElements() // 총 요소 수
         );
-        ApiResponse<SearchResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<ElasticRespones> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 
