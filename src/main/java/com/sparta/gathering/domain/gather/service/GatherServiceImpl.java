@@ -76,11 +76,13 @@ public class GatherServiceImpl implements GatherService {
         // Map 객체 생성 및 Gather, Member, ElasticSearch 생성
         Map newMap = createMap(request);
         Gather gather = createGather(request, category, newMap);
+        gather = gatherRepository.save(gather);
+
         Member member = createMember(user, gather);
-        GatherDocument document = new GatherDocument(gather.getId(),gather.getTitle(),gather.getCategory(),gather.getDescription(),gather.getMap().getAddressName(),gather.getGatherHashtags());
+        GatherDocument document = GatherDocument.from(gather);
 
         // Gather, Member 저장
-        saveData(gather, member, document);
+        saveData(member, document);
 
         // 해시태그 연결
         List<String> hashTagNames = request.getHashtags(); // 요청에서 해시태그 목록 가져오기
@@ -107,7 +109,10 @@ public class GatherServiceImpl implements GatherService {
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
         updateRedisScores(gather, 1);  // 수정된 주소 score +1
 
+        GatherDocument document = GatherDocument.from(gather);
+
         gatherRepository.save(gather);
+        elasticRepository.save(document);
     }
 
     private Gather findGatherById(Long id) {
@@ -204,7 +209,7 @@ public class GatherServiceImpl implements GatherService {
     @Transactional(readOnly = true)
     @Override
     public Page<GatherDocument> findByTitle(Pageable pageable,String title) {
-        return elasticRepository.findByTitle(pageable, title);
+        return elasticRepository.findByTitleContaining(pageable, title);
     }
 
 
@@ -270,8 +275,7 @@ public class GatherServiceImpl implements GatherService {
         return new Member(user, gather, Permission.MANAGER);
     }
 
-    public void saveData(Gather gather, Member member, GatherDocument document) {
-        gatherRepository.save(gather);
+    public void saveData(Member member, GatherDocument document) {
         memberRepository.save(member);
         elasticRepository.save(document);
     }

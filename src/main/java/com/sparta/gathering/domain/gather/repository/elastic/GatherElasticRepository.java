@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 public interface GatherElasticRepository extends ElasticsearchRepository<GatherDocument, String> {
-    Page<GatherDocument> findByTitle(Pageable pageable, String title);
+    Page<GatherDocument> findByTitleContaining(Pageable pageable, String title);
 }

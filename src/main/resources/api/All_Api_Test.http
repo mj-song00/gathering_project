@@ -2,9 +2,9 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token =  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzMxMjU1NjQsImV4cCI6MTczMzEyNzM2NH0.s0OLH22gYh3BYGXE4Pa7KrEjovjm3RD1a_A-8roqrp4
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMzQ3MTc4NSwiZXhwIjoxNzMzNDczNTg1fQ.gm9udyps-SZjdoGBTz-S963IR1HGlf8gwt4TdNV0XMk
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMzM4NTY1NiwiZXhwIjoxNzMzMzg3NDU2fQ.Lk82qJjpa6Wga6vRj2iVQP9aPmXKCnC0jyDZ0cj5WtQ
 
 @refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
 
@@ -12,9 +12,9 @@
 
 @memberId = 1
 
-@category_Id = 1
+@category_Id = 2
 
-@gatherId = 1
+@gatherId = 26
 
 @scheduleId = 4
 
@@ -109,8 +109,8 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "password": "skwkdrns365!A"
+  "email": "test@example.com",
+  "password": "password123A!"
 }
 
 ### 리프레시 토큰으로 액세스 토큰 재발급
@@ -200,12 +200,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "강릉-",
-  "description": "같이 공차실분",
+  "title": "크아아아아악",
+  "description": "뭐가문제인거냐아",
   "hashtags": [
-    "여의도공원",
-    "저녁",
-    "실외"
+   "스택오버플로어 에러는 뭐지"
   ],
   "addressName": "서울 동작구 노량진로 111",
   "latitude": 37.7645195812136,
@@ -218,12 +216,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "농구하실분",
-  "description": "여의도 공원 농구 모임",
+  "title": "????",
+  "description": "머여",
   "hashtags": [
-    "여의도공원",
-    "저녁",
-    "실외"
+    "왜 수정이 안대"
   ],
   "addressName": "서울 영등포구 여의도동 여의공원로 68",
   "latitude": "37.5134034035131",
@@ -236,17 +232,17 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 카테고리별 모임 검색
-GET {{base_url}}/api/gathers/{{category_Id}}
+GET {{base_url}}/api/gathers/{{category_Id}}?page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### hashTag 검색
-GET {{base_url}}/api/gathers/search?hashTagName=건강&page=1
+GET {{base_url}}/api/gathers/search?hashTagName=저녁&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 검색
-GET {{base_url}}/api/gathers/title?title=서울&page=1
+GET {{base_url}}/api/gathers/title?title=크&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

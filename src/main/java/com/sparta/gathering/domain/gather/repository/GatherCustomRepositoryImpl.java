@@ -60,32 +60,6 @@ public class GatherCustomRepositoryImpl implements GatherCustomRepository {
     }
 
     @Override
-    public Page<Gather> findByTitle(Pageable pageable, String title) {
-        List<Gather> result = q.selectFrom(gather)
-                .leftJoin(gather.gatherHashtags, gatherHashtag).fetchJoin() // GatherHashtag 조인
-                .leftJoin(gatherHashtag.hashTag, hashTag).fetchJoin()       // HashTag 조인
-                .leftJoin(gather.map).fetchJoin()
-                .where(
-                        gather.title.contains(title)
-                        , (gather.deletedAt.isNull())
-
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        Long count = q.select(gather.count())
-                .from(gather)
-                .where(
-                        gather.title.contains(title)
-                                .and(gather.deletedAt.isNull())
-                )
-                .fetchOne();
-        if (count == null) count = 0L;
-        return new PageImpl<>(result, pageable, count);
-    }
-
-    @Override
     public Page<Gather> findByCategoryWithHashTags(Pageable pageable, Long categoryId) {
         List<Gather> result = q.selectFrom(gather)
                 .leftJoin(gather.gatherHashtags, gatherHashtag).fetchJoin()

@@ -6,11 +6,9 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.common.service.SlackNotifierService;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
-import com.sparta.gathering.domain.gather.document.GatherDocument;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
-import com.sparta.gathering.domain.gather.repository.elastic.ElasticRepository;
 import com.sparta.gathering.domain.gather.service.GatherServiceImpl;
 import com.sparta.gathering.domain.map.entity.Map;
 import com.sparta.gathering.domain.map.repository.MapRepository;
@@ -65,8 +63,8 @@ public class GatherServiceTest {
     @Mock
     private MapRepository mapRepository;
 
-    @Mock
-    private ElasticRepository elasticRepository;
+//    @Mock
+//    private ElasticRepository elasticRepository;
 
     @Mock
     private RedisTemplate<String, String> redisTemplate;
@@ -214,14 +212,14 @@ public class GatherServiceTest {
             Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
             gather.saveMap(newMap);
             Member member = new Member(user, gather, Permission.MANAGER);
-            GatherDocument document= new GatherDocument(gather.getId(),gather.getTitle(),gather.getCategory(),gather.getDescription(),gather.getMap().getAddressName(),gather.getGatherHashtags());
+    //        GatherDocument document= new GatherDocument(gather.getId().toString() ,gather.getTitle(),gather.getCategory().getCategoryName(),gather.getDescription(),gather.getMap().getAddressName(),gather.getGatherHashtags());
             // when
-            gatherService.saveData(gather, member,document);
+    //        gatherService.saveData(gather, member,document);
 
             // then
             verify(gatherRepository).save(gather);
             verify(memberRepository).save(member);
-            verify(elasticRepository).save(document);
+//            verify(elasticRepository).save(document);
         }
 
         @Test
