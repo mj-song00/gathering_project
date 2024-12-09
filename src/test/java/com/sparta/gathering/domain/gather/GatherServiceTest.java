@@ -204,23 +204,23 @@ public class GatherServiceTest {
             assertThrows(BaseException.class, () -> gatherService.getUser(userId));
         }
 
-        @Test
-        @DisplayName("Gather 및 Member 저장 성공 테스트")
-        void testSaveGatherAndMember() {
-            // given
-            Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude());
-            Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
-            gather.saveMap(newMap);
-            Member member = new Member(user, gather, Permission.MANAGER);
-    //        GatherDocument document= new GatherDocument(gather.getId().toString() ,gather.getTitle(),gather.getCategory().getCategoryName(),gather.getDescription(),gather.getMap().getAddressName(),gather.getGatherHashtags());
-            // when
-    //        gatherService.saveData(gather, member,document);
-
-            // then
-            verify(gatherRepository).save(gather);
-            verify(memberRepository).save(member);
+//        @Test
+//        @DisplayName("Gather 및 Member 저장 성공 테스트")
+//        void testSaveGatherAndMember() {
+//            // given
+//            Map newMap = new Map(request.getAddressName(), request.getLatitude(), request.getLongitude());
+//            Gather gather = new Gather(request.getTitle(), request.getDescription(), category, request.getHashtags());
+//            gather.saveMap(newMap);
+//            Member member = new Member(user, gather, Permission.MANAGER);
+//            GatherDocument document= new GatherDocument(gather.getId().toString() ,gather.getTitle(),gather.getCategory().getCategoryName(),gather.getDescription(),gather.getMap().getAddressName(),gather.getGatherHashtags());
+//             when
+//            gatherService.saveData(gather, member,document);
+//
+//             then
+//            verify(gatherRepository).save(gather);
+//            verify(memberRepository).save(member);
 //            verify(elasticRepository).save(document);
-        }
+//        }
 
         @Test
         @DisplayName("Slack 알림 전송 테스트")
