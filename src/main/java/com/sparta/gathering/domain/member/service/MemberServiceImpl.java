@@ -8,7 +8,6 @@ import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
-import com.sparta.gathering.domain.notification.service.NotificationService;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
@@ -27,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
-    private final NotificationService notificationService;
+//    private final NotificationService notificationService;
 
     @Transactional
     @Override
