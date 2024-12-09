@@ -7,7 +7,6 @@ import com.sparta.gathering.domain.gather.document.GatherDocument;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.*;
 import com.sparta.gathering.domain.gather.entity.Gather;
-import com.sparta.gathering.domain.gather.repository.elastic.GatherElasticRepository;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +31,6 @@ import java.util.List;
 public class GatherController {
 
     private final GatherService gatherService;
-    private final GatherElasticRepository elasticRepository;
 
     @Operation(summary = "소모임 생성", description = "모임을 생성합니다. 생성 즉시 모임의 매니저로 등록됩니다.")
     @PostMapping("/{categoryId}")
@@ -118,11 +116,10 @@ public class GatherController {
             "page size는 10입니다.")
     @GetMapping("/title")
     public ResponseEntity<ApiResponse<ElasticRespones>> searchTitles(
-           @RequestParam(value = "title") String title,
+            @RequestParam(value = "title") String title,
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size)
-    {
-       Pageable pageable = PageRequest.of(page - 1, size);
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<GatherDocument> titleList = gatherService.findByTitle(pageable, title);
         ElasticRespones response = new ElasticRespones(
                 titleList.getContent(), // Gather 리스트

@@ -14,7 +14,7 @@ public class ElasticResponseItem {
     private final List<String> hashtags;
 
     public ElasticResponseItem(GatherDocument gather) {
-       this.gatherId = gather.getGatherId();
+        this.gatherId = gather.getGatherId();
         this.title = gather.getTitle();
         this.description = gather.getDescription();
         this.hashtags = gather.getGatherHashtags().stream()

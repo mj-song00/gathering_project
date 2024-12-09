@@ -5,9 +5,11 @@ import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.member.dto.eventpayload.EventPayload;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
+import com.sparta.gathering.domain.notification.service.NotificationService;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
@@ -26,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     @Override
@@ -45,6 +48,13 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = new Member(user, gather, Permission.PENDDING);
         memberRepository.save(member);
+
+        //신규 가입 신청 정보
+        notificationService.broadcast(manager.getId(),
+                EventPayload.builder()
+                        .memberId(member.getId().toString())
+                        .build()
+        );
     }
 
     public Page<Member> getMembers(Pageable pageable, long gatherId) {

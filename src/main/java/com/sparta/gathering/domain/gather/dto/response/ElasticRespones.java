@@ -1,7 +1,6 @@
 package com.sparta.gathering.domain.gather.dto.response;
 
 import com.sparta.gathering.domain.gather.document.GatherDocument;
-import com.sparta.gathering.domain.gather.entity.Gather;
 import lombok.Getter;
 
 import java.util.List;
