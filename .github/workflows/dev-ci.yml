@@ -30,8 +30,7 @@ jobs:
         ports:
           - 6379:6379
       elasticsearch:
-        image:
-           8.16.1
+        image: elasticsearch:8.16.1
         ports:
           - 9200:9200
     steps:
