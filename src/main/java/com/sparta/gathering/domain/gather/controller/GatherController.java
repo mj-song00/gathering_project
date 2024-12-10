@@ -3,35 +3,25 @@ package com.sparta.gathering.domain.gather.controller;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
+import com.sparta.gathering.domain.gather.document.GatherDocument;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
-import com.sparta.gathering.domain.gather.dto.response.CategoryListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
-import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
-import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
-import com.sparta.gathering.domain.gather.dto.response.RankResponse;
-import com.sparta.gathering.domain.gather.dto.response.SearchResponse;
+import com.sparta.gathering.domain.gather.dto.response.*;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.service.GatherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Gather", description = "소모임 / 송민지")
 @RestController
@@ -87,7 +77,7 @@ public class GatherController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @PathVariable Long categoryId) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Order.asc("id")));
 
         Page<Gather> gatherList = gatherService.gathers(pageable, categoryId);
         CategoryListResponse response = new CategoryListResponse(
@@ -125,19 +115,19 @@ public class GatherController {
     @Operation(summary = "title 검색", description = "contain 검색 방식입니다." +
             "page size는 10입니다.")
     @GetMapping("/title")
-    public ResponseEntity<ApiResponse<SearchResponse>> searchTitles(
+    public ResponseEntity<ApiResponse<ElasticRespones>> searchTitles(
             @RequestParam(value = "title") String title,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Gather> titleList = gatherService.findByTitles(pageable, title);
-        SearchResponse response = new SearchResponse(
+        Page<GatherDocument> titleList = gatherService.findByTitle(pageable, title);
+        ElasticRespones response = new ElasticRespones(
                 titleList.getContent(), // Gather 리스트
                 titleList.getNumber(), // 현재 페이지 번호
                 titleList.getTotalPages(), // 총 페이지 수
                 titleList.getTotalElements() // 총 요소 수
         );
-        ApiResponse<SearchResponse> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
+        ApiResponse<ElasticRespones> apiResponse = ApiResponse.successWithData(response, ApiResponseEnum.GET_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 

@@ -1,20 +1,20 @@
 @base_url = http://localhost:8080
 
-@user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
+@user_Id = c9867e7b-d9bf-4ad4-9676-1e8e219ad3b7
 
-@jwt_token =  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzMxMjU1NjQsImV4cCI6MTczMzEyNzM2NH0.s0OLH22gYh3BYGXE4Pa7KrEjovjm3RD1a_A-8roqrp4
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiZDRhMmIxNC0xY2M1LTRlNjItYjc1YS1jZDJkM2ExYzYyMzgiLCJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM4MTE0MDcsImV4cCI6MTczMzgxMzIwN30.17j8am3jPEMyVG1mSRsVTtXoRFpVdLSKI3prHrw-KoQ
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM3MjU1OTMsImV4cCI6MTczMzcyNzM5M30.AUJA4U9G2UCo8iqdECdxRJgCMyJ9z27TLyVolFnmxRs
 
 @refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
 
 @expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
 
-@memberId = 1
+@memberId = 52
 
-@category_Id = 1
+@category_Id = 2
 
-@gatherId = 1
+@gatherId = 29
 
 @scheduleId = 4
 
@@ -109,8 +109,8 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "password": "skwkdrns365!A"
+  "email": "test2@example.com",
+  "password": "password123A!"
 }
 
 ### 리프레시 토큰으로 액세스 토큰 재발급
@@ -200,12 +200,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "강릉-",
-  "description": "같이 공차실분",
+  "title": "갑자기 공포",
+  "description":"ㅠㅠㅠㅠ",
   "hashtags": [
-    "여의도공원",
-    "저녁",
-    "실외"
+   "소오름","무섭다ㅠ"
   ],
   "addressName": "서울 동작구 노량진로 111",
   "latitude": 37.7645195812136,
@@ -218,12 +216,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "농구하실분",
-  "description": "여의도 공원 농구 모임",
+  "title": "????",
+  "description": "머여",
   "hashtags": [
-    "여의도공원",
-    "저녁",
-    "실외"
+    "왜 수정이 안대"
   ],
   "addressName": "서울 영등포구 여의도동 여의공원로 68",
   "latitude": "37.5134034035131",
@@ -236,17 +232,17 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 카테고리별 모임 검색
-GET {{base_url}}/api/gathers/{{category_Id}}
+GET {{base_url}}/api/gathers/{{category_Id}}?page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### hashTag 검색
-GET {{base_url}}/api/gathers/search?hashTagName=건강&page=1
+GET {{base_url}}/api/gathers/search?hashTagName=저녁&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 검색
-GET {{base_url}}/api/gathers/title?title=서울&page=1
+GET {{base_url}}/api/gathers/title?title=크&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -261,7 +257,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 멤버 생성
-POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
+POST {{base_url}}/api/members/user/{{user_Id}}/gather/29
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -467,4 +463,10 @@ Authorization: Bearer {{jwt_token}}
 ### 모임 좋아요/좋아요 취소
 POST {{base_url}}/api/likes/gather/168/member/169
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### sse 이벤트 구독
+GET {{base_url}}/api/noti/subscribe/04a89669-0f04-46e7-a5e3-5a451fcf4938
+Content-Type: text/event-stream
 Authorization: Bearer {{jwt_token}}

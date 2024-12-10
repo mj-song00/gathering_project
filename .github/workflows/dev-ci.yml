@@ -29,6 +29,11 @@ jobs:
         image: redis:6.2
         ports:
           - 6379:6379
+      elasticsearch:
+        image: elasticsearch:8.16.1
+        ports:
+          - 9200:9200
+        options: --health-cmd="curl http://localhost:9200/_cluster/health" -e "discovery.type=single-node" -e "xpack.security.enabled=false"
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4

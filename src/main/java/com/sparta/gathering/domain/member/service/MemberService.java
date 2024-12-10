@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface MemberService {
 
-    void createMember(UUID userId, long gatherId);
+    void createMember(UUID userId, long gatherId,AuthenticatedUser authenticatedUser);
 
     Page<Member> getMembers(Pageable pageable, long gatherId);
 

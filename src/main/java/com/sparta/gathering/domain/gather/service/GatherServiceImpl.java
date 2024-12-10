@@ -6,6 +6,7 @@ import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.common.service.SlackNotifierService;
 import com.sparta.gathering.domain.category.entity.Category;
 import com.sparta.gathering.domain.category.repository.CategoryRepository;
+import com.sparta.gathering.domain.gather.document.GatherDocument;
 import com.sparta.gathering.domain.gather.dto.request.GatherRequest;
 import com.sparta.gathering.domain.gather.dto.response.GatherListResponse;
 import com.sparta.gathering.domain.gather.dto.response.GatherResponse;
@@ -13,6 +14,7 @@ import com.sparta.gathering.domain.gather.dto.response.NewGatherResponse;
 import com.sparta.gathering.domain.gather.dto.response.RankResponse;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.gather.repository.elastic.GatherElasticRepository;
 import com.sparta.gathering.domain.hashtag.entity.HashTag;
 import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.map.entity.Map;
@@ -52,6 +54,7 @@ public class GatherServiceImpl implements GatherService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
     private final HashTagRepository hashTagRepository;
+    private final GatherElasticRepository elasticRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisTemplate<String, String> rediusTemplate;
     private final ZSetOperations<String, Object> zsetOperations;
@@ -70,13 +73,16 @@ public class GatherServiceImpl implements GatherService {
         // Redis에 map 저장
         addRedisMap(request);
 
-        // Map 객체 생성 및 Gather, Member 생성
+        // Map 객체 생성 및 Gather, Member, ElasticSearch 생성
         Map newMap = createMap(request);
         Gather gather = createGather(request, category, newMap);
+        gather = gatherRepository.save(gather);
+
         Member member = createMember(user, gather);
+        GatherDocument document = GatherDocument.from(gather);
 
         // Gather, Member 저장
-        saveGatherAndMember(gather, member);
+        saveData(member, document);
 
         // 해시태그 연결
         List<String> hashTagNames = request.getHashtags(); // 요청에서 해시태그 목록 가져오기
@@ -103,7 +109,10 @@ public class GatherServiceImpl implements GatherService {
         gather.updateGather(request.getTitle(), request.getDescription(), request.getHashtags(), map);
         updateRedisScores(gather, 1);  // 수정된 주소 score +1
 
+        GatherDocument document = GatherDocument.from(gather);
+
         gatherRepository.save(gather);
+        elasticRepository.save(document);
     }
 
     private Gather findGatherById(Long id) {
@@ -199,8 +208,8 @@ public class GatherServiceImpl implements GatherService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Gather> findByTitles(Pageable pageable, String title) {
-        return gatherRepository.findByTitle(pageable, title);
+    public Page<GatherDocument> findByTitle(Pageable pageable,String title) {
+        return elasticRepository.findByTitleContaining(pageable, title);
     }
 
 
@@ -266,9 +275,9 @@ public class GatherServiceImpl implements GatherService {
         return new Member(user, gather, Permission.MANAGER);
     }
 
-    public void saveGatherAndMember(Gather gather, Member member) {
-        gatherRepository.save(gather);
+    public void saveData(Member member, GatherDocument document) {
         memberRepository.save(member);
+        elasticRepository.save(document);
     }
 
     public void updateRedisZSet(Gather gather) {
