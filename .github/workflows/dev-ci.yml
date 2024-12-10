@@ -29,6 +29,10 @@ jobs:
         image: redis:6.2
         ports:
           - 6379:6379
+      elasticsearch:
+        image: 8.16.1
+        ports:
+          - 9200:9200
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v4
