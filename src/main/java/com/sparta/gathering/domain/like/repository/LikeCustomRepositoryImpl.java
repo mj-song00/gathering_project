@@ -18,7 +18,6 @@ public class LikeCustomRepositoryImpl implements LikeCustomRepository {
         return q.selectFrom(like)
                 .where(like.member.id.eq(memberId)
                         .and(like.gather.id.eq(gatherId)))
-                //.setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetchOne() != null;
     }
 
