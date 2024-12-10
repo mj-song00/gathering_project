@@ -38,9 +38,10 @@ public class MemberController {
     @PostMapping("/user/{userId}/gather/{gatherId}")
     public ResponseEntity<ApiResponse<Void>> createMember(
             @PathVariable UUID userId,
-            @PathVariable long gatherId
+            @PathVariable long gatherId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
-        memberService.createMember(userId, gatherId);
+        memberService.createMember(userId, gatherId, authenticatedUser);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATE_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

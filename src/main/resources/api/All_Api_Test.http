@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token =  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmNjBiODFhYy1iMjIzLTQzNDAtYmU4Yi0yODYyMWJmMTRiZTciLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMzNzQwMDQxLCJleHAiOjE3MzM3NDE4NDF9.nZs8Pv0Q-RJRzGXNtRJZKthz4st2fJAmK8YuStViW0o
+@jwt_token =  eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzMxMjU1NjQsImV4cCI6MTczMzEyNzM2NH0.s0OLH22gYh3BYGXE4Pa7KrEjovjm3RD1a_A-8roqrp4
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -12,7 +12,7 @@
 
 @memberId = 1
 
-@category_Id = 2
+@category_Id = 1
 
 @gatherId = 1
 
@@ -200,11 +200,12 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "테스트",
-  "description": "왜안됌",
+  "title": "강릉-",
+  "description": "같이 공차실분",
   "hashtags": [
-    "김치",
-    "파전"
+    "여의도공원",
+    "저녁",
+    "실외"
   ],
   "addressName": "서울 동작구 노량진로 111",
   "latitude": 37.7645195812136,
@@ -235,17 +236,17 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 카테고리별 모임 검색
-GET {{base_url}}/api/gathers/{{category_Id}}
+GET {{base_url}}/api/gathers/{{category_Id}}?page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### hashTag 검색
-GET {{base_url}}/api/gathers/search?hashTagName=건강&page=1
+GET {{base_url}}/api/gathers/search?hashTagName=저녁&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 검색
-GET {{base_url}}/api/gathers/title?title=서울&page=1
+GET {{base_url}}/api/gathers/title?title=크&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -260,7 +261,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### 멤버 생성
-POST {{base_url}}/api/members/user/{{user_Id}}/gather/1
+POST {{base_url}}/api/members/user/{{user_Id}}/gather/29
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -356,6 +357,7 @@ Authorization: Bearer {{jwt_token}}
   "scheduleContent": "스케쥴2 컨텐츠"
 }
 
+
 ### 스케쥴 수정
 PUT {{base_url}}/api/gathers/1/schedules/{{scheduleId}}
 Content-Type: application/json
@@ -374,6 +376,7 @@ Authorization: Bearer {{jwt_token}}
 
 {
 }
+
 
 
 ### 댓글생성
@@ -412,6 +415,7 @@ Authorization: Bearer {{jwt_token}}
 {
 }
 
+
 ### 지도검색
 POST {{base_url}}/api/kakaoMap
 Content-Type: application/json
@@ -419,6 +423,10 @@ Content-Type: application/json
 {
   "address": "인천 석남1동"
 }
+
+
+
+
 
 ### 지도조회(래디스)
 GET {{base_url}}/api/kakaoMap/RedisSearch
@@ -458,4 +466,10 @@ Authorization: Bearer {{jwt_token}}
 ### 모임 좋아요/좋아요 취소
 POST {{base_url}}/api/likes/gather/168/member/169
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### sse 이벤트 구독
+GET {{base_url}}/api/noti/subscribe/04a89669-0f04-46e7-a5e3-5a451fcf4938
+Content-Type: text/event-stream
 Authorization: Bearer {{jwt_token}}

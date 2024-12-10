@@ -93,6 +93,7 @@ public enum ExceptionEnum {
     MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "MEMBER_NOT_FOUND", "멤버를 찾을 수 없습니다."),
     ALREADY_DELETED_MEMBER(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "탈퇴한 게스트입니다."),
     MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "MEMBER_NOT_ALLIOWED", "올바른 요청이 아닙니다"),
+    DUPLICATE_MEMBER(HttpStatus.BAD_REQUEST,"DUPLICATE_MEMBER","중복된 요청입니다."),
 
     // 보드 관련
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD_NOT_FOUND", "해당 보드를 찾을 수 없습니다."),
