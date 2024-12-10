@@ -51,7 +51,7 @@ public class NotificationServiceImpl implements NotificationService {
                 notificationRepository.deleteById(userId);
                 throw new RuntimeException("Connection error", ex);
             }
-        }else {
+        } else {
             log.warn("No active connection for user: " + userId);
         }
     }

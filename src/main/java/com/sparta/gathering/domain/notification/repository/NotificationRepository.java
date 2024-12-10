@@ -32,23 +32,4 @@ public class NotificationRepository {
     public List<Object> getMessagesFromCache(UUID userId) {
         return messageCache.getOrDefault(userId, Collections.emptyList());
     }
-
-//    public void sendEventToClient(UUID userId, Object data) {
-//        SseEmitter sseEmitter = findByMemberId(userId);
-//        if (sseEmitter != null) {
-//            try {
-//                sseEmitter.send(SseEmitter.event()
-//                        .id(userId.toString())
-//                        .name("sse")
-//                        .data(data)
-//                );
-//            } catch (IOException ex) {
-//                deleteById(userId);
-//                throw new RuntimeException("연결 오류", ex);
-//            }
-//        } else {
-//            // 구독하지 않은 경우 로그 출력
-//            System.out.println("No active connection for user: " + userId);
-//        }
-//    }
 }

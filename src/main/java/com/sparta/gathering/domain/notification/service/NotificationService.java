@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public interface NotificationService {
 
-
     SseEmitter subscribe(UUID userId);
 
     void broadcast(UUID userId, EventPayload eventPayload);
