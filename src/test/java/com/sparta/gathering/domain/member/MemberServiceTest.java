@@ -110,7 +110,7 @@ public class MemberServiceTest {
                     .thenReturn(Optional.of(member)); // 기존 매니저 존재
 
             // when
-            memberService.createMember(userId, gatherId);
+            memberService.createMember(userId, gatherId,authenticatedUser);
 
             // then
             verify(userRepository).findById(userId);
@@ -133,7 +133,7 @@ public class MemberServiceTest {
 
             // when & then
             BaseException exception = assertThrows(BaseException.class, () -> {
-                memberService.createMember(userId, gatherId);
+                memberService.createMember(userId, gatherId,authenticatedUser);
             });
 
             assertEquals(ExceptionEnum.MEMBER_NOT_ALLOWED, exception.getExceptionEnum()); // 본인이 매니저일 경우 예외 발생
@@ -150,7 +150,7 @@ public class MemberServiceTest {
 
             // when & then
             BaseException exception = assertThrows(BaseException.class, () -> {
-                memberService.createMember(userId, gatherId);
+                memberService.createMember(userId, gatherId,authenticatedUser);
             });
 
             assertEquals(ExceptionEnum.USER_NOT_FOUND, exception.getExceptionEnum()); // 유저가 없을 경우 예외 발생
@@ -168,7 +168,7 @@ public class MemberServiceTest {
 
             // when & then
             BaseException exception = assertThrows(BaseException.class, () -> {
-                memberService.createMember(userId, gatherId);
+                memberService.createMember(userId, gatherId,authenticatedUser);
             });
 
             assertEquals(ExceptionEnum.GATHER_NOT_FOUND, exception.getExceptionEnum()); // 모임이 없을 경우 예외 발생

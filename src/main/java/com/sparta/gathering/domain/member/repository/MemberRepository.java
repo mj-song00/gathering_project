@@ -1,7 +1,9 @@
 package com.sparta.gathering.domain.member.repository;
 
+import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
+import com.sparta.gathering.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +30,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("SELECT COUNT(m) > 0 FROM Member m JOIN m.gather g WHERE m.id = :memberId AND g.id = :gatherId")
     boolean existsByMemberIdAndGatherId(@Param("memberId") Long memberId, @Param("gatherId") Long gatherId);
+
+    Optional<Member> findByUserAndGather(User user, Gather gather);
 }

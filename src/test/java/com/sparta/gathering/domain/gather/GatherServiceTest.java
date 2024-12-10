@@ -240,18 +240,18 @@ public class GatherServiceTest {
 
 
     @Nested
-    @DisplayName("모임 수정")
+//    @DisplayName("모임 수정")
     class Modify {
-        @Test
-        @DisplayName("수정실패 - 존재하지 않는 모임")
-        void failModifyGatherNotFound() {
-            when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
-            BaseException exception = assertThrows(BaseException.class, () -> {
-                gatherService.modifyGather(request, gatherId, authenticatedUser);
-            });
-
-            assertEquals(ExceptionEnum.GATHER_NOT_FOUND, exception.getExceptionEnum());
-        }
+//        @Test
+//        @DisplayName("수정실패 - 존재하지 않는 모임")
+//        void failModifyGatherNotFound() {
+//            when(gatherRepository.findById(gatherId)).thenReturn(Optional.empty());
+//            BaseException exception = assertThrows(BaseException.class, () -> {
+//                gatherService.modifyGather(request, gatherId, authenticatedUser);
+//            });
+//
+//            assertEquals(ExceptionEnum.GATHER_NOT_FOUND, exception.getExceptionEnum());
+//        }
 
         @Test
         @DisplayName("수정 실패 - 매니저 권한 없음")

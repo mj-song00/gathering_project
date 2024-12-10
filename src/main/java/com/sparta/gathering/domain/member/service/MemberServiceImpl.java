@@ -5,9 +5,12 @@ import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
+import com.sparta.gathering.domain.member.dto.eventpayload.EventPayload;
+import com.sparta.gathering.domain.member.dto.eventpayload.EventType;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
+import com.sparta.gathering.domain.notification.service.NotificationService;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,11 +30,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final UserRepository userRepository;
     private final GatherRepository gatherRepository;
-//    private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
     @Transactional
     @Override
-    public void createMember(UUID userId, long gatherId) {
+    public void createMember(UUID userId, long gatherId, AuthenticatedUser authenticatedUser) {
+        if(userId != authenticatedUser.getUserId()){
+            throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
+        }
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
@@ -44,15 +51,25 @@ public class MemberServiceImpl implements MemberService {
             throw new BaseException(ExceptionEnum.MEMBER_NOT_ALLOWED);
         }
 
-        Member member = new Member(user, gather, Permission.PENDDING);
-        memberRepository.save(member);
+        //중복신청 방지
+        Optional<Member> existingMember = memberRepository.findByUserAndGather(user, gather);
+        if (existingMember.isEmpty()) {
+            Member member = new Member(user, gather, Permission.PENDDING);
+            memberRepository.save(member);
+        } else {
+            throw new BaseException(ExceptionEnum.DUPLICATE_MEMBER);
+        }
 
         //신규 가입 신청 정보
-//        notificationService.broadcast(manager.getId(),
-//                EventPayload.builder()
-//                        .memberId(member.getId().toString())
-//                        .build()
-//        );
+        notificationService.broadcast(manager.getUser().getId(),
+                EventPayload.builder()
+                        .nickname(user.getNickName() + " 님이 멤버신청을 하였습니다.")
+                        .eventType(EventType.PANDING)
+                        .gatherId(gather.getId())
+                        .title(gather.getTitle())
+                        .build()
+
+        );
     }
 
     public Page<Member> getMembers(Pageable pageable, long gatherId) {
@@ -65,6 +82,17 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
         member.updatePermission(Permission.GUEST);
         memberRepository.save(member);
+
+        //가입 승인 정보
+        Gather gather = gatherRepository.findById(gatherId).orElseThrow(()->new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        notificationService.broadcast(member.getUser().getId(),
+                EventPayload.builder()
+                        .nickname(member.getUser().getNickName() + " 님의 신청을 승인하였습니다.")
+                        .eventType(EventType.APPROVE)
+                        .title(gather.getTitle())
+                        .gatherId(gatherId)
+                        .build()
+        );
     }
 
     @Transactional
@@ -76,6 +104,17 @@ public class MemberServiceImpl implements MemberService {
         member.updatePermission(Permission.REFUSAL);
         member.delete();
         memberRepository.save(member);
+
+        //가입 거절 정보
+        Gather gather = gatherRepository.findById(gatherId).orElseThrow(()->new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        notificationService.broadcast(member.getUser().getId(),
+                EventPayload.builder()
+                        .nickname(member.getUser().getNickName() + " 님의 신청을 거절하였습니다.")
+                        .eventType(EventType.REJECT)
+                        .title(gather.getTitle())
+                        .gatherId(gatherId)
+                        .build()
+        );
     }
 
     @Transactional
