@@ -43,7 +43,7 @@ public class SqsListener {
                 deleteMessage(message); // 메시지 삭제
             }
         } catch (Exception e) {
-            log.error("Error while polling messages from SQS queue", e);
+            log.error("SQS 대기열에서 메시지를 폴링하는 중 오류가 발생했습니다.", e);
         }
     }
 
@@ -73,9 +73,9 @@ public class SqsListener {
                     templateModel
             );
 
-            log.info("Email sent to {}", email);
+            log.info("이메일 전송 대상 {}", email);
         } catch (Exception e) {
-            log.error("Failed to process message: {}", message.body(), e);
+            log.error("메시지를 처리하지 못했습니다.: {}", message.body(), e);
         }
     }
 
@@ -87,6 +87,6 @@ public class SqsListener {
                 .build();
 
         sqsClient.deleteMessage(deleteRequest);
-        log.info("Message deleted from queue: {}", message.messageId());
+        log.info("대기열에서 메시지가 삭제되었습니다.: {}", message.messageId());
     }
 }

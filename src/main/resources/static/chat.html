@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
         rel="stylesheet">
   <style>
-    /* 채팅 버블 스타일 */
     .chat-bubble {
       max-width: 70%;
       padding: 0.5rem;
@@ -16,19 +15,27 @@
     }
 
     .chat-bubble.sent {
-      background-color: #e1ffc7; /* 보낸 메시지 - 연한 초록색 */
+      background-color: #e1ffc7;
       align-self: flex-end;
     }
 
     .chat-bubble.received {
-      background-color: #ffffff; /* 받은 메시지 - 흰색 */
+      background-color: #fde2d3;
       align-self: flex-start;
     }
 
-    .chat-bubble.system {
-      color: #999999; /* 시스템 메시지 - 회색 */
-      font-style: italic;
+    .chat-bubble.join {
+      color: #28a745;
+      font-weight: bold;
       text-align: center;
+      align-self: center;
+    }
+
+    .chat-bubble.leave {
+      color: #dc3545;
+      font-weight: bold;
+      text-align: center;
+      align-self: center;
     }
 
     #chatContainer {

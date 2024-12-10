@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "채팅 API", description = "채팅 관련 API / 이정현")
+@Tag(name = "Chat API", description = "채팅 관련 API / 이정현")
 public class ChatController {
 
     private final ChatService chatService;
@@ -56,6 +56,12 @@ public class ChatController {
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
             @PathVariable Long roomId) {
         chatService.sendLeaveMessage(authenticatedUser.getUserId(), roomId);
+    }
+
+    @Operation(summary = "본인 senderId 조회", description = "현재 사용자의 senderId를 조회합니다.")
+    @GetMapping("/api/chat/me")
+    public String getSenderId(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        return authenticatedUser.getUserId().toString();
     }
 
 }
