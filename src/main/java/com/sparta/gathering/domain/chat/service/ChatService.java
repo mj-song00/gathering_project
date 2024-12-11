@@ -52,7 +52,7 @@ public class ChatService {
         }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")); // 페이지 요청 생성
-        return chatMessageRepository.findByRoom_IdOrderByCreatedAtDesc(roomId, pageable)
+        return chatMessageRepository.findByRoomIdOrderByCreatedAtDesc(roomId, pageable)
                 .map(this::convertToDto); // 조회 결과를 DTO로 변환
     }
 
