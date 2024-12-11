@@ -86,6 +86,20 @@ CREATE TABLE gather
     FOREIGN KEY (map_id) REFERENCES map (id)
 );
 
+-- 채팅 메시지 테이블
+CREATE TABLE chat_message
+(
+    id           BIGINT                         NOT NULL AUTO_INCREMENT,
+    room_id      BIGINT                         NOT NULL,
+    sender_id    BINARY(16)                     NOT NULL,
+    message      TEXT                           NOT NULL,
+    message_type ENUM ('CHAT', 'JOIN', 'LEAVE') NOT NULL,
+    created_at   DATETIME(6)                    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (room_id) REFERENCES gather (id),
+    FOREIGN KEY (sender_id) REFERENCES user (id)
+);
+
 -- 멤버 테이블
 CREATE TABLE member
 (

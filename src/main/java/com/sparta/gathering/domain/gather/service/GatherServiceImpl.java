@@ -25,6 +25,11 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,12 +41,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -87,7 +86,6 @@ public class GatherServiceImpl implements GatherService {
         // 해시태그 연결
         List<String> hashTagNames = request.getHashtags(); // 요청에서 해시태그 목록 가져오기
         connectHashTagsToGather(gather, hashTagNames);
-
 
         // Redis ZSet 값 갱신
         updateRedisZSet(gather);
@@ -157,9 +155,7 @@ public class GatherServiceImpl implements GatherService {
     }
 
     /**
-     * 매일 자정마다 실행되는 스케쥴러 입니다.
-     * 상위 5개의 데이터를 top5Ranking에 별도 저장후 기존 저장된 city는 삭제됩니다.
-     * 이후 다시 모임이 생성되면 city역시 다시 저장됩니다.
+     * 매일 자정마다 실행되는 스케쥴러 입니다. 상위 5개의 데이터를 top5Ranking에 별도 저장후 기존 저장된 city는 삭제됩니다. 이후 다시 모임이 생성되면 city역시 다시 저장됩니다.
      */
     @Transactional(readOnly = true)
     @Scheduled(cron = "0 0 0 * * *")
@@ -173,11 +169,13 @@ public class GatherServiceImpl implements GatherService {
             redisTemplate.opsForZSet().removeRange("top5Ranking", 5, -1);
 
             // 새 데이터를 top5Ranking에 추가
-            top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
+            top5.forEach(tuple -> redisTemplate.opsForZSet()
+                    .add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
         } else {
             // top5가 null이거나 비어있으면 그냥 새로운 데이터만 저장
             if (top5 != null) {
-                top5.forEach(tuple -> redisTemplate.opsForZSet().add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
+                top5.forEach(tuple -> redisTemplate.opsForZSet()
+                        .add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
             }
         }
 
@@ -189,12 +187,13 @@ public class GatherServiceImpl implements GatherService {
     @Override
     public List<RankResponse> getTop5Ranking() {
         // top5Ranking 키에서 상위 5개 데이터 조회
-        Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet().reverseRangeWithScores("top5Ranking", 0, 4);
+        Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet()
+                .reverseRangeWithScores("top5Ranking", 0, 4);
 
         // 조회된 데이터를 RankResponse 리스트로 변환
         return (top5 == null || top5.isEmpty()) ? Collections.emptyList()
                 : top5.stream().map(tuple -> new RankResponse(tuple.getScore(), tuple.getValue().toString()))
-                .collect(Collectors.toList());
+                        .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -294,7 +293,7 @@ public class GatherServiceImpl implements GatherService {
                 "\n 모임명 : " + request.getTitle());
     }
 
-    private void connectHashTagsToGather(Gather gather,List<String> hashTagNames) {
+    private void connectHashTagsToGather(Gather gather, List<String> hashTagNames) {
         if (hashTagNames == null || hashTagNames.isEmpty()) {
             return; // 해시태그가 없으면 처리 생략
         }

@@ -1,73 +1,67 @@
 package com.sparta.gathering.domain.chat.controller;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
-import com.sparta.gathering.domain.chat.entity.ChatMessage;
+import com.sparta.gathering.domain.chat.dto.ChatMessageDto;
 import com.sparta.gathering.domain.chat.service.ChatService;
-import com.sparta.gathering.domain.member.service.MemberServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
-@Controller
-@Tag(name = "Chat", description = "채팅 API / 조은형,고결")
+@RestController
+@Tag(name = "Chat API", description = "채팅 관련 API / 이정현")
 public class ChatController {
 
-
-    private final MemberServiceImpl memberService;
     private final ChatService chatService;
-    private final ChannelTopic topic;
 
-    @GetMapping("/api/checkMembership")
-    @Operation(summary = "맴버십 확인", description = "맴버십 확인")
-    public boolean checkMembership(@RequestParam Long gatheringId,
-            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-        // 사용자와 모임 ID를 통해 멤버십 확인
-        return memberService.isUserInGathering(gatheringId, authenticatedUser);
+    @Operation(summary = "채팅방 메시지 조회", description = "채팅방의 메시지를 조회합니다, 페이지네이션을 지원하며 기본값은 20입니다.")
+    @GetMapping("/api/chat/messages/{roomId}")
+    public Page<ChatMessageDto> getChatMessages(
+            @PathVariable Long roomId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return chatService.getChatMessages(roomId, page, size);
     }
 
-    @MessageMapping("/chat.sendMessage/{gatheringId}")
-    @SendTo("/topic/gathering/{gatheringId}")
-    @Operation(summary = "메시지 전송", description = "메시지 전송")
-    public ChatMessage sendMessage(@DestinationVariable Long gatheringId, ChatMessage chatMessage) {
-        chatMessage.setGatherId(gatheringId);
-        return chatService.saveAndPublishMessage(chatMessage, topic);  // 메시지 저장 및 퍼블리시
+    @Operation(summary = "채팅방 메시지 전송", description = "채팅방에 메시지를 전송합니다.")
+    @PostMapping("/api/chat/send/{roomId}")
+    public void sendMessage(
+            @RequestBody ChatMessageDto messageDto,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PathVariable Long roomId) {
+        chatService.sendMessage(messageDto, authenticatedUser.getUserId(), roomId);
     }
 
-    @MessageMapping("/chat.addUser/{gatheringId}")
-    @SendTo("/topic/gathering/{gatheringId}")
-    @Operation(summary = "입장 메시지 전송", description = "회원 입장 메시지 전송")
-    public ChatMessage addUser(ChatMessage chatMessage) {
-        chatMessage.setContent(chatMessage.getSender() + "님이 입장하셨습니다.");
-        chatMessage.setType(ChatMessage.MessageType.JOIN);
-        return chatService.saveAndPublishMessage(chatMessage, topic);  // 입장 메시지 저장 및 퍼블리시
+    @Operation(summary = "채팅방 참여메세지 전송", description = "채팅방에 참여 메세지를 전송합니다.")
+    @PostMapping("/api/chat/join/{roomId}")
+    public void joinRoom(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PathVariable Long roomId) {
+        chatService.sendJoinMessage(authenticatedUser.getUserId(), roomId);
     }
 
-    @MessageMapping("/chat.leaveUser/{gatheringId}")
-    @SendTo("/topic/gathering/{gatheringId}")
-    @Operation(summary = "퇴실 메시지 전송", description = "회원 퇴실 메시지 전송")
-    public ChatMessage leaveUser(ChatMessage chatMessage) {
-        chatMessage.setContent(chatMessage.getSender() + "님이 퇴장하셨습니다.");
-        chatMessage.setType(ChatMessage.MessageType.LEAVE);
-        return chatService.saveAndPublishMessage(chatMessage, topic);  // 퇴장 메시지 저장 및 퍼블리시
+    @Operation(summary = "채팅방 나가기메세지 전송", description = "채팅방에 나가기 메세지를 전송합니다.")
+    @PostMapping("/api/chat/leave/{roomId}")
+    public void leaveRoom(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PathVariable Long roomId) {
+        chatService.sendLeaveMessage(authenticatedUser.getUserId(), roomId);
     }
 
-    @GetMapping("/api/chat/history/{gatheringId}")
-    @ResponseBody
-    @Operation(summary = "대화 내용 조회", description = "대화 내용 조회")
-    public List<ChatMessage> getChatHistory(@PathVariable Long gatheringId) {
-        return chatService.getChatHistory(gatheringId);
+    @Operation(summary = "본인 senderId 조회", description = "현재 사용자의 senderId를 조회합니다.")
+    @GetMapping("/api/chat/me")
+    public String getSenderId(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        return authenticatedUser.getUserId().toString();
     }
 
 }
