@@ -57,7 +57,7 @@ POST {{base_url}}/api/verification/send
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com"
+  "email": "test@gmail.com"
 }
 
 ### 인증 코드 확인 요청
@@ -65,8 +65,8 @@ POST {{base_url}}/api/verification/confirm
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "code": "393755"
+  "email": "test@gmail.com",
+  "code": "752229"
 }
 
 ### Agreement Expiration Job 실행 요청
@@ -78,12 +78,12 @@ POST {{base_url}}/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "",
-  "nickName": "",
-  "password": "",
+  "email": "tsdasd@dsds.com",
+  "nickName": "sdfdsfds",
+  "password": "qwer1234!A",
   "identityProvider": "NONE",
   "agreedAgreementIds": [
-    "17a980dd-a53e-11ef-9770-00155dbf39e6",
+    "7cfa39d8-ab21-11ef-bbd8-00155dc6e467",
     "17a9833c-a53e-11ef-9770-00155dbf39e6",
     "17a983d8-a53e-11ef-9770-00155dbf39e6"
   ]
@@ -110,7 +110,7 @@ Content-Type: application/json
 
 {
   "email": "nbcteam21test@gmail.com",
-  "password": "skwkdrns365!A"
+  "password": "qwer1234!A"
 }
 
 ### 리프레시 토큰으로 액세스 토큰 재발급
