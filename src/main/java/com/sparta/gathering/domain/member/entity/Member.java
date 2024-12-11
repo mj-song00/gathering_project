@@ -32,6 +32,9 @@ public class Member extends Timestamped {
     @JoinColumn(name = "gather_id", nullable = false)
     private Gather gather;
 
+    @Column(name = "gather_id", insertable = false, updatable = false)
+    private Long gatherId;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

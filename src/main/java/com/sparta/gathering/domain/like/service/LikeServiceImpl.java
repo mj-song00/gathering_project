@@ -10,7 +10,6 @@ import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -21,25 +20,21 @@ public class LikeServiceImpl implements LikeService {
     private final GatherRepository gatherRepository;
     private final MemberRepository memberRepository;
 
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional
     @Override
     public void addLike(Long memberId, Long gatherId) {
-        //멤버 조회
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
         // 모임 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
 
         //member가 gather에 소속되어있는지 확인
-        boolean isMember = memberRepository.existsByMemberIdAndGatherId(memberId, gatherId);
-        if (!isMember) throw new BaseException(ExceptionEnum.MEMBER_NOT_FOUND);
+        Member member = memberRepository.findByIdAndGatherId(memberId, gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
 
 
-        boolean alreadyLiked = likeRepository.existByMemberIdAndGatherId(memberId, gatherId);
+        Like alreadyLiked = likeRepository.findByMemberIdAndGatherId(memberId, gatherId);
 
-        if (alreadyLiked) {
+        if (alreadyLiked != null) {
             likeRepository.deleteLike(memberId, gatherId);
             gather.disLike();
         } else {
@@ -47,7 +42,6 @@ public class LikeServiceImpl implements LikeService {
             gather.like();
             likeRepository.save(like);
         }
-
     }
 
     @Override
