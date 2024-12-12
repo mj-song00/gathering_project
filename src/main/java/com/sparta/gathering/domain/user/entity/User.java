@@ -1,7 +1,6 @@
 package com.sparta.gathering.domain.user.entity;
 
 import com.sparta.gathering.common.entity.Timestamped;
-import com.sparta.gathering.domain.agreement.enums.AgreementStatus;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.useragreement.entity.UserAgreement;
@@ -101,12 +100,6 @@ public class User extends Timestamped {
         if (userAgreement.getUser() != this) {
             userAgreement.setUser(this);
         }
-    }
-
-    // 필수 약관의 만료 상태를 확인하는 메서드
-    public boolean isInactiveDueToExpiredAgreements() {
-        return userAgreements.stream()
-                .anyMatch(agreement -> agreement.isRequired() && agreement.getStatus() == AgreementStatus.EXPIRED);
     }
 
 }

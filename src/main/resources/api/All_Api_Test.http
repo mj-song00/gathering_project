@@ -1,16 +1,16 @@
 @base_url = http://localhost:8080
 
-@user_Id = bd4a2b14-1cc5-4e62-b75a-cd2d3a1c6238
+@user_Id = c9867e7b-d9bf-4ad4-9676-1e8e219ad3b7
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM5MDE2OTQsImV4cCI6MTczMzkwMzQ5NH0.iis27gVH_iqtzRC7YI0wjhbUhYM2XriEEFiUR3A9ye4
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMzkwNzgyOCwiZXhwIjoxNzMzOTA5NjI4fQ.SmHia8snJBm0nVHy_nt34jK-RT7y_muWLCFaZHObumc
 
-@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczMzkwMzIxNywiZXhwIjoxNzMzOTA1MDE3fQ.ZC6JnUdGG5JltMieiVBa0K_UbYIrbR5a8oTS2EVgSKA
+@expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM3MjU1OTMsImV4cCI6MTczMzcyNzM5M30.AUJA4U9G2UCo8iqdECdxRJgCMyJ9z27TLyVolFnmxRs
 
 @refresh_token =eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzcwNTcsImV4cCI6MTczMTk2MzQ1N30.UNQ3HBHl6Zkt-ih-htR5_v_M2SCRsm6Mdq0A_eQusso
 
 @expired_refresh_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhMTM3ZmRhZS02OTI4LTQ1N2EtOTBlMi01YTU0NjI4YmYxZWYiLCJpYXQiOjE3MzE4NzY1NzEsImV4cCI6MTczMTk2Mjk3MX0.y69UiHYx80syBZjgIieJtrOp-ckzRS0PzQJChDwKBWw
 
-@memberId = 56
+@memberId = 52
 
 @category_Id = 2
 
@@ -109,7 +109,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test@example.com",
   "password": "password123A!"
 }
 
@@ -200,8 +200,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "테스트2",
-  "description":"테스트2",
+  "title": "테스트3",
+  "description":"테스트3",
   "hashtags": [
    "알바","ㅠㅠㅠㅠ"
   ],
@@ -242,7 +242,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### title 검색
-GET {{base_url}}/api/gathers/title?title=테&page=1
+GET {{base_url}}/api/gathers/title?title=크&page=1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -260,6 +260,7 @@ Authorization: Bearer {{jwt_token}}
 POST {{base_url}}/api/members/user/{{user_Id}}/gather/29
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
 
 ### 멤버 승인
 PATCH {{base_url}}/api/members/{{memberId}}/gather/{{gatherId}}
@@ -460,7 +461,7 @@ Authorization: Bearer {{jwt_token}}
 
 
 ### 모임 좋아요/좋아요 취소
-POST {{base_url}}/api/likes/gather/29/member/48
+POST {{base_url}}/api/likes/gather/168/member/169
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

@@ -7,43 +7,44 @@
         rel="stylesheet">
   <script defer src="/js/home.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 flex flex-col min-h-screen">
 <nav class="bg-blue-500 p-4">
-  <div class="container mx-auto flex justify-between">
-    <a href="/" class="text-white text-lg font-bold">Monolog</a>
-    <button id="logoutButton" class="text-red-500 px-4">로그아웃</button>
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="/home.html" class="text-white text-lg font-bold">Monolog</a>
+    <div class="flex space-x-4">
+      <a href="/findGather.html" class="text-white hover:text-blue-200">모임 찾기</a>
+      <a href="/gather.html" class="text-white hover:text-blue-200">내 모임</a>
+      <button id="logoutButton" class="text-red-500 hover:text-red-700">로그아웃</button>
+    </div>
   </div>
 </nav>
-<div class="flex items-center justify-center h-screen">
-  <div class="bg-white p-6 rounded shadow-md text-center max-w-md w-full">
-    <h1 class="text-2xl font-bold mb-4 text-gray-800">로그인 성공</h1>
-    <p class="text-gray-700 mb-4">Gathering 앱에 오신 것을 환영합니다!</p>
-    <div>
-      <input type="text" id="gatheringIdInput" placeholder="모임 ID를 입력하세요"
-             class="w-full px-3 py-2 border rounded mb-4">
-      <button id="chatButton" onclick="goToChatRoom()"
-              class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600">
-        채팅방으로 이동
-      </button>
+
+<div class="container mx-auto mt-10 flex-grow">
+  <div class="bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-4">환영합니다.</h1>
+
+    <div class="bg-blue-50 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold mb-4">내 모임</h2>
+      <div id="myGathersList" class="space-y-2">
+        <!-- 동적으로 모임 목록 추가 -->
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <a href="/gather.html" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        새 모임 만들기
+      </a>
     </div>
   </div>
 </div>
-<script>
-  // 로그아웃 로직
-  document.getElementById("logoutButton").addEventListener("click", function () {
-    localStorage.removeItem("token");
-    window.location.href = "/login.html";
-  });
 
-  // 채팅방 이동 로직
-  function goToChatRoom() {
-    const gatheringId = document.getElementById("gatheringIdInput").value;
-    if (gatheringId) {
-      window.location.href = `/chat.html?gatheringId=${gatheringId}`;
-    } else {
-      alert("모임 ID를 입력해주세요.");
-    }
-  }
-</script>
+<!-- 푸터 -->
+<footer class="bg-blue-500 text-white text-center py-4 mt-auto">
+  <div class="container mx-auto">
+    &copy; 2024 Monolog. All rights reserved.
+  </div>
+</footer>
+
+<script src="/js/home.js"></script>
 </body>
 </html>

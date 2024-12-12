@@ -117,12 +117,14 @@ public enum ExceptionEnum {
     SERIALIZE_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "SERIALIZE_FAILURE", "토큰 직렬화에 실패하였습니다."),
     DESERIALIZE_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "DESERIALIZE_FAILURE", "토큰 역직렬화에 실패하였습니다."),
 
-
     // 좋아요 관련
     LIKE_NOT_ALLOWED(HttpStatus.CONFLICT,"LIKE_NOT_ALLOWED","이미 좋아요를 눌렀습니다."),
     NOT_FOUND_AVAILABLE_PORT(HttpStatus.BAD_REQUEST,"PORT_NOT_FOUND","포트를 찾지 못했습니다." ),
     ERROR_EXECUTING_EMBEDDED_REDIS(HttpStatus.BAD_REQUEST,"ERROR_EXECUTING_EMBEDDED_REDIS" ,"포트를 찾을 수 없습니다" ),
-    REDIS_SERVER_EXCUTABLE_NOT_FOUND(HttpStatus.BAD_REQUEST,"REDIS_SERVER_EXCUTABLE_NOT_FOUND" , "서버를 찾을 수 없습니다.");
+    REDIS_SERVER_EXCUTABLE_NOT_FOUND(HttpStatus.BAD_REQUEST,"REDIS_SERVER_EXCUTABLE_NOT_FOUND" , "서버를 찾을 수 없습니다."),
+
+    // 채팅 관련
+    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "ROOM_NOT_FOUND", "해당 채팅방을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String errorCode;
