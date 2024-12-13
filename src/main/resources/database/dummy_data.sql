@@ -40,3 +40,18 @@ VALUES (0x3866D935ACE84E9E874FCBE3D3A04702, '2024-12-02 15:07:32.349586', null,
 INSERT INTO category (id, created_at, updated_at, deleted_at, user_id, category_name)
 VALUES (1, '2024-11-25 20:48:08.608000', null, null, 0xF60B81ACB2234340BE8B28621BF14BE7, '운동'),
        (2, '2024-12-09 18:57:52.000000', null, null, 0xF60B81ACB2234340BE8B28621BF14BE7, '코딩');
+
+INSERT INTO map(id, address_name, latitude, longitude)
+VALUES(1,'서울 동작구 노량진로 111',37.5134034035131,126.943292835393),
+      (2,'서울 동작구 노량진로 111',37.5134034035131,126.943292835393),
+      (3,'서울 동작구 노량진로 111',37.5134034035131,126.943292835393),
+      (4,'서울 영등포구 국제금융로 78',37.5134034035131,126.943292835393),
+      (5,'서울 영등포구 국제금융로 78',37.5134034035131,126.943292835393);
+
+INSERT INTO gather(id, created_at, updated_at, deleted_at, category_id, map_id,title,description,like_count)
+VALUES(1,'2024-11-25 20:50:52.000000',null,null,1, 1,'운동할사람','찾습니다',0),
+      (2,'2024-11-25 20:52:52.000000',null,null,1, 2,'test1','test1',0),
+      (3,'2024-11-25 20:54:52.000000',null,null,1, 3,'test2','test2',0),
+      (4,'2024-11-25 20:55:52.000000',null,null,1, 4,'test3','test3',0),
+      (5,'2024-11-25 20:56:52.000000',null,null,1, 5,'test3','test4',0);
+
