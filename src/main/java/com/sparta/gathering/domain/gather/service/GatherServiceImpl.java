@@ -154,35 +154,6 @@ public class GatherServiceImpl implements GatherService {
         return gatherRepository.findByKeywords(pageable, hashTagName);
     }
 
-    /**
-     * 매일 자정마다 실행되는 스케쥴러 입니다. 상위 5개의 데이터를 top5Ranking에 별도 저장후 기존 저장된 city는 삭제됩니다. 이후 다시 모임이 생성되면 city역시 다시 저장됩니다.
-     */
-//    @Transactional(readOnly = true)
-//    @Scheduled(cron = "0 0 0 * * *")
-//    public void ranks() {
-//        // 1. 상위 5개 데이터 조회
-//        Set<ZSetOperations.TypedTuple<Object>> top5 = redisTemplate.opsForZSet().reverseRangeWithScores("city", 0, 4);
-//
-//        // 2. 상위 5개 데이터를 별도의 키에 저장 (top5Ranking)
-//        if (top5 != null && !top5.isEmpty()) {
-//            // 기존 top5Ranking에서 데이터가 있다면 6번째 이후 항목 삭제
-//            redisTemplate.opsForZSet().removeRange("top5Ranking", 5, -1);
-//
-//            // 새 데이터를 top5Ranking에 추가
-//            top5.forEach(tuple -> redisTemplate.opsForZSet()
-//                    .add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
-//        } else {
-//            // top5가 null이거나 비어있으면 그냥 새로운 데이터만 저장
-//            if (top5 != null) {
-//                top5.forEach(tuple -> redisTemplate.opsForZSet()
-//                        .add("top5Ranking", tuple.getValue().toString(), tuple.getScore()));
-//            }
-//        }
-//
-//        // 3. 기존 랭킹 데이터 삭제
-//        redisTemplate.opsForZSet().removeRange("city", 0, -1);
-//    }
-
     @Transactional(readOnly = true)
     @Override
     public List<RankResponse> getTop5Ranking() {
