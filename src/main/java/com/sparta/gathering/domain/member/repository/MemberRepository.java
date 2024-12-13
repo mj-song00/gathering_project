@@ -28,8 +28,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m.permission FROM Member m WHERE m.user.id = :userId")
     Permission findPermissionByUserId(@Param("userId") UUID userId);
 
-    @Query("SELECT COUNT(m) > 0 FROM Member m JOIN m.gather g WHERE m.id = :memberId AND g.id = :gatherId")
-    boolean existsByMemberIdAndGatherId(@Param("memberId") Long memberId, @Param("gatherId") Long gatherId);
-
     Optional<Member> findByUserAndGather(User user, Gather gather);
+
+    Optional<Member> findByIdAndGatherId(Long memberId, Long gatherId);
 }
