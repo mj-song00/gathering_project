@@ -222,7 +222,7 @@ CREATE TABLE user_agreement_history
 ) engine = InnoDB;
 
 -- Spring Batch 테이블
-CREATE TABLE batch_job_instance
+CREATE TABLE BATCH_JOB_INSTANCE
 (
     job_instance_id BIGINT       NOT NULL PRIMARY KEY,
     version         BIGINT,
@@ -231,7 +231,7 @@ CREATE TABLE batch_job_instance
     UNIQUE KEY uk_job_name_key (job_name, job_key)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_job_execution
+CREATE TABLE BATCH_JOB_EXECUTION
 (
     job_execution_id BIGINT      NOT NULL PRIMARY KEY,
     version          BIGINT,
@@ -243,20 +243,20 @@ CREATE TABLE batch_job_execution
     exit_code        VARCHAR(2500),
     exit_message     VARCHAR(2500),
     last_updated     DATETIME(6),
-    FOREIGN KEY (job_instance_id) REFERENCES batch_job_instance (job_instance_id)
+    FOREIGN KEY (job_instance_id) REFERENCES BATCH_JOB_INSTANCE (job_instance_id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_job_execution_params
+CREATE TABLE BATCH_JOB_EXECUTION_PARAMS
 (
     job_execution_id BIGINT       NOT NULL,
     parameter_name   VARCHAR(100) NOT NULL,
     parameter_type   VARCHAR(100) NOT NULL,
     parameter_value  VARCHAR(2500),
     identifying      CHAR(1)      NOT NULL,
-    FOREIGN KEY (job_execution_id) REFERENCES batch_job_execution (job_execution_id)
+    FOREIGN KEY (job_execution_id) REFERENCES BATCH_JOB_EXECUTION (job_execution_id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_step_execution
+CREATE TABLE BATCH_STEP_EXECUTION
 (
     step_execution_id  BIGINT       NOT NULL PRIMARY KEY,
     version            BIGINT       NOT NULL,
@@ -277,26 +277,26 @@ CREATE TABLE batch_step_execution
     exit_code          VARCHAR(2500),
     exit_message       VARCHAR(2500),
     last_updated       DATETIME(6),
-    FOREIGN KEY (job_execution_id) REFERENCES batch_job_execution (job_execution_id)
+    FOREIGN KEY (job_execution_id) REFERENCES BATCH_JOB_EXECUTION (job_execution_id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_step_execution_context
+CREATE TABLE BATCH_STEP_EXECUTION_CONTEXT
 (
     step_execution_id  BIGINT        NOT NULL PRIMARY KEY,
     short_context      VARCHAR(2500) NOT NULL,
     serialized_context TEXT,
-    FOREIGN KEY (step_execution_id) REFERENCES batch_step_execution (step_execution_id)
+    FOREIGN KEY (step_execution_id) REFERENCES BATCH_JOB_EXECUTION (job_execution_id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_job_execution_context
+CREATE TABLE BATCH_JOB_EXECUTION_CONTEXT
 (
     job_execution_id   BIGINT        NOT NULL PRIMARY KEY,
     short_context      VARCHAR(2500) NOT NULL,
     serialized_context TEXT,
-    FOREIGN KEY (job_execution_id) REFERENCES batch_job_execution (job_execution_id)
+    FOREIGN KEY (job_execution_id) REFERENCES BATCH_JOB_EXECUTION (job_execution_id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_lock
+CREATE TABLE BATCH_LOCK
 (
     id        BIGINT       NOT NULL AUTO_INCREMENT,
     job_name  VARCHAR(255) NOT NULL,
@@ -306,7 +306,7 @@ CREATE TABLE batch_lock
     UNIQUE KEY uk_job_name (job_name)
 ) ENGINE = InnoDB;
 
-CREATE TABLE batch_job_request
+CREATE TABLE BATCH_JOB_REQUEST
 (
     id           BIGINT       NOT NULL AUTO_INCREMENT,
     job_name     VARCHAR(255) NOT NULL,
@@ -316,35 +316,35 @@ CREATE TABLE batch_job_request
 ) ENGINE = InnoDB;
 
 -- 시퀀스 테이블
-CREATE TABLE batch_step_execution_seq
+CREATE TABLE BATCH_STEP_EXECUTION_SEQ
 (
     id         BIGINT  NOT NULL,
     unique_key CHAR(1) NOT NULL,
     UNIQUE KEY uk_batch_step_seq (unique_key)
 ) ENGINE = InnoDB;
 
-INSERT INTO batch_step_execution_seq (id, unique_key)
+INSERT INTO BATCH_STEP_EXECUTION_SEQ (id, unique_key)
 VALUES (0, '0')
 ON DUPLICATE KEY UPDATE id = id;
 
-CREATE TABLE batch_job_execution_seq
+CREATE TABLE BATCH_JOB_EXECUTION_SEQ
 (
     id         BIGINT  NOT NULL,
     unique_key CHAR(1) NOT NULL,
     UNIQUE KEY uk_batch_job_exec_seq (unique_key)
 ) ENGINE = InnoDB;
 
-INSERT INTO batch_job_execution_seq (id, unique_key)
+INSERT INTO BATCH_JOB_EXECUTION_SEQ (id, unique_key)
 VALUES (0, '0')
 ON DUPLICATE KEY UPDATE id = id;
 
-CREATE TABLE batch_job_seq
+CREATE TABLE BATCH_JOB_SEQ
 (
     id         BIGINT  NOT NULL,
     unique_key CHAR(1) NOT NULL,
     UNIQUE KEY uk_batch_job_seq (unique_key)
 ) ENGINE = InnoDB;
 
-INSERT INTO batch_job_seq (id, unique_key)
+INSERT INTO BATCH_JOB_SEQ (id, unique_key)
 VALUES (0, '0')
 ON DUPLICATE KEY UPDATE id = id;

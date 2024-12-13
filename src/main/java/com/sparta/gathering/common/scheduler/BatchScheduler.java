@@ -18,6 +18,7 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final Job agreementExpirationJob;
     private final Job userAgreementPendingReagreeJob;
+    private final Job redisRankingJob;
     private final BatchLockService batchLockService;
 
     @Scheduled(cron = "0 0 4 * * *") // 매일 새벽 4시에 실행
@@ -29,6 +30,12 @@ public class BatchScheduler {
     public void runUserAgreementPendingReagreeJob() {
         runBatchJob("userAgreementPendingReagreeJob", userAgreementPendingReagreeJob, 3); // 최대 재시도 3회
     }
+
+    @Scheduled(cron = "0 0 0 * * *") //매일 자정 실행
+    public void runRedisRankingJob() {
+        runBatchJob("redisRankingJob", redisRankingJob,3); // 최대 재시도 3회
+    }
+
 
     private void runBatchJob(String jobName, Job job, int remainingAttempts) {
         if (remainingAttempts <= 0) {

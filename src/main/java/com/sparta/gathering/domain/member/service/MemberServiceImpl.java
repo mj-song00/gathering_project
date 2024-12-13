@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void createMember(UUID userId, long gatherId, AuthenticatedUser authenticatedUser) {
-        if(userId != authenticatedUser.getUserId()){
+        if(!userId.equals(authenticatedUser.getUserId())){
             throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
