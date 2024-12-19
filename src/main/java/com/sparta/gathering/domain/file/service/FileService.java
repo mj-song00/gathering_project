@@ -35,7 +35,7 @@ public class FileService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public String saveImage(MultipartFile file, Long gatherId,AuthenticatedUser authenticatedUser ) {
+    public String saveImage(MultipartFile file, Long gatherId, AuthenticatedUser authenticatedUser) {
         validateManager(gatherId, authenticatedUser);
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         final Path path = Paths.get("upload", fileName);

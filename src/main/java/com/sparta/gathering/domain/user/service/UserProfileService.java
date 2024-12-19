@@ -3,34 +3,22 @@ package com.sparta.gathering.domain.user.service;
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
-import com.sparta.gathering.domain.file.entity.File;
-import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetUrlRequest;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 
-import static com.sparta.gathering.domain.file.entity.QFile.file;
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

@@ -10,7 +10,7 @@ public class FileResponse {
     private final String name;
     private final String uri;
 
-    public FileResponse(File file){
+    public FileResponse(File file) {
         this.id = file.getId();
         this.originName = file.getOriginName();
         this.name = file.getName();
