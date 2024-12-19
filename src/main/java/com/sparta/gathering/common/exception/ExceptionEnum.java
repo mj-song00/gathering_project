@@ -124,7 +124,10 @@ public enum ExceptionEnum {
     REDIS_SERVER_EXCUTABLE_NOT_FOUND(HttpStatus.BAD_REQUEST,"REDIS_SERVER_EXCUTABLE_NOT_FOUND" , "서버를 찾을 수 없습니다."),
 
     // 채팅 관련
-    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "ROOM_NOT_FOUND", "해당 채팅방을 찾을 수 없습니다.");
+    ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "ROOM_NOT_FOUND", "해당 채팅방을 찾을 수 없습니다."),
+
+    //image 관련
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND,"IMAGE_NOT_FOUND","이미지를 찾을 수 없습니다." );
 
     private final HttpStatus status;
     private final String errorCode;

@@ -2,7 +2,7 @@
 
 @user_Id = c9867e7b-d9bf-4ad4-9676-1e8e219ad3b7
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczNDA0OTIxNiwiZXhwIjoxNzM0MDUxMDE2fQ.ITba6L7LoYvXYMwWkomYJgy5NbeD5izHD5APL0tiL40
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczNDU5ODYzNCwiZXhwIjoxNzM0NjAwNDM0fQ.TYnXdrdXix8TjCyW9f0qoReCaqLX0qr8go-HuMvcd7s
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM3MjU1OTMsImV4cCI6MTczMzcyNzM5M30.AUJA4U9G2UCo8iqdECdxRJgCMyJ9z27TLyVolFnmxRs
 
@@ -14,7 +14,7 @@
 
 @category_Id = 2
 
-@gatherId = 29
+@gatherId = 40
 
 @scheduleId = 4
 
@@ -281,6 +281,10 @@ GET {{base_url}}/api/members/168
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
+### 본인 멤버 정보 조회
+GET {{base_url}}/api/members
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### 해시태그 생성
 POST {{base_url}}/api/gatherings/1/hashtags
@@ -468,4 +472,26 @@ Authorization: Bearer {{jwt_token}}
 ### sse 이벤트 구독
 GET {{base_url}}/api/noti/subscribe/04a89669-0f04-46e7-a5e3-5a451fcf4938
 Content-Type: text/event-stream
+Authorization: Bearer {{jwt_token}}
+
+### file upload
+POST {{base_url}}/api/file/image/40
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: Bearer {{jwt_token}}
+
+--boundary
+Content-Disposition: form-data; name="image"; filename="01_모코코콘1_07_멘탈X.png"
+Content-Type: image/gif
+
+--boundary--
+
+### 이미지 불러오기
+GET {{base_url}}/api/file/image/40
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### 이미지 삭제
+DELETE {{base_url}}/api/file/image/11
+Content-Type: application/json
 Authorization: Bearer {{jwt_token}}

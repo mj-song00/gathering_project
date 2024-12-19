@@ -55,3 +55,8 @@ VALUES(1,'2024-11-25 20:50:52.000000',null,null,1, 1,'운동할사람','찾습�
       (4,'2024-11-25 20:55:52.000000',null,null,1, 4,'test3','test3',0),
       (5,'2024-11-25 20:56:52.000000',null,null,1, 5,'test3','test4',0);
 
+INSERT INTO member (id, created_at, updated_at, deleted_at, gather_id, user_id, permission)
+VALUES (1, '2024-12-13 10:54:59.000000', '2024-12-13 10:55:02.000000', null, 1,
+        0x1494D6C779D34086A551E2C06FD97803, 'MANAGER'),
+       (2, '2024-12-13 10:54:59.000000', '2024-12-13 10:55:02.000000', null, 1,
+        0xF60B81ACB2234340BE8B28621BF14BE7, 'GUEST');
