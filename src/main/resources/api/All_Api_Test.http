@@ -2,7 +2,7 @@
 
 @user_Id = c9867e7b-d9bf-4ad4-9676-1e8e219ad3b7
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczNDU5MDkzMSwiZXhwIjoxNzM0NTkyNzMxfQ.giVsd9DzfalO_a9HyoMXwvFSBCrZpEeRvuwBmzpUtt4
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNGE4OTY2OS0wZjA0LTQ2ZTctYTVlMy01YTQ1MWZjZjQ5MzgiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfVVNFUiIsImlhdCI6MTczNDU5NjgwMCwiZXhwIjoxNzM0NTk4NjAwfQ.s1Qfdadg2kGYyVRN0aeiHnIzh3hvykzYAgBJ1RMuseg
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjOTg2N2U3Yi1kOWJmLTRhZDQtOTY3Ni0xZThlMjE5YWQzYjciLCJlbWFpbCI6InRlc3QxQGV4YW1wbGUuY29tIiwidXNlclJvbGUiOiJST0xFX1VTRVIiLCJpYXQiOjE3MzM3MjU1OTMsImV4cCI6MTczMzcyNzM5M30.AUJA4U9G2UCo8iqdECdxRJgCMyJ9z27TLyVolFnmxRs
 
@@ -109,7 +109,7 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test1@example.com",
+  "email": "test@example.com",
   "password": "password123A!"
 }
 
@@ -480,3 +480,14 @@ Content-Disposition: form-data; name="image"; filename="01_모코코콘1_07_멘�
 Content-Type: image/gif
 
 --boundary--
+
+### 이미지 불러오기
+GET {{base_url}}/api/file/image/40
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+### 이미지 삭제
+DELETE {{base_url}}/api/file/image/11
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

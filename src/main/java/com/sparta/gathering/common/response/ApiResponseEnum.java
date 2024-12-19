@@ -79,7 +79,8 @@ public enum ApiResponseEnum {
 
     //파일
     IMAGE_UPLOAD_SUCCESS("업로드가 완료되었습니다."),
-    IMAGE_GET_SUCCESS("요청이 완료되었습니다.");
+    IMAGE_GET_SUCCESS("요청이 완료되었습니다."),
+    DELETE_IMAGE_SUCESSES("이미지 삭제가 완료되었습니다.");
 
     private final String message;
 

@@ -1,5 +1,6 @@
 package com.sparta.gathering.domain.file.controller;
 
+import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.file.dto.response.FileResponse;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,9 +28,10 @@ public class FileController {
     @PostMapping("/image/{gatherId}")
     public ResponseEntity<ApiResponse<String>> imageUpload(
             @RequestPart(value = "image", required = false) MultipartFile file,
-            @PathVariable Long gatherId
+            @PathVariable Long gatherId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
     ) {
-        fileService.saveImage(file,gatherId);
+        fileService.saveImage(file,gatherId,authenticatedUser);
         ApiResponse<String> response = ApiResponse.successWithOutData(
                 ApiResponseEnum.IMAGE_UPLOAD_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -41,5 +44,17 @@ public class FileController {
     ){
         List<FileResponse> response = fileService.getImage(gatherId);
         return ResponseEntity.ok(ApiResponse.successWithData(response,ApiResponseEnum.IMAGE_GET_SUCCESS));
+    }
+
+    @Operation(summary = "image 삭제", description = "image를 삭제합니다.")
+    @DeleteMapping("/image/{fileId}")
+    public ResponseEntity<ApiResponse<Void>> deleteImage(
+            @PathVariable Long fileId,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser
+    ){
+        fileService.deleteImage(fileId,authenticatedUser);
+        ApiResponse<Void> response = ApiResponse.successWithOutData(
+                ApiResponseEnum.DELETE_IMAGE_SUCESSES);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
