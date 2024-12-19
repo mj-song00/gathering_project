@@ -9,8 +9,6 @@ import com.sparta.gathering.domain.file.entity.File;
 import com.sparta.gathering.domain.file.repository.FileRepository;
 import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
-import com.sparta.gathering.domain.member.entity.Member;
-import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import lombok.RequiredArgsConstructor;
