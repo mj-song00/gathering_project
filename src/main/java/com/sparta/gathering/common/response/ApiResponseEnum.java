@@ -75,8 +75,11 @@ public enum ApiResponseEnum {
     WITHDRAWAL_SUCCESS("모임탈퇴가 완료되었습니다."),
 
     //좋아요 관련
-    REQUEST_SUCCESS("요청에 성공하였습니다.");
+    REQUEST_SUCCESS("요청에 성공하였습니다."),
 
+    //파일
+    IMAGE_UPLOAD_SUCCESS("업로드가 완료되었습니다."),
+    IMAGE_GET_SUCCESS("요청이 완료되었습니다.");
 
     private final String message;
 

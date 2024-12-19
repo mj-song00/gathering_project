@@ -54,7 +54,6 @@ public class Gather extends Timestamped {
     @JoinColumn(name = "map_id", unique = true)
     private Map map;
 
-
     private int likeCount;
 
     public Gather(String title) {
