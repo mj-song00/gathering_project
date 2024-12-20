@@ -12,12 +12,11 @@ import com.sparta.gathering.domain.hashtag.repository.HashTagRepository;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +32,7 @@ public class HashTagService {
     public List<HashTagRes> createHashTag(AuthenticatedUser authenticatedUser, Gather gather, HashTagsReq hashTagReq) {
         isValidGather(gather);
         // 멤버 권한 확인
-        isValidMember(authenticatedUser);
+        isValidMember(authenticatedUser, gather.getId());
 
         List<String> hashTagNames = hashTagReq.getHashTagName();
 
@@ -54,7 +53,6 @@ public class HashTagService {
         return HashTagRes.from(savedHashTags);
     }
 
-
     // 해시태그 조회
 //    public List<HashTagRes> getHashTagList(Gather gather) {
 //        Gather newgather = isValidGather(gather);
@@ -67,10 +65,10 @@ public class HashTagService {
 
     // 해시태그 삭제
     @Transactional
-    public void deleteHashTag(AuthenticatedUser authenticatedUser, Gather gather, Long hashtagId) {
+    public void deleteHashTag(AuthenticatedUser authenticatedUser, Gather gather, Long hashtagId, Long gatherId) {
         isValidGather(gather);
         // 멤버 권한 확인
-        isValidMember(authenticatedUser);
+        isValidMember(authenticatedUser, gatherId);
         HashTag hashTag = hashTagRepository.findById(hashtagId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.NOT_FOUNT_HASHTAG));
         hashTag.updateDeleteAt();
@@ -84,10 +82,9 @@ public class HashTagService {
     }
 
     // Manager 권한 확인
-    public void isValidMember(AuthenticatedUser authenticatedUser) throws BaseException {
-        Member member = memberRepository.findByUserId(authenticatedUser.getUserId())
+    public void isValidMember(AuthenticatedUser authenticatedUser, Long gatherId) throws BaseException {
+        Member member = memberRepository.findByGatherIdAndUserId(gatherId, authenticatedUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
-
         if (!member.getPermission().equals(Permission.MANAGER)) {
             throw new BaseException(ExceptionEnum.NOT_ADMIN_ROLE);
         }

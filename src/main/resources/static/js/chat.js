@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const messageInput = document.getElementById("messageInput");
   const sendMessageButton = document.getElementById("sendMessageButton");
   const loadMoreButton = document.getElementById("loadMoreButton");
+  const gatherTitle = document.getElementById("gatherTitle");
   const token = localStorage.getItem("token");
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("gatheringId");

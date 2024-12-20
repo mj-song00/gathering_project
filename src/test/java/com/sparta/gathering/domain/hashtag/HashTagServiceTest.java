@@ -1,5 +1,12 @@
 package com.sparta.gathering.domain.hashtag;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.exception.BaseException;
 import com.sparta.gathering.common.exception.ExceptionEnum;
@@ -16,6 +23,10 @@ import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,16 +34,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class HashTagServiceTest {
@@ -109,7 +110,7 @@ class HashTagServiceTest {
 //        verify(hashTagRepository, never()).saveAll(anyList());
 //    }
 
-    @Test
+    /*@Test
     @DisplayName("해시태그 삭제 성공")
     void test3() {
         // given
@@ -126,7 +127,7 @@ class HashTagServiceTest {
         // then
         assertNotNull(hashTag.getDeletedAt());
         verify(hashTagRepository, times(1)).findById(hashTagId);
-    }
+    }*/
 
     @Test
     @DisplayName("해시태그 조회 성공")

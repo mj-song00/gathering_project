@@ -31,34 +31,22 @@ public class CommentController {
     private final CommentService commentService;
 
     //댓글 생성
-
-    /**
-     * 댓글생성
-     *
-     * @param scheduleId        댓글을 생성할 스케줄의 아이디
-     * @param request           댓글 내용
-     * @param authenticatedUser 댓글을 생성하는 유저의 정보
-     */
     @Operation(summary = "댓글 생성", description = "모든 멤버 생성 가능합니다.")
-    @PostMapping("/{scheduleId}/comments")
+    @PostMapping("/{scheduleId}/gather/{gatherId}/comments")
     public ResponseEntity<ApiResponse<Void>> saveComment(
+            @PathVariable Long gatherId,
             @PathVariable Long scheduleId,
             @RequestBody CommentRequest request,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-        commentService.createComment(scheduleId, authenticatedUser, request);
+        commentService.createComment(scheduleId, authenticatedUser, request, gatherId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.CREATED_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * 댓글 조회
-     *
-     * @param scheduleId 게시판 ID
-     * @return 댓글 작성 유저 이름, 내용, 작성일, 수정일
-     */
     @Operation(summary = "댓글 조회", description = "모든 사용자 조회 가능합니다.")
-    @GetMapping("/{scheduleId}/comments")
+    @GetMapping("/{scheduleId}/gather/{gatherId}/comments")
     public ResponseEntity<ApiResponse<List<CommentResponse>>> getComment(
+            @PathVariable Long gatherId,
             @PathVariable Long scheduleId) {
         List<CommentResponse> list = commentService.getComment(scheduleId);
         ApiResponse<List<CommentResponse>> response = ApiResponse.successWithData(list,
@@ -66,41 +54,27 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    /**
-     * 댓글 수정
-     *
-     * @param request           수정할 댓글 내용
-     * @param scheduleId        게시판 ID
-     * @param commentId         댓글 ID
-     * @param authenticatedUser 유저 ID, 유저 이메일
-     */
     @Operation(summary = "댓글 수정", description = "댓글 생성자만 수정 가능합니다.")
-    @PatchMapping("/{scheduleId}/comments/{commentId}")
+    @PatchMapping("/{scheduleId}/gather/{gatherId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<Void>> updateComment(
             @RequestBody CommentRequest request,
+            @PathVariable Long gatherId,
             @PathVariable Long scheduleId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-        commentService.updateComment(request, scheduleId, commentId, authenticatedUser);
+        commentService.updateComment(request, scheduleId, commentId, authenticatedUser, gatherId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.UPDATE_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    /**
-     * 댓글 삭제
-     *
-     * @param authenticatedUser 유저 ID, 유저 이메일, 닉네임
-     * @param scheduleId        게시판 ID
-     * @param commentId         댓글 ID
-     * @return 삭제한 댓글 ID
-     */
     @Operation(summary = "댓글 삭제", description = "댓글 생성자와 매니저만 삭제 가능합니다.")
-    @PatchMapping("/{scheduleId}/comments/{commentId}/delete")
+    @PatchMapping("/{scheduleId}/gather/{gatherId}/comments/{commentId}/delete")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @PathVariable Long gatherId,
             @PathVariable Long scheduleId,
             @PathVariable Long commentId) {
-        commentService.deleteComment(authenticatedUser, scheduleId, commentId);
+        commentService.deleteComment(authenticatedUser, scheduleId, commentId, gatherId);
         ApiResponse<Void> response = ApiResponse.successWithOutData(ApiResponseEnum.DELETED_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

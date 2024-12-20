@@ -2,7 +2,7 @@
 
 @user_Id = 4245716d-9ed2-439c-a2f0-a83b87facd9e
 
-@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmNjBiODFhYy1iMjIzLTQzNDAtYmU4Yi0yODYyMWJmMTRiZTciLCJlbWFpbCI6Im5iY3RlYW0yMXRlc3RAZ21haWwuY29tIiwidXNlclJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzMzOTg3NTc4LCJleHAiOjE3MzM5ODkzNzh9.5sfQxXQ4rmsvcMSU3A-R07bVXrpXC20o84yO35ZA9IU
+@jwt_token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNDk0ZDZjNy03OWQzLTQwODYtYTU1MS1lMmMwNmZkOTc4MDMiLCJlbWFpbCI6InNrcnRsMzY1QGdtYWlsLmNvbSIsInVzZXJSb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzM0NTA0NDg4LCJleHAiOjE3MzQ1MDYyODh9.7dht6fEBkF-04_m1AfGSUO89q1n4YPrHYU-dxSyIGiM
 
 @expired_jwt = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MjQ1NzE2ZC05ZWQyLTQzOWMtYTJmMC1hODNiODdmYWNkOWUiLCJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJ1c2VyUm9sZSI6IlJPTEVfQURNSU4iLCJpYXQiOjE3MzAzNzI5OTksImV4cCI6MTczMDM3NDc5OX0.xlYiDp2ewoYVsAuRNPrKgk8WPUSwGDRvrNM1swZcgpg
 
@@ -26,8 +26,8 @@ POST {{base_url}}/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "nbcteam21test@gmail.com",
-  "password": "skwkdrns365!A"
+  "email": "skrtl365@gmail.com",
+  "password": "qwer1234!A"
 }
 
 ### 카테고리 생성
@@ -45,8 +45,8 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "테스트모임4",
-  "description": "알람용",
+  "title": "테스트모임5",
+  "description": "테스트",
   "hashtags": [
     "김밥",
     "김치",

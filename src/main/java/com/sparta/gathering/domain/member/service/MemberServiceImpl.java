@@ -12,16 +12,14 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.notification.service.NotificationService;
 import com.sparta.gathering.domain.user.entity.User;
-import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void createMember(UUID userId, long gatherId, AuthenticatedUser authenticatedUser) {
-        if(!userId.equals(authenticatedUser.getUserId())){
+        if (!userId.equals(authenticatedUser.getUserId())) {
             throw new BaseException(ExceptionEnum.USER_NOT_FOUND);
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ExceptionEnum.USER_NOT_FOUND));
@@ -84,7 +82,8 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         //가입 승인 정보
-        Gather gather = gatherRepository.findById(gatherId).orElseThrow(()->new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        Gather gather = gatherRepository.findById(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         notificationService.broadcast(member.getUser().getId(),
                 EventPayload.builder()
                         .nickname(member.getUser().getNickName() + " 님의 신청을 승인하였습니다.")
@@ -106,7 +105,8 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         //가입 거절 정보
-        Gather gather = gatherRepository.findById(gatherId).orElseThrow(()->new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
+        Gather gather = gatherRepository.findById(gatherId)
+                .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
         notificationService.broadcast(member.getUser().getId(),
                 EventPayload.builder()
                         .nickname(member.getUser().getNickName() + " 님의 신청을 거절하였습니다.")
@@ -134,13 +134,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private void validateManager(long gatherId, AuthenticatedUser authenticatedUser) {
-        // gatherId에 대한 매니저 ID를 찾고, 없으면 예외를 던짐
-        UUID managerId = memberRepository.findManagerIdByGatherId(gatherId)
-                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));  // Optional.empty()인 경우 예외 발생
-
-        // 매니저 권한 검증
-        if (!managerId.equals(authenticatedUser.getUserId()) && authenticatedUser.getAuthorities().stream()
-                .noneMatch(authority -> authority.getAuthority().equals(UserRole.ROLE_ADMIN.toString()))) {
+        Member member = memberRepository.findByGatherIdAndUserId(gatherId, authenticatedUser.getUserId())
+                .orElseThrow(() -> new BaseException(ExceptionEnum.MANAGER_NOT_FOUND));
+        if (!member.getPermission().equals(Permission.MANAGER)) {
             throw new BaseException(ExceptionEnum.UNAUTHORIZED_ACTION);
         }
     }
