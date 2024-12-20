@@ -12,8 +12,14 @@ import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
 import com.sparta.gathering.domain.schedule.entity.Schedule;
 import com.sparta.gathering.domain.schedule.repository.ScheduleRepository;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,11 +53,21 @@ public class CommentService {
         comment.update(requestDto.getComment());
     }
 
-    public List<CommentResponse> getComment(Long scheduleId) {
-        return commentRepository.findAllByScheduleIdAndDeletedAtIsNullOrderByUpdatedAtDesc(scheduleId)
-                .stream()
+    @Transactional(readOnly = true)
+    public Map<String, Object> getCommentPage(Long scheduleId, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+        Page<Comment> commentPage = commentRepository.findAllByScheduleIdAndDeletedAtIsNull(scheduleId, pageable);
+
+        List<CommentResponse> commentResponses = commentPage.getContent().stream()
                 .map(CommentResponse::new)
                 .toList();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("comments", commentResponses);
+        result.put("currentPage", page);
+        result.put("totalPages", commentPage.getTotalPages());
+
+        return result;
     }
 
     @Transactional

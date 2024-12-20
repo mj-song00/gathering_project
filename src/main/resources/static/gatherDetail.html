@@ -14,7 +14,7 @@
 <nav class="bg-blue-500 p-4">
   <div class="container mx-auto flex justify-between">
     <a href="/home.html" class="text-white text-lg font-bold">← 홈으로</a>
-    <h1 id="gatherTitle" class="text-white text-lg font-semibold mx-auto">모임 상세</h1>
+    <h1 id="gatherTitle" class="text-white text-lg font-semibold ml-auto">모임 상세</h1>
   </div>
 </nav>
 
@@ -116,7 +116,14 @@
     </div>
     <div id="scheduleModalComments" class="mt-4">
       <h4 class="text-lg font-semibold mb-2">💬 댓글</h4>
-      <ul id="scheduleModalCommentList" class="list-disc pl-6 mb-2"></ul>
+      <ul id="scheduleModalCommentList" class="list-disc pl-6 mb-2 max-h-64 overflow-y-auto"></ul>
+      <!-- 페이지네이션 컨테이너 -->
+      <div class="flex justify-center items-center space-x-2 mt-2">
+        <button id="prevPageBtn" class="bg-gray-300 px-2 py-1 rounded">이전</button>
+        <div id="paginationContainer" class="flex space-x-1"></div>
+        <button id="nextPageBtn" class="bg-gray-300 px-2 py-1 rounded">다음</button>
+      </div>
+
       <textarea id="scheduleModalCommentInput" rows="2" placeholder="댓글을 입력하세요"
                 class="w-full border p-2 rounded mt-2"></textarea>
       <button id="scheduleModalAddCommentButton"

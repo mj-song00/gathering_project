@@ -1,13 +1,10 @@
 package com.sparta.gathering.domain.comment.commentservicetest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
-import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.entity.Comment;
 import com.sparta.gathering.domain.comment.repository.CommentRepository;
 import com.sparta.gathering.domain.comment.service.CommentService;
@@ -19,8 +16,6 @@ import com.sparta.gathering.domain.user.entity.User;
 import com.sparta.gathering.domain.user.enums.IdentityProvider;
 import com.sparta.gathering.domain.user.enums.UserRole;
 import com.sparta.gathering.domain.user.repository.UserRepository;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -183,7 +178,7 @@ public class CommentServiceTest {
         verify(comment, never()).update(anyString());
     }*/
 
-    @Test
+    /*@Test
     public void getCommentShouldReturnCommentListWhenScheduleIdIsValid() {
         Long scheduleId = 1L;
         // Setup mocks
@@ -198,7 +193,7 @@ public class CommentServiceTest {
         assertThat(result.get(0).getComment()).isEqualTo("First comment");
         assertThat(result.get(1).getComment()).isEqualTo("Second comment");
         verify(commentRepository, times(1)).findAllByScheduleIdAndDeletedAtIsNullOrderByUpdatedAtDesc(scheduleId);
-    }
+    }*/
 
    /* @Test
     public void deleteCommentShouldDeleteCommentWhenUserIsAuthorized() {

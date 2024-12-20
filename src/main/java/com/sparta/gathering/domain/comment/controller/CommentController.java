@@ -4,11 +4,10 @@ import com.sparta.gathering.common.config.jwt.AuthenticatedUser;
 import com.sparta.gathering.common.response.ApiResponse;
 import com.sparta.gathering.common.response.ApiResponseEnum;
 import com.sparta.gathering.domain.comment.dto.request.CommentRequest;
-import com.sparta.gathering.domain.comment.dto.response.CommentResponse;
 import com.sparta.gathering.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -45,13 +45,17 @@ public class CommentController {
 
     @Operation(summary = "댓글 조회", description = "모든 사용자 조회 가능합니다.")
     @GetMapping("/{scheduleId}/comments")
-    public ResponseEntity<ApiResponse<List<CommentResponse>>> getComment(
-            @PathVariable Long scheduleId) {
-        List<CommentResponse> list = commentService.getComment(scheduleId);
-        ApiResponse<List<CommentResponse>> response = ApiResponse.successWithData(list,
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getComment(
+            @PathVariable Long scheduleId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int size) {
+
+        Map<String, Object> result = commentService.getCommentPage(scheduleId, page, size);
+        ApiResponse<Map<String, Object>> response = ApiResponse.successWithData(result,
                 ApiResponseEnum.GET_COMMENT_SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
 
     @Operation(summary = "댓글 수정", description = "댓글 생성자만 수정 가능합니다.")
     @PatchMapping("/{scheduleId}/gather/{gatherId}/comments/{commentId}")

@@ -17,6 +17,12 @@ let currentItemId = null;
 let currentType = null; // 'board' 또는 'schedule'
 let currentMemberId = null; // 현재 로그인한 사용자의 memberId
 
+// 작성 버튼 이벤트 리스너
+document.getElementById("addNoticeButton").addEventListener("click",
+    openCreateNoticeModal);
+document.getElementById("addScheduleButton").addEventListener("click",
+    openCreateScheduleModal);
+
 // memberId 조회 함수
 async function getMemberId() {
   try {
@@ -192,7 +198,8 @@ async function openDetailScheduleModal(title, content, id) {
   document.getElementById("scheduleModalDelete").classList.remove("hidden");
   document.getElementById("scheduleModalComments").classList.remove("hidden");
   document.getElementById("scheduleModal").classList.remove("hidden");
-  await loadComments(id);
+  await loadComments(id, 1);
+  await loadComments(id, totalPages);
 }
 
 // 수정 버튼 이벤트
@@ -400,43 +407,175 @@ async function loadMembers() {
   }
 }
 
-// 댓글 불러오기
-async function loadComments(itemId) {
-  const commentList = document.getElementById("scheduleModalCommentList");
+let currentCommentPage = 1; // 현재 페이지 번호
+const COMMENTS_PER_PAGE = 3; // 한 페이지에 보여줄 댓글 수
+let totalPages = 1; // 전체 페이지 수를 전역 변수로 관리
 
-  try {
-    const response = await fetch(`/api/schedule/${itemId}/comments`, {
-      headers: {Authorization: `Bearer ${token}`},
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  if (currentCommentPage > 1) {
+    currentCommentPage--;
+    loadComments(currentItemId, currentCommentPage);
+  }
+});
+
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  currentCommentPage++;
+  loadComments(currentItemId, currentCommentPage);
+});
+
+// 페이지 번호와 이전/다음 버튼 표시 함수
+function renderPagination(totalPages, currentPage) {
+  const paginationContainer = document.getElementById('paginationContainer');
+  paginationContainer.innerHTML = '';
+
+  const pageWindow = 2;
+  let startPage = Math.max(currentPage - pageWindow, 1);
+  let endPage = Math.min(currentPage + pageWindow, totalPages);
+
+  // 첫 페이지로 이동 버튼(옵션)
+  if (startPage > 1) {
+    const firstBtn = document.createElement('button');
+    firstBtn.textContent = '<<';
+    firstBtn.className = 'bg-gray-300 px-2 py-1 rounded';
+    firstBtn.addEventListener('click', () => {
+      currentCommentPage = 1;
+      loadComments(currentItemId, currentCommentPage);
     });
+    paginationContainer.appendChild(firstBtn);
+  }
+
+  // 시작 페이지가 2 이상이면 앞쪽에 ... 표시(옵션)
+  if (startPage > 2) {
+    const ellipsis = document.createElement('span');
+    ellipsis.textContent = '...';
+    paginationContainer.appendChild(ellipsis);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    const pageBtn = document.createElement('button');
+    pageBtn.textContent = i;
+    pageBtn.className = 'bg-gray-300 px-2 py-1 rounded';
+    if (i === currentPage) {
+      pageBtn.classList.add('bg-blue-300');
+    }
+    pageBtn.addEventListener('click', () => {
+      currentCommentPage = i;
+      loadComments(currentItemId, currentCommentPage);
+    });
+    paginationContainer.appendChild(pageBtn);
+  }
+
+  // 마지막 페이지가 totalPages-1 이상 차이나면 ... 표시
+  if (endPage < totalPages - 1) {
+    const ellipsis = document.createElement('span');
+    ellipsis.textContent = '...';
+    paginationContainer.appendChild(ellipsis);
+  }
+
+  // 마지막 페이지로 이동 버튼(옵션)
+  if (endPage < totalPages) {
+    const lastBtn = document.createElement('button');
+    lastBtn.textContent = '>>';
+    lastBtn.className = 'bg-gray-300 px-2 py-1 rounded';
+    lastBtn.addEventListener('click', () => {
+      currentCommentPage = totalPages;
+      loadComments(currentItemId, currentCommentPage);
+    });
+    paginationContainer.appendChild(lastBtn);
+  }
+
+  // 이전 버튼 표시/숨기기
+  const prevBtn = document.getElementById('prevPageBtn');
+  prevBtn.style.display = currentPage > 1 ? 'inline-block' : 'none';
+
+  // 다음 버튼 표시/숨기기
+  const nextBtn = document.getElementById('nextPageBtn');
+  nextBtn.style.display = currentPage < totalPages ? 'inline-block' : 'none';
+}
+
+async function loadComments(itemId, page = 1) {
+  const commentList = document.getElementById("scheduleModalCommentList");
+  try {
+    const response = await fetch(
+        `/api/schedule/${itemId}/comments?page=${page}&size=${COMMENTS_PER_PAGE}`,
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
 
     if (!response.ok) {
       throw new Error("댓글을 불러오는데 실패했습니다.");
     }
 
     const {data} = await response.json();
+    const comments = data.comments;
+    totalPages = data.totalPages; // 전역 변수에 총 페이지 수 저장
+    const currentPage = data.currentPage || 1;
 
-    if (!data || !Array.isArray(data)) {
-      throw new Error("댓글 데이터가 올바르지 않습니다.");
-    }
-
-    commentList.innerHTML = data.length
-        ? data.map((c) => `
-          <li class="flex items-start space-x-4 mb-4">
-            <div>
-              <p class="font-semibold">${c.nickName}</p>
-              <p class="text-gray-700">${c.comment}</p>
-              <p class="text-gray-500 text-sm">${new Date(
-            c.createdAt).toLocaleString()}</p>
-              <button class="text-blue-500 hover:underline" onclick="editComment('${c.commentId}', '${c.comment}')">수정</button>
-              <button class="text-red-500 hover:underline" onclick="deleteComment('${c.commentId}')">삭제</button>
-            </div>
-          </li>`).join("")
+    commentList.innerHTML = comments.length
+        ? comments.map((c) => `
+<li class="flex items-start space-x-4 mb-4">
+  <div class="flex flex-col">
+    <div class="flex items-center space-x-2">
+      <p class="font-semibold">${c.nickName}</p>
+      <p class="text-gray-500 text-sm">${new Date(c.createdAt).toLocaleString()}</p>
+    </div>
+    <p class="text-gray-700">${c.comment}</p>
+    <div class="flex space-x-2">
+      <button class="text-blue-500 hover:underline" onclick="editComment('${c.commentId}', '${c.comment}')">수정</button>
+      <button class="text-red-500 hover:underline" onclick="deleteComment('${c.commentId}')">삭제</button>
+    </div>
+  </div>
+</li>`).join("")
         : "<li>댓글이 없습니다.</li>";
+
+    currentCommentPage = currentPage;
+
+    // 페이지네이션 렌더링
+    renderPagination(totalPages, currentPage);
+
   } catch (error) {
     console.error(error);
     commentList.innerHTML = "<li>댓글을 불러오는 중 오류가 발생했습니다.</li>";
   }
 }
+
+// 댓글 작성 및 마지막 페이지로 이동 로직
+document.getElementById("scheduleModalAddCommentButton").addEventListener(
+    "click", async () => {
+      const commentInput = document.getElementById("scheduleModalCommentInput");
+      const comment = commentInput.value.trim();
+
+      if (!comment) {
+        return alert("댓글 내용을 입력해주세요.");
+      }
+
+      try {
+        const response = await fetch(
+            `/api/schedule/${currentItemId}/gather/${gatherId}/comments`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({comment}),
+            });
+
+        if (!response.ok) {
+          throw new Error("댓글 작성에 실패했습니다.");
+        }
+
+        commentInput.value = "";
+
+        // 현재 댓글 정보를 로딩해 totalPages를 파악
+        await loadComments(currentItemId, 1);
+        // totalPages 정보를 얻고 마지막 페이지로 다시 로딩
+        await loadComments(currentItemId, totalPages);
+
+      } catch (error) {
+        console.error(error);
+        alert("댓글 작성 중 오류가 발생했습니다.");
+      }
+    });
 
 async function editComment(commentId, currentComment) {
   const newComment = prompt("수정할 댓글 내용을 입력하세요:", currentComment);
@@ -463,7 +602,7 @@ async function editComment(commentId, currentComment) {
     }
 
     alert("댓글이 수정되었습니다.");
-    loadComments(currentItemId);
+    loadComments(currentItemId, currentCommentPage); // 현재 페이지로 이동
   } catch (error) {
     console.error("댓글 수정 오류:", error);
     alert("댓글 수정 중 오류가 발생했습니다.");
@@ -492,42 +631,9 @@ async function deleteComment(commentId) {
     }
 
     alert("댓글이 삭제되었습니다.");
-    loadComments(currentItemId);
+    loadComments(currentItemId, currentCommentPage); // 현재 페이지로 이동
   } catch (error) {
     console.error("댓글 삭제 오류:", error);
     alert("댓글 삭제 중 오류가 발생했습니다.");
   }
 }
-
-// 댓글 작성
-document.getElementById("scheduleModalAddCommentButton").addEventListener(
-    "click", async () => {
-      const commentInput = document.getElementById("scheduleModalCommentInput");
-      const comment = commentInput.value.trim();
-
-      if (!comment) {
-        return alert("댓글 내용을 입력해주세요.");
-      }
-
-      try {
-        const response = await fetch(
-            `/api/schedule/${currentItemId}/gather/${gatherId}/comments`, {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({comment}),
-            });
-
-        if (!response.ok) {
-          throw new Error("댓글 작성에 실패했습니다.");
-        }
-
-        commentInput.value = "";
-        loadComments(currentItemId);
-      } catch (error) {
-        console.error(error);
-        alert("댓글 작성 중 오류가 발생했습니다.");
-      }
-    });
