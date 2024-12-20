@@ -121,7 +121,8 @@
 
 ### 시퀸스 다이어그램
 
-<img width="1280" alt="스크린샷 2024-11-06 오후 1 18 26" src="https://private-user-images.githubusercontent.com/175674094/393754978-f7323992-2726-4e12-8371-5ebee961090e.PNG?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzM3MzI5MzUsIm5iZiI6MTczMzczMjYzNSwicGF0aCI6Ii8xNzU2NzQwOTQvMzkzNzU0OTc4LWY3MzIzOTkyLTI3MjYtNGUxMi04MzcxLTVlYmVlOTYxMDkwZS5QTkc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMjA5JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTIwOVQwODIzNTVaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT03Y2E1YzU5NWQ3ZWRmNjZhNmUyMDdiZDQ3NjMyMzExYjQzZmQyYjE3OGI4NjU3YzdhZjZlMWM2MzE3ZDhkZWQ1JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.ANZDHKwCIFda6Rlew3i1k3NqoL9DKb2ns3yv7QTJTMo">
+![393754978-f7323992-2726-4e12-8371-5ebee961090e](https://github.com/user-attachments/assets/23e693d8-1473-4492-8db3-2606451ff6a0)
+
 
 ### 메시지 전송 워크플로우
 
@@ -280,19 +281,21 @@ Redisson 락으로 작업 충돌을 방지하며, 병렬로 요청 처리.
 1. application-dev.yml파일에 batch size = 100으로 설정였습니다.
 2. map과 hashTag를 leftJoin().fetchJoin()으로 설정하였습니다.
 3. Gather table에 title로 새로운 인덱스를 생성하였습니다.
+4. Elastic Search를 도입하였습니다.
 
 `결과`
 
 1. map과 hashTag를 leftJoin().fetchJoin()으로 설정하자 N+1 문제가 해결되었습니다.
-2. Gather table에 인덱스를 적용하고 검색하자 카테고리 검색 84.3%, 해시태그 검색 85%, 타이틀 검색 77.7% 개선 되었습니다.
+2. Elastic Search를 적용하고 검색하자 카테고리 검색 82.37%, 해시태그 검색 78.65%, 타이틀 검색 71.29% 개선 되었습니다.
 3. 일반검색 대비 Throughput 개선률이 **약 4배**이상 개선되었습니다.<br>
-   ![image](https://github.com/user-attachments/assets/7f8634eb-66a5-4d84-8756-3260f97e44f2)
-   ![image](https://github.com/user-attachments/assets/836bdcf6-9cda-4f38-8cb4-7d4cf62af00f)
+   ![image](https://github.com/user-attachments/assets/3155c741-80f3-45b4-8a5f-60dfc2582fb2)
+   ![image](https://github.com/user-attachments/assets/d1983900-f032-476c-a278-1e395b092e3e)
 
-| 검색 타입      | **Batch 적용 개선율** | **DB Index 적용 개선율** | **전체 개선율 (일반 → DB Index)** |
+
+| 검색 타입      | **Batch 적용 개선율** | **Elastic Search적용 개선율** | **전체 개선율 (일반 → DB Index)** |
 |------------|------------------|---------------------|----------------------------|
-| 카테고리 검색    | 313.85%          | 22.59%              | 407.69%                    |
-| HashTag 검색 | 318.46%          | 21.32%              | 408.46                     
+| 카테고리 검색    | 313.85%          | 8.37%              | 350.00%                    |
+| HashTag 검색 | 318.46%          | 9.19%              | 356.92%                     
 
 ### 2️⃣ 위치기반 모임 추천속도 개선
 
@@ -334,15 +337,10 @@ MySQL에 저장된 값을 Redis로 캐싱하여 GeoOperation 자료구조를 활
 2. **트래픽 분산**:
    Redis의 고속 데이터 처리 특성을 이용해 MySQL 대신 Redis에서 순위를 관리함으로써 **서버 부하를 효과적으로 분산**시킬 수 있었습니다.
 
-3. **구조도**:
-   아래의 구조도는 새로운 Redis ZSET Operation을 통해 서버 부하를 최적화한 구조를 보여줍니다.
+3. **Spring batch**:
+   Spring batch를 사용하여 대용량의 데이터를 효율적이고 안정적으로 반복할 수 있을것으로 기대하하고 있습니다.
+   <img width="761" alt="스크린샷 2024-12-16 오전 9 48 29" src="https://github.com/user-attachments/assets/88990449-88eb-40fc-98fd-5d7c2b2556d7" />
 
-<img width="818" alt="스크린샷 2024-11-06 오후 1 09 55" src="https://github.com/user-attachments/assets/d034e32b-2d2f-4c30-b081-0a74a1f1b33c">
-
-- **상단**: 기존 MySQL 기반 데이터 흐름 (비효율적인 집계 방식)
-- **하단**: Redis ZSET Operation 적용 후 데이터 흐름 (최적화된 집계 방식)
-
-  **설명**: MySQL에서 직접 데이터 정렬 및 집계하던 작업을 Redis ZSET으로 옮겨, 서버 부하를 줄이고 실시간 데이터 접근이 가능하도록 최적화하였습니다.
 
 ### 3️⃣ 쿠폰 요청 시 불필요한 쿼리 발생
 

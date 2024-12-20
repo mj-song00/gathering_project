@@ -39,10 +39,8 @@ public class Gather extends Timestamped {
     @JsonIgnore
     private Category category;
 
-
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Board> boardList = new ArrayList<>();
-
 
     @OneToMany(mappedBy = "gather", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Schedule> scheduleList = new ArrayList<>();
@@ -53,7 +51,6 @@ public class Gather extends Timestamped {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "map_id", unique = true)
     private Map map;
-
 
     private int likeCount;
 
@@ -71,11 +68,10 @@ public class Gather extends Timestamped {
 //        }
     }
 
-    public void addHashTag(HashTag hashTag){
+    public void addHashTag(HashTag hashTag) {
         GatherHashtag gatherHashTag = GatherHashtag.of(this, hashTag);
         this.gatherHashtags.add(gatherHashTag);
     }
-
 
 
     public void updateGather(String title, String description, List<String> hashtags, Map map) {

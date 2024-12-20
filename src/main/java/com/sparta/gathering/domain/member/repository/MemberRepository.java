@@ -13,6 +13,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
@@ -33,4 +35,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByUserAndGather(User user, Gather gather);
 
     Optional<Member> findByIdAndGatherId(Long memberId, Long gatherId);
+
+    List<Member> findAllByUserId(UUID userId);
 }

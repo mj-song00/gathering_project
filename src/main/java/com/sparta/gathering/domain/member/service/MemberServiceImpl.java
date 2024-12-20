@@ -7,6 +7,7 @@ import com.sparta.gathering.domain.gather.entity.Gather;
 import com.sparta.gathering.domain.gather.repository.GatherRepository;
 import com.sparta.gathering.domain.member.dto.eventpayload.EventPayload;
 import com.sparta.gathering.domain.member.dto.eventpayload.EventType;
+import com.sparta.gathering.domain.member.dto.response.MemberInfoResponse;
 import com.sparta.gathering.domain.member.entity.Member;
 import com.sparta.gathering.domain.member.enums.Permission;
 import com.sparta.gathering.domain.member.repository.MemberRepository;
@@ -20,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +135,18 @@ public class MemberServiceImpl implements MemberService {
 
         member.delete();
         memberRepository.save(member);
+    }
+
+    @Override
+    public List<MemberInfoResponse> getMyId(AuthenticatedUser authenticatedUser) {
+        List<Member> infos = memberRepository.findAllByUserId(authenticatedUser.getUserId());
+        if (infos.isEmpty()){
+            throw  new BaseException(ExceptionEnum.MEMBER_NOT_FOUND);
+        }
+
+        return infos.stream()
+                .map(info -> new MemberInfoResponse(info))
+                .collect(Collectors.toList());
     }
 
     private void validateManager(long gatherId, AuthenticatedUser authenticatedUser) {
