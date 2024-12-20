@@ -1,4 +1,7 @@
-document.addEventListener("DOMContentLoaded", loadGatherDetail);
+document.addEventListener("DOMContentLoaded", async () => {
+  await getMemberId();
+  loadGatherDetail();
+});
 
 const token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
@@ -12,12 +15,62 @@ if (!token || !gatherId) {
 let schedules = [];
 let currentItemId = null;
 let currentType = null; // 'board' 또는 'schedule'
+let currentMemberId = null; // 현재 로그인한 사용자의 memberId
 
-// 작성 버튼 이벤트 리스너
-document.getElementById("addNoticeButton").addEventListener("click",
-    openCreateNoticeModal);
-document.getElementById("addScheduleButton").addEventListener("click",
-    openCreateScheduleModal);
+// memberId 조회 함수
+async function getMemberId() {
+  try {
+    const response = await fetch(`/api/members`, {
+      headers: {Authorization: `Bearer ${token}`},
+    });
+
+    if (!response.ok) {
+      throw new Error("멤버 정보를 불러올 수 없습니다.");
+    }
+
+    const {data} = await response.json();
+
+    const member = data.find(m => m.gatherId === Number(gatherId));
+    if (!member) {
+      throw new Error("현재 유저는 해당 모임에 속한 멤버가 아닙니다.");
+    }
+
+    currentMemberId = member.id;
+  } catch (error) {
+    console.error("멤버 ID 조회 실패:", error);
+    alert("멤버 정보를 불러오는 중 오류가 발생했습니다. 로그인 상태를 확인해주세요.");
+  }
+}
+
+// 좋아요 버튼 이벤트 리스너 추가
+document.getElementById("likeButton").addEventListener("click", incrementLike);
+
+// 좋아요 증가 함수 (프론트에서 직접 증가시키지 않고 재조회로 갱신)
+async function incrementLike() {
+  if (!currentMemberId) {
+    alert("멤버 정보가 없습니다. 다시 시도해주세요.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+        `/api/likes/gather/${gatherId}/member/${currentMemberId}`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+    if (!response.ok) {
+      throw new Error("좋아요 증가 실패");
+    }
+
+    await loadGatherDetail();
+  } catch (error) {
+    console.error("좋아요 중 오류:", error);
+    alert("좋아요 증가 중 오류가 발생했습니다.");
+  }
+}
 
 // 모임 상세 정보 불러오기
 async function loadGatherDetail() {
@@ -341,8 +394,7 @@ async function loadMembers() {
             <p class="font-semibold">${m.nickName}</p>
             <p class="text-sm text-gray-500">${m.permission}</p>
           </div>
-        </div>`)
-    .join("");
+        </div>`).join("");
   } catch (error) {
     console.error("멤버 조회 실패:", error);
   }
@@ -353,11 +405,9 @@ async function loadComments(itemId) {
   const commentList = document.getElementById("scheduleModalCommentList");
 
   try {
-    const response = await fetch(
-        `/api/schedule/${itemId}/comments`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        });
+    const response = await fetch(`/api/schedule/${itemId}/comments`, {
+      headers: {Authorization: `Bearer ${token}`},
+    });
 
     if (!response.ok) {
       throw new Error("댓글을 불러오는데 실패했습니다.");
@@ -434,7 +484,6 @@ async function deleteComment(commentId) {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json"
           }
-          // 삭제 요청 시 body는 굳이 필요 없습니다. 제거하거나 비워둬도 됩니다.
         }
     );
 

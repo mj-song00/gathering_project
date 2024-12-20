@@ -9,12 +9,12 @@ INSERT INTO user (id, created_at, updated_at, deleted_at, email, identity_provid
 VALUES (0x1494D6C779D34086A551E2C06FD97803, '2024-12-02 15:07:32.338585',
         '2024-12-03 18:26:47.329096', null, 'skrtl365@gmail.com', 'NONE', '이정현',
         '$2a$10$vujZoivZW30hPkFg8ift9.zUOa38mzkJh758ExpVvXHDUv5gMkhXO',
-        'https:https://gathering-21.s3.ap-northeast-2.amazonaws.com/IMG_5127.JPG', null,
+        'https://gathering-21.s3.ap-northeast-2.amazonaws.com/IMG_5127.JPG', null,
         'ROLE_USER'),
        (0xF60B81ACB2234340BE8B28621BF14BE7, '2024-11-25 20:39:17.952910',
         '2024-12-03 18:26:48.924095', null, 'nbcteam21test@gmail.com', 'NONE', '홍길동',
         '$2a$10$vujZoivZW30hPkFg8ift9.zUOa38mzkJh758ExpVvXHDUv5gMkhXO',
-        'https:https://gathering-21.s3.ap-northeast-2.amazonaws.com/IMG_5127.JPG', null,
+        'https://gathering-21.s3.ap-northeast-2.amazonaws.com/IMG_5127.JPG', null,
         'ROLE_ADMIN');
 
 INSERT INTO user_agreements (id, created_at, updated_at, agreed_at, status, agreement_id, user_id)
