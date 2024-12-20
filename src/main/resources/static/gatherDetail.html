@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>모임 상세 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+        rel="stylesheet"/>
+  <!-- JS 파일을 defer 속성으로 로딩해서 DOM 로딩 후 실행 -->
+  <script defer src="/js/gatherDetail.js"></script>
+</head>
+<body class="bg-gray-100">
+<!-- 네비게이션 -->
+<nav class="bg-blue-500 p-4">
+  <div class="container mx-auto flex justify-between">
+    <a href="/home.html" class="text-white text-lg font-bold">← 홈으로</a>
+    <h1 id="gatherTitle" class="text-white text-lg font-semibold mx-auto">모임 상세</h1>
+  </div>
+</nav>
+
+<!-- 메인 컨텐츠 -->
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-md mt-6">
+  <!-- 모임 정보 -->
+  <div id="gatherInfo" class="mb-6">
+    <h2 id="gatherName" class="text-2xl font-bold"></h2>
+    <p id="gatherDescription" class="text-gray-700 mt-2"></p>
+    <div class="flex items-center space-x-4 mt-4">
+      <button id="likeButton" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        ❤️ 좋아요 <span id="likeCount">0</span>
+      </button>
+      <a id="chatRoomLink" href="#"
+         class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        채팅방 입장
+      </a>
+    </div>
+  </div>
+
+  <!-- 공지사항 -->
+  <div class="mt-6">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xl font-semibold flex items-center">
+        📋 공지사항
+        <button id="addNoticeButton"
+                class="ml-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">작성
+        </button>
+      </h3>
+    </div>
+    <div id="boardList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+
+  <!-- 스케줄 -->
+  <div class="mt-6">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xl font-semibold flex items-center">
+        📅 스케줄
+        <button id="addScheduleButton"
+                class="ml-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">작성
+        </button>
+      </h3>
+    </div>
+    <div id="scheduleList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+
+  <!-- 멤버 목록 -->
+  <div class="mt-6">
+    <h3 class="text-lg font-semibold mb-2">👥 멤버</h3>
+    <div id="memberList" class="grid grid-cols-2 gap-4"></div>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<footer class="bg-blue-500 text-white text-center py-4 mt-auto">
+  <div class="container mx-auto">
+    &copy; 2024 Monolog. All rights reserved.
+  </div>
+</footer>
+
+<!-- 공지사항 모달 -->
+<div id="noticeModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+    <h3 id="noticeModalTitle" class="text-lg font-bold mb-4"></h3>
+    <input id="noticeModalInputTitle" placeholder="제목을 입력하세요"
+           class="w-full border p-2 rounded mb-2">
+    <textarea id="noticeModalInputContent" rows="3" placeholder="내용을 입력하세요"
+              class="w-full border p-2 rounded"></textarea>
+    <div class="flex justify-end mt-4">
+      <button id="noticeModalCancel" class="px-4 py-2 bg-gray-400 text-white rounded mr-2">닫기
+      </button>
+      <button id="noticeModalSave" class="px-4 py-2 bg-green-500 text-white rounded">저장</button>
+      <button id="noticeModalEdit" class="px-4 py-2 bg-yellow-500 text-white rounded ml-2">수정
+      </button>
+      <button id="noticeModalDelete" class="px-4 py-2 bg-red-500 text-white rounded ml-2">삭제
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 스케줄 모달 -->
+<div id="scheduleModal"
+     class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+    <h3 id="scheduleModalTitle" class="text-lg font-bold mb-4"></h3>
+    <input id="scheduleModalInputTitle" placeholder="제목을 입력하세요"
+           class="w-full border p-2 rounded mb-2">
+    <textarea id="scheduleModalInputContent" rows="3" placeholder="내용을 입력하세요"
+              class="w-full border p-2 rounded"></textarea>
+    <div class="flex justify-end mt-4">
+      <button id="scheduleModalCancel" class="px-4 py-2 bg-gray-400 text-white rounded mr-2">닫기
+      </button>
+      <button id="scheduleModalSave" class="px-4 py-2 bg-green-500 text-white rounded">저장</button>
+      <button id="scheduleModalEdit" class="px-4 py-2 bg-yellow-500 text-white rounded ml-2">수정
+      </button>
+      <button id="scheduleModalDelete" class="px-4 py-2 bg-red-500 text-white rounded ml-2">삭제
+      </button>
+    </div>
+    <div id="scheduleModalComments" class="mt-4">
+      <h4 class="text-lg font-semibold mb-2">💬 댓글</h4>
+      <ul id="scheduleModalCommentList" class="list-disc pl-6 mb-2"></ul>
+      <textarea id="scheduleModalCommentInput" rows="2" placeholder="댓글을 입력하세요"
+                class="w-full border p-2 rounded mt-2"></textarea>
+      <button id="scheduleModalAddCommentButton"
+              class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">댓글 작성
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

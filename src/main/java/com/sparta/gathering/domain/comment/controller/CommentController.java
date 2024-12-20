@@ -44,9 +44,8 @@ public class CommentController {
     }
 
     @Operation(summary = "댓글 조회", description = "모든 사용자 조회 가능합니다.")
-    @GetMapping("/{scheduleId}/gather/{gatherId}/comments")
+    @GetMapping("/{scheduleId}/comments")
     public ResponseEntity<ApiResponse<List<CommentResponse>>> getComment(
-            @PathVariable Long gatherId,
             @PathVariable Long scheduleId) {
         List<CommentResponse> list = commentService.getComment(scheduleId);
         ApiResponse<List<CommentResponse>> response = ApiResponse.successWithData(list,
