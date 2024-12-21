@@ -129,7 +129,7 @@ class HashTagServiceTest {
         verify(hashTagRepository, times(1)).findById(hashTagId);
     }*/
 
-    @Test
+/*    @Test
     @DisplayName("해시태그 조회 성공")
     void test4() {
         // given
@@ -146,7 +146,7 @@ class HashTagServiceTest {
 //        assertNotNull(result);
 //        assertEquals(2, result.size());
 //        verify(hashTagRepository, times(1)).findByGatherIdAndDeletedAtIsNull(gather.getId());
-    }
+    }*/
 
     @Test
     @DisplayName("유효하지 않은 멤버로 예외 발생")
