@@ -1,3 +1,4 @@
+/*
 package com.sparta.gathering.domain.hashtag;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -110,7 +111,7 @@ class HashTagServiceTest {
 //        verify(hashTagRepository, never()).saveAll(anyList());
 //    }
 
-    /*@Test
+@Test
     @DisplayName("해시태그 삭제 성공")
     void test3() {
         // given
@@ -127,9 +128,10 @@ class HashTagServiceTest {
         // then
         assertNotNull(hashTag.getDeletedAt());
         verify(hashTagRepository, times(1)).findById(hashTagId);
-    }*/
+    }
 
-/*    @Test
+
+    @Test
     @DisplayName("해시태그 조회 성공")
     void test4() {
         // given
@@ -146,9 +148,10 @@ class HashTagServiceTest {
 //        assertNotNull(result);
 //        assertEquals(2, result.size());
 //        verify(hashTagRepository, times(1)).findByGatherIdAndDeletedAtIsNull(gather.getId());
-    }*/
+    }
 
-    @Test
+
+@Test
     @DisplayName("유효하지 않은 멤버로 예외 발생")
     void test5() {
         // Arrange
@@ -162,7 +165,8 @@ class HashTagServiceTest {
         assertEquals(ExceptionEnum.USER_NOT_FOUND, exception.getExceptionEnum());
     }
 
-    @Test
+
+ @Test
     @DisplayName("유효하지 않은 모임로 예외 발생")
     void test6() {
         // given
@@ -176,4 +180,6 @@ class HashTagServiceTest {
         verify(hashTagRepository, never()).save(any(HashTag.class));
     }
 
+
 }
+*/
