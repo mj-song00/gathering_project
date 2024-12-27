@@ -404,11 +404,20 @@ return memberRepository.findByUserId(userId)
 
 ---
 
-### [API 명세서](https://www.notion.so/teamsparta/monolog-API-1262dc3ef51481bf83d9d18c9cf78a3b)
+### 🗂 ERD
 
----
+![ERD](https://github.com/user-attachments/assets/c55c7a3a-b3f2-4fda-927f-123aab568f2e)
 
-### ERD![image](https://github.com/user-attachments/assets/70b6cb53-8cfd-428f-a43a-e303bbe92e8e)
+#### **주요 테이블**
+- **user**: 사용자의 기본 정보(이메일, 닉네임, 프로필 이미지 등)와 소셜 로그인 관련 데이터 저장
+- **gather**: 모임 정보를 저장하며, 모임의 카테고리, 좋아요 수 관리
+- **member**: 특정 모임에 가입한 회원 정보를 저장하며, 회원의 권한(주최자, 관리자, 멤버 등) 관리
+- **schedule**: 모임 내의 일정 정보를 저장하며, 일정 제목과 내용 포함
+- **board**: 모임 내 공지사항과 게시글 정보를 관리
+- **comment**: 게시글이나 일정에 대한 댓글 데이터를 저장
+- **likes**: 모임의 좋아요(하트) 기능을 구현하기 위한 테이블
+- **agreement**: 사용자 동의 항목(마케팅 동의, 개인정보 처리 방침 등)과 관련된 데이터 관리
+- **batch_job_instance 및 관련 테이블**: Spring Batch를 활용한 배치 작업의 실행 정보와 로그를 저장
 
 ---
 
