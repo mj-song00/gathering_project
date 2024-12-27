@@ -20,7 +20,6 @@
 ![](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
-​
 
 ---
 
@@ -60,7 +59,19 @@
 
 ### 💨 SWAGGER 사용
 
-#### [Swagger URL](http://localhost:8080/swagger-ui/index.html)
+![Swagger UI Demo](https://github.com/user-attachments/assets/ddf8ac4a-aff9-484e-8df5-52dd937d1707)
+
+- **Swagger**를 사용하여 API 문서를 자동으로 생성하고, 개발자 간 명세 공유를 용이하게 했습니다.
+- `SwaggerConfig`를 통해 문서화에 필요한 기본 정보(제목, 설명, 버전)를 설정
+- 보안 강화를 위해 **개발 환경(dev)**에서만 `Swagger`가 활성화되도록 설정
+
+**API 명세 자동화**:
+   - RESTful API에 대한 요청/응답 스펙을 Swagger UI를 통해 시각화했습니다.
+   - 가적인 어노테이션을 활용해 추가적인 API 설명을 문서화했습니다.
+
+**환경별 접근 제한**:
+   - `application.yml`에서 `dev` 프로파일에서만 `Swagger UI`에 접근할 수 있도록 조건부 활성화를 설정했습니다.
+   - 이는 보안과 운영 환경의 간소화를 동시에 고려하였습니다. *(dev 환경에서만 가능)*
 
 ---
 
@@ -140,6 +151,10 @@
   </br>
 - `퍼블리시` (Publish) : 메시지를 특정 채널에 등록해, 해당 채널을 구독하는 모든 리스너가 접근할 수 있도록 발행하는 행위입니다.</br>
 - `브로드캐스트` (Broadcast) : 여러 대상에게 메시지를 동시 전달하는 행위로, `WebSocket`을 사용하여 실시간으로 모든 클라이언트에게 메시지를 전송합니다.
+
+
+### 구현된 채팅 기능 데모
+​![chat](https://github.com/user-attachments/assets/72d90215-624b-46cd-b684-90674c24639b)
 
 <details>
 <summary>기존 Redis Pub/Sub 만으로 구현된 초기 버전과 차이점</summary>
@@ -399,20 +414,34 @@ return memberRepository.findByUserId(userId)
 
 ### [인프라 설계도]
 
-![image](https://github.com/user-attachments/assets/98d0138c-8f44-4677-9ca4-b2e8939900e3)
+![인프라 설계도](https://github.com/user-attachments/assets/28078e8e-7924-44cb-b02f-3167808881f1)
 
 - **CI/CD 파이프라인**:  
-  GitHub Actions를 이용해 GitHub에 코드가 병합되면 **Amazon ECR**에 Docker 이미지가 자동으로 업로드됩니다. 해당 이미지를 **Amazon ECS
-  ** 인스턴스에 배포하여 서버를 구동합니다.
+  GitHub Actions를 통해 Docker 이미지를 **Amazon ECR**에 업로드한 후, **Amazon EC2**를 사용해 수동으로 배포를 진행합니다.  
+  배포 시 **ACM**(AWS Certificate Manager)를 이용해 SSL 인증서를 적용하였으며, **Amazon Route 53**과 연결하여 도메인을 설정했습니다.
 
 - **Database**:  
-  메인 데이터베이스로 **MySQL**을 사용하며, **실시간 채팅, 랭킹, 이메일 인증 서비스**는 Redis로 처리합니다.
+  메인 데이터베이스로 **MySQL**(Amazon RDS)를 사용하며, **실시간 채팅, 랭킹, 이메일 인증 서비스**는 **Redis Cloud**를 활용해 처리하고 있습니다.
+
+### 🚀 향후 개선 사항
+- 프로젝트 기간(1개월)이 짧아 CI/CD 자동화 작업을 완료하지 못했습니다. 
+- 향후 **AWS CodeDeploy**나 **Elastic Beanstalk**를 활용하여 배포 자동화 프로세스를 구현할 계획입니다.
+- 배포 자동화를 통해 운영의 효율성을 높이고, 더 빠르게 새로운 기능을 배포할 수 있도록 개선하고자 합니다.
 
 ---
 
-### [와이어프레임](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
+### [초기 와이어프레임 V1](https://www.notion.so/teamsparta/21-5f3e6a5d16e84de48916ea9904b4fc91)
 
 ![final_project](https://github.com/user-attachments/assets/22b8469f-c568-4686-99fc-e5fa25bf5c65)
 
+### 구현된 페이지
+
+![398877121-69498f5d-7761-402e-89d2-013ba2d5fb15](https://github.com/user-attachments/assets/5951292c-5388-48b3-b7ef-ad7b05b23679)
+
+![398877117-4ac91722-8ce3-45f6-a7ed-3b9fbd7757b8](https://github.com/user-attachments/assets/71ebe466-7641-4134-8668-1eda5ab6c367)
+
+![398877114-0c1cf5ce-e158-4c63-99e1-aec1648e63af](https://github.com/user-attachments/assets/b3983261-b6fe-4336-846a-0640c35d08fb)
+
+![398877104-a3b56e1c-a1bf-433f-9115-146d687e6e34](https://github.com/user-attachments/assets/41392aa5-567b-4c63-af1d-91468c0b8dda)
 
 ---
