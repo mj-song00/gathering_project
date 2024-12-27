@@ -32,7 +32,7 @@ public class ScheduleService {
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new BaseException(ExceptionEnum.GATHER_NOT_FOUND));
-        checkAuth(gatherId,authUser);
+        checkAuth(gatherId, authUser);
         // Schedule 엔티티 생성 및 Gather 엔티티 설정
         Schedule schedule = new Schedule(scheduleRequestDto.getScheduleTitle(),
                 scheduleRequestDto.getScheduleContent(), gather);
@@ -49,7 +49,7 @@ public class ScheduleService {
     public ScheduleResponseDto updateSchedule(Long gatherId, Long scheduleId,
             ScheduleRequestDto scheduleRequestDto, AuthenticatedUser authUser) {
 
-        checkAuth(gatherId,authUser);
+        checkAuth(gatherId, authUser);
 
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
@@ -75,7 +75,7 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long gatherId, Long scheduleId, AuthenticatedUser authUser) {
 
-        checkAuth(gatherId,authUser);
+        checkAuth(gatherId, authUser);
 
         // gatherId로 Gather 엔티티 조회
         Gather gather = gatherRepository.findById(gatherId)
@@ -106,10 +106,9 @@ public class ScheduleService {
     }
 
     private void checkAuth(Long gatherId, AuthenticatedUser authUser) {
-
-        Member member = memberRepository.findByUserId(authUser.getUserId())
+        Member member = memberRepository.findByGatherIdAndUserId(gatherId, authUser.getUserId())
                 .orElseThrow(() -> new BaseException(ExceptionEnum.MEMBER_NOT_FOUND));
-        if (!member.getGather().getId().equals(gatherId)){
+        if (!member.getGather().getId().equals(gatherId)) {
             throw new BaseException(ExceptionEnum.MEMBER_NOT_ALLOWED);
         }
     }

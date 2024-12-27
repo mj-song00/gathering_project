@@ -200,12 +200,13 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "title": "테스트39",
-  "description":"테스트39",
+  "title": "테스트 모임",
+  "description": "테스트40",
   "hashtags": [
-   "t1","t2"
+    "테스트",
+    "코딩"
   ],
-  "addressName":"대구 북구 칠성동2가 302-155",
+  "addressName": "대구 북구 칠성동2가 302-155",
   "latitude": 37.7645195812136,
   "longitude": 128.899617238918
 }

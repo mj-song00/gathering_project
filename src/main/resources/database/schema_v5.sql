@@ -221,6 +221,18 @@ CREATE TABLE user_agreement_history
     FOREIGN KEY (user_id) REFERENCES user (id)
 ) engine = InnoDB;
 
+create table file
+(
+    id          BIGINT NOT NULL AUTO_INCREMENT,
+    created_at  DATETIME(6),
+    updated_at  DATETIME(6),
+    name        VARCHAR(255),
+    origin_name VARCHAR(255),
+    uri         VARCHAR(255),
+    gather_id   BIGINT NOT NULL,
+    PRIMARY KEY (id)
+) engine = InnoDB;
+
 -- Spring Batch 테이블
 CREATE TABLE BATCH_JOB_INSTANCE
 (
@@ -296,6 +308,7 @@ CREATE TABLE BATCH_JOB_EXECUTION_CONTEXT
     FOREIGN KEY (job_execution_id) REFERENCES BATCH_JOB_EXECUTION (job_execution_id)
 ) ENGINE = InnoDB;
 
+-- 커스텀 배치 테이블
 CREATE TABLE BATCH_LOCK
 (
     id        BIGINT       NOT NULL AUTO_INCREMENT,
