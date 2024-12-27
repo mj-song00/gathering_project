@@ -55,10 +55,13 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public Map<String, Object> getCommentPage(Long scheduleId, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
+        int safePage = Math.max(page - 1, 0);
+        Pageable pageable = PageRequest.of(safePage, size, Sort.by(Sort.Direction.ASC, "createdAt"));
+
         Page<Comment> commentPage = commentRepository.findAllByScheduleIdAndDeletedAtIsNull(scheduleId, pageable);
 
         List<CommentResponse> commentResponses = commentPage.getContent().stream()
+                .sorted((c1, c2) -> c2.getCreatedAt().compareTo(c1.getCreatedAt()))
                 .map(CommentResponse::new)
                 .toList();
 
