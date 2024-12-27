@@ -493,6 +493,7 @@ function renderPagination(totalPages, currentPage) {
   nextBtn.style.display = currentPage < totalPages ? 'inline-block' : 'none';
 }
 
+// 댓글 불러오기
 async function loadComments(itemId, page = 1) {
   const commentList = document.getElementById("scheduleModalCommentList");
   try {
@@ -500,39 +501,44 @@ async function loadComments(itemId, page = 1) {
         `/api/schedule/${itemId}/comments?page=${page}&size=${COMMENTS_PER_PAGE}`,
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        }
+    );
 
     if (!response.ok) {
       throw new Error("댓글을 불러오는데 실패했습니다.");
     }
 
     const {data} = await response.json();
-    const comments = data.comments;
-    totalPages = data.totalPages; // 전역 변수에 총 페이지 수 저장
+    let comments = data.comments;
+
+    // 댓글을 `createdAt` 기준으로 오름차순 정렬
+    comments.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+    totalPages = data.totalPages;
     const currentPage = data.currentPage || 1;
 
     commentList.innerHTML = comments.length
         ? comments.map((c) => `
-<li class="flex items-start space-x-4 mb-4">
-  <div class="flex flex-col">
-    <div class="flex items-center space-x-2">
-      <p class="font-semibold">${c.nickName}</p>
-      <p class="text-gray-500 text-sm">${new Date(c.createdAt).toLocaleString()}</p>
-    </div>
-    <p class="text-gray-700">${c.comment}</p>
-    <div class="flex space-x-2">
-      <button class="text-blue-500 hover:underline" onclick="editComment('${c.commentId}', '${c.comment}')">수정</button>
-      <button class="text-red-500 hover:underline" onclick="deleteComment('${c.commentId}')">삭제</button>
-    </div>
-  </div>
-</li>`).join("")
+        <li class="flex items-start space-x-4 mb-4">
+          <div class="flex flex-col">
+            <div class="flex items-center space-x-2">
+              <p class="font-semibold">${c.nickName}</p>
+              <p class="text-gray-500 text-sm">${new Date(
+            c.createdAt).toLocaleString()}</p>
+            </div>
+            <p class="text-gray-700">${c.comment}</p>
+            <div class="flex space-x-2">
+              <button class="text-blue-500 hover:underline" onclick="editComment('${c.commentId}', '${c.comment}')">수정</button>
+              <button class="text-red-500 hover:underline" onclick="deleteComment('${c.commentId}')">삭제</button>
+            </div>
+          </div>
+        </li>`).join("")
         : "<li>댓글이 없습니다.</li>";
 
     currentCommentPage = currentPage;
 
     // 페이지네이션 렌더링
     renderPagination(totalPages, currentPage);
-
   } catch (error) {
     console.error(error);
     commentList.innerHTML = "<li>댓글을 불러오는 중 오류가 발생했습니다.</li>";
